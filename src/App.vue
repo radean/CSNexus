@@ -1,6 +1,7 @@
 <template>
   <v-app
     id="inspire"
+    dark
   >
     <v-navigation-drawer
       persistent
@@ -11,7 +12,7 @@
       width="240"
     >
       <v-list>
-        <img align-center src="./assets/mlogo-b.png" style="padding-left: 25%" />
+        <img align-center src="./assets/mlogo.png" style="padding-left: 25%" />
         <v-divider></v-divider>
         <v-subheader class="mt-3 mb-3 grey--text text--darken-1">
           <v-avatar size="48px" class="mr-3">
@@ -19,17 +20,17 @@
           </v-avatar>
           {{ user.name }} [ {{ user.title }} ]
         </v-subheader>
-        <v-list-tile ripple="true">
-          <v-list-tile-action>
+        <v-list-tile to="/Landing" ripple>
+          <v-list-tile-action >
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>
+          <v-list-tile-content >
             <v-list-tile-title >
               DashBoard
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile to="reports" ripple>
           <v-list-tile-action>
             <v-icon>insert_chart</v-icon>
           </v-list-tile-action>
@@ -39,7 +40,7 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile to="merc" ripple>
           <v-list-tile-action>
             <v-icon>people</v-icon>
           </v-list-tile-action>
@@ -49,7 +50,7 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile to="broadcast" ripple>
           <v-list-tile-action>
             <v-icon>line_style</v-icon>
           </v-list-tile-action>
@@ -59,7 +60,7 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+        <v-list-tile to="monitor" ripple>
           <v-list-tile-action>
             <v-icon>map</v-icon>
           </v-list-tile-action>
@@ -69,26 +70,28 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-subheader class="mt-3 grey--text text--darken-1">Latest Feed</v-subheader>
+        <v-subheader class="mt-3 grey--text text--darken-1">Other Optinos</v-subheader>
         <v-divider></v-divider>
-        <v-list-tile class="mt-3" @click="">
+        <v-flex xs2 offset-xs2> <h2>{{ currentTime }}</h2> </v-flex>
+        <v-divider></v-divider>
+        <v-list-tile @click="" ripple>
           <v-list-tile-action>
-            <v-icon color="grey darken-1">add_circle_outline</v-icon>
+            <v-icon >add_circle_outline</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">Create Merchandiser</v-list-tile-title>
+          <v-list-tile-title>Add Merchandiser</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile @click="">
+        <v-list-tile @click=""ripple>
           <v-list-tile-action>
-            <v-icon color="grey darken-1">settings</v-icon>
+            <v-icon color="grey darken-1" >settings</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">Manage Merchandiser</v-list-tile-title>
+          <v-list-tile-title class="grey--text text--darken-1">Subscription Settings</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
 
 
 
-    <v-toolbar color="red" dense fixed clipped-left app dark>
+    <v-toolbar class="transper" dense fixed clipped-left app dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         {{ appinfo.name }}
@@ -103,15 +106,16 @@
     </v-toolbar>
     <main>
       <v-content>
-        <v-container fill-height>
-          <v-layout justify-center>
+        <v-container>
+          <transition name="fade">
             <!--Content goes here-->
             <router-view></router-view>
-          </v-layout>
+          </transition>
         </v-container>
       </v-content>
     </main>
-
+    <!--DIALOGS-->
+    <!--HELP DIALOG-->
     <v-dialog v-model="helpDialog" persistent>
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card>
@@ -123,13 +127,41 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--Loading Dialog-->
+    <v-dialog v-model="appLoadingStats" persistent >
+      <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
+      <v-card dark>
+        <v-card-title class="headline">Please Wait </v-card-title>
+        <v-card-text>if this query taking more than 30 seconds contact VDM.</v-card-text>
+        <v-container>
+          <v-layout row wrap center>
+            <v-flex xs2 offset-xs5>
+              <v-progress-circular indeterminate v-bind:size="50" color="amber"></v-progress-circular>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-dialog>
 
+
+
+    <!--Messages-->
+    <!--Merchanser Registration-->
+    <v-snackbar
+      v-model="successFlag"
+      :top="true"
+      class="green"
+      dark
+    >
+      {{ successMsg }}
+      <v-btn flat color="white" @click.native="successFlag = false">Close</v-btn>
+    </v-snackbar>
 
     <!--Footer-->
-    <v-footer class="pa-3" fixed light>
+    <v-footer class="pa-3 transper" fixed dark>
       <div>{{ appinfo.fullname }}</div>
       <v-spacer></v-spacer>
-      <div> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.authorEmail }}</div>
+      <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.authorEmail }}</div>
     </v-footer>
 
   </v-app>
@@ -142,6 +174,8 @@ export default {
 //      Settings
       drawer: false,
 //      User Details
+      currentTime: null,
+      currentDate: null,
       user: {
         name: 'Akram Khan',
         title: 'Admin',
@@ -149,26 +183,75 @@ export default {
       },
 //      Dialogs
       helpDialog: false,
+//      Toasts
     }
   },
   computed: {
       appinfo(){
           return this.$store.getters.appinfo
+      },
+      appLoadingStats(){
+        return this.$store.getters.mainLoading
+      },
+      successMsg(){
+        return this.$store.getters.successMsg
+      },
+      successFlag(){
+        return this.$store.getters.successFlag
       }
+  },
+  created(){
+      this.$store.dispatch('shopsListUPD');
+    setTimeout(() =>{
+      this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
+        let date = new Date(response.body.zones[0].timestamp * 1000);
+        let hours = date.getHours() - 5;
+        let minutes = "0" + date.getMinutes();
+        this.currentTime = hours + ':' + minutes.substr(-2);
+        this.currentDate = date.getDate() + '/' + (date.getMonth() + 1)
+      });
+      console.log('done')
+    }, 2000);
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
-.input-group__details:after {
-  background-color: rgba(255, 255, 255, 0.32) !important;
-}
+  #inspire{
+    background: #085078;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #85D8CE, #085078);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #85D8CE, #085078); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .transper {
+    background-color: rgba(60,60,60,0.4);
+    color: white;
+  }
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0px;
+  }
+  .input-group__details:after {
+    background-color: rgba(255, 255, 255, 0.32) !important;
+  }
+  a {color: inherit !important;}
+  form {
+    margin: 0px; padding: 0px; width: 100%;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition-property: opacity;
+    transition-duration: .25s;
+  }
+
+  .fade-enter-active {
+    transition-delay: .25s;
+  }
+
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
+
 </style>

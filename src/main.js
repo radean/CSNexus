@@ -10,6 +10,7 @@ import { store } from './store/store'
 import { routes } from './router';
 
 
+
 // Vue Usage
 Vue.use(Vuetify);
 Vue.use(VueResource);

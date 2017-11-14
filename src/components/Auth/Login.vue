@@ -11,7 +11,7 @@
       <v-flex xs10 md4 offset-md4>
         <v-text-field
           name="useremail"
-          label="E-MAIL"
+          label="UserName"
           id="testing"
           v-model="useremail"
         ></v-text-field>

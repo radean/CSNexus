@@ -192,11 +192,11 @@
       }
     },
 
-
     components:{
       'app-user-count': UserCount,
       'app-city-progress': CityProgress
     },
+
     created(){
 //        getting Random store Details
       if (this.$store.getters.user === null) {
@@ -209,15 +209,10 @@
       setInterval(() =>{
         this.fillData();
         this.updateStore();
-        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
-      }, 4000)
-        //        sync Data after 12 seconds
-//      setInterval(() =>{
-//        this.updateStore()
 //        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
-//      }, 12000)
-    },
+      }, 4000);
 
+    },
 
     computed:{
       storelist(){
@@ -227,7 +222,6 @@
         this.storeData = this.$store.getters.storeDetails;
       }
     },
-
 
     methods: {
       updateStore(){
@@ -272,6 +266,7 @@
         }
       }
     }
+
   }
 </script>
 
@@ -286,6 +281,7 @@
     border: 1px solid #333;
     border-radius: 2px;
   }
+
   .GraphsContainer .header {
     background-color: rgba(30,30,30,0.3);
     font-size:24px;

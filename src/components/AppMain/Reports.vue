@@ -13,11 +13,11 @@
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1">
             <v-icon>people</v-icon>
-            Merchandiser Report
+            B.A Reports
           </v-tabs-item>
           <v-tabs-item href="c2">
             <v-icon>store</v-icon>
-            Shop Report
+            Stores Reports
           </v-tabs-item>
         </v-tabs-bar>
         <v-tabs-items>

@@ -21,7 +21,7 @@
           </v-avatar>
           {{ userDetail.name }} [ {{ userDetail.title }} ]
         </v-subheader>
-        <v-list-tile to="/Landing" ripple>
+        <v-list-tile to="/" ripple>
           <v-list-tile-action >
             <v-icon>dashboard</v-icon>
           </v-list-tile-action>
@@ -41,19 +41,19 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="merc" ripple>
+        <v-list-tile to="create" ripple>
           <v-list-tile-action>
             <v-icon>people</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              Merchandiser
+              Create New Objects
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="broadcast" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>line_style</v-icon>
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -61,9 +61,9 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="monitor" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>map</v-icon>
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -75,11 +75,11 @@
         <v-divider></v-divider>
         <v-flex xs2 offset-xs2> <h2>{{ currentTime }}</h2> </v-flex>
         <v-divider></v-divider>
-        <v-list-tile @click="" ripple>
+        <v-list-tile @click="" ripple to="addbrandAmbassador">
           <v-list-tile-action>
             <v-icon >add_circle_outline</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title>Add Merchandiser</v-list-tile-title>
+          <v-list-tile-title>Add Brand Ambassador</v-list-tile-title>
         </v-list-tile>
         <v-list-tile @click=""ripple>
           <v-list-tile-action>
@@ -145,7 +145,6 @@
     </v-dialog>
 
 
-
     <!--Messages-->
     <!--Merchanser Registration-->
     <v-snackbar
@@ -179,9 +178,9 @@ export default {
       currentTime: null,
       currentDate: null,
       userDetail: {
-        name: 'Akram Khan',
-        title: 'Admin',
-        picture: 'https://randomuser.me/api/portraits/men/35.jpg',
+        name: '',
+        title: '',
+        picture: './static/img/app/placeholder.jpg',
       },
 //      Dialogs
       helpDialog: false,
@@ -240,10 +239,8 @@ export default {
   created(){
       this.$store.dispatch('userSession');
     if (this.$store.getters.user === null) {
-      this.notLogin = false;
       this.$router.push('/')
     }else{
-      this.$router.push('/Landing')
       setTimeout(() =>{
         this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
           let date = new Date(response.body.zones[0].timestamp * 1000);
@@ -252,8 +249,9 @@ export default {
           this.currentTime = hours + ':' + minutes.substr(-2);
           this.currentDate = date.getDate() + '/' + (date.getMonth() + 1)
         });
+        this.setUpUser();
         console.log('done')
-      }, 2000)
+      }, 3000)
     }
   },
   methods:{
@@ -261,6 +259,10 @@ export default {
       this.$store.dispatch('userSignOut');
       this.$router.push('/login')
       document.location.reload(true);
+    },
+    setUpUser(){
+      this.userDetail.name = this.userInfo.name;
+      this.userDetail.title = this.userInfo.role.substr(0, 6);
     }
   }
 }

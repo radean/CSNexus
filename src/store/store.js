@@ -41,6 +41,7 @@ export const store = new Vuex.Store({
       subscription: true
     },
     // Data
+    unAssignedStores: [],
     stores: [],
     storeDetails: [],
     merchandiserReports: [],
@@ -75,6 +76,9 @@ export const store = new Vuex.Store({
     },
     setUserInfo (state, payload){
       state.userinfo = payload;
+    },
+    'SET_UNASSIGNED_STORES'(state, payload){
+      state.unAssignedStores = payload
     },
     'SET_STORES'(state, payload){
       state.stores = payload
@@ -160,21 +164,6 @@ export const store = new Vuex.Store({
         commit('SET_MAIN_LOADING', false);
       });
     },
-    // Fetching Data
-    shopsListUPD({commit}){
-      firebase.database().ref('storedata').on('value', (storelist) => {
-        const stores = [];
-        const obj = storelist.val();
-        for (let key in obj) {
-          stores.push({
-            id: key,
-            name: obj[key].name,
-            location: obj[key].location,
-          })
-        }
-        commit('SET_STORES', stores);
-      });
-    },
     // User Session Check
     userSession({dispatch, commit}){
       // Checking Firebase user
@@ -213,9 +202,46 @@ export const store = new Vuex.Store({
       });
     },
 
+//     ===================
+    // Fetching Data
+    shopsListUPD({commit}){
+      firebase.database().ref('storedata').on('value', (storelist) => {
+        const stores = [];
+        const obj = storelist.val();
+        for (let key in obj) {
+          stores.push({
+            id: key,
+            name: obj[key].name,
+            location: obj[key].location,
+          })
+        }
+        commit('SET_STORES', stores);
+      });
+    },
+    // Unassigned Stores
+    unAssignedStoresListUPD({commit}){
+      firebase.database().ref('stores').orderByChild('assign').equalTo('').on('value', (storelist) => {
+        const stores = [];
+        const obj = storelist.val();
+        for (let key in obj) {
+          stores.push({
+            id: key,
+            name: obj[key].name,
+            address: obj[key].address,
+            city: obj[key].city
+          })
+        }
+        commit('SET_UNASSIGNED_STORES', stores);
+      });
+    },
+
+
+
+    // ========================
     // Employees CRUD
-    // Merchandiser Registration
-    merchandiserReg({commit}, payload){
+    // Adding New Registration Entries
+    // Brand Ambassador PUT
+    brandAmbassadorReg({commit}, payload){
       // Start Loading
       commit('SET_MAIN_LOADING', true);
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
@@ -242,6 +268,60 @@ export const store = new Vuex.Store({
           },4000)
         }
       )
+    },
+    // Supervisor PUT
+    supervisorReg({commit}, payload){
+      // Start Loading
+      commit('SET_MAIN_LOADING', true);
+      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(
+          user => {
+            const newUser = {
+              id: user.uid,
+            };
+            // End Loading
+            commit('SET_MAIN_LOADING', false);
+            // Sending Success Message
+            commit('SET_SUCCESS_MSG', 'Merchandiser Successfully Registered');
+            setTimeout(() => {
+              commit('SET_SUCCESS_MSG', 'Operation Successful');
+            },4000);
+            console.log('Registerd')
+          }
+        ).catch(
+        error => {
+          commit('SET_USER_ERROR', true);
+          console.log(error);
+          setTimeout(() => {
+            commit('SET_USER_ERROR', false);
+          },4000)
+        }
+      )
+    },
+    // Store PUT
+    storeReg({commit}, payload){
+      // Start Loading
+      commit('SET_MAIN_LOADING', true);
+      let storeDetails = {
+        name: payload.name,
+        address: payload.address,
+        city: payload.city,
+        assign: 'none'
+      };
+      firebase.database().ref('stores').push(storeDetails).then(() => {
+        // End Loading
+        commit('SET_MAIN_LOADING', false);
+        // Sending Success Message
+        commit('SET_SUCCESS_MSG', 'Store Successfully Added');
+        setTimeout(() => {
+          commit('SET_SUCCESS_MSG', 'Operation Successful');
+        },4000);
+      }).catch(error => {
+        commit('SET_USER_ERROR', true);
+          setTimeout(() => {
+            commit('SET_USER_ERROR', false);
+          },4000)
+      });
     },
 
     // Fetching Store Details
@@ -292,6 +372,9 @@ export const store = new Vuex.Store({
     },
     userInfo (state){
       return state.userinfo
+    },
+    unAssignedStores (state){
+      return state.unAssignedStores
     },
     storeList (state){
       return state.stores

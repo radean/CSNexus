@@ -220,7 +220,7 @@ export const store = new Vuex.Store({
     },
     // Unassigned Stores
     unAssignedStoresListUPD({commit}){
-      firebase.database().ref('stores').orderByChild('assign').equalTo('').on('value', (storelist) => {
+      firebase.database().ref('stores').orderByChild('assign').equalTo('none').on('value', (storelist) => {
         const stores = [];
         const obj = storelist.val();
         for (let key in obj) {

@@ -28,7 +28,7 @@
                   <v-layout row wrap>
                     <v-flex xs12><h6>ADD BRANDAMBASSADOR</h6> All fields are required</v-flex>
 
-                    <form @submit.prevent="onMerchandierReg" class="mb-5">
+                    <form @submit.prevent="onBAReg" class="mb-5">
 
                       <!--EMAIL-->
                       <v-flex xs10 offset-xs1>
@@ -59,16 +59,6 @@
                           v-model="addBA.address"
                         ></v-text-field>
                       </v-flex>
-                      <!--StoreID-->
-                      <v-flex xs10 offset-xs1>
-                        <v-text-field
-                          required
-                          name="userId"
-                          label="STORE ID"
-                          id="testing"
-                          v-model="addBA.storeId"
-                        ></v-text-field>
-                      </v-flex>
                       <!--password-->
                       <v-flex xs10 offset-xs1>
                         <v-text-field
@@ -80,6 +70,19 @@
                           v-model="addBA.password"
                           :type="'password'"
                         ></v-text-field>
+                      </v-flex>
+                       <!--Assign Store -->
+                      <v-flex xs10 offset-xs1>
+                        <v-select
+                        v-bind:items="unAssignedStores"
+                        v-model="addBA.storeId"
+                        label="ASSIGN STORE"
+                        single-line
+                        item-text="name"
+                        item-value="id"
+                        :loading="selectLoading"
+                        bottom
+                        ></v-select>
                       </v-flex>
                       <!--submission-->
                       <v-flex xs12>
@@ -141,17 +144,6 @@
                         v-model="addSupervisor.address"
                       ></v-text-field>
                     </v-flex>
-                    <!-- Assign Store -->
-                    <!--<v-flex xs10 offset-xs1>-->
-                      <!--<v-select-->
-                        <!--v-bind:items="availableStores"-->
-                        <!--v-model="addSupervisor.storeId"-->
-                        <!--label="ASSIGN STORE"-->
-                        <!--single-line-->
-                        <!--:loading="availableStoreLoading"-->
-                        <!--bottom-->
-                      <!--&gt;</v-select>-->
-                    <!--</v-flex>-->
                     <!--submission-->
                     <v-flex xs12>
                       <v-btn large :disabled="!supervisorFormValid" type="submit" class="green" > SUBMIT <v-icon right>send</v-icon></v-btn>
@@ -191,15 +183,15 @@
                           v-model="addStore.address"
                         ></v-text-field>
                       </v-flex>
-                      <!--password-->
+                      <!-- Assign Store -->
                       <v-flex xs10 offset-xs1>
-                        <v-text-field
-                          required
-                          name="city"
-                          label="CITY"
-                          min="6"
+                        <v-select
+                          v-bind:items="cities"
                           v-model="addStore.city"
-                        ></v-text-field>
+                          label="CITY"
+                          single-line
+                          bottom
+                        ></v-select>
                       </v-flex>
                       <!--submission-->
                       <v-flex xs12>
@@ -247,6 +239,16 @@
           password: '',
           role: 'Supervisor',
         },
+//        GUI DATA
+        selectLoading: true,
+        unAssignedStores: [
+
+        ],
+        cities: [
+          'KHI',
+          'LHR',
+          'ISD'
+        ],
         //      userInfo
         useremail: '',
         username: '',
@@ -263,7 +265,16 @@
       },
       onStoreReg() {
         this.$store.dispatch('storeReg', this.addStore)
-      }
+      },
+      populateUnassignedStoreList(){
+//      Converting Firebase Raw Returns to Vialable Form
+        let obj = this.unAssignedStore;
+        let convert = Object.keys(obj).map((key) => {
+          return { id: obj[key].id,name : obj[key].name};
+        });
+//      Storing to Application
+        this.unAssignedStores = convert;
+      },
     },
     computed: {
 //      Fetching Data
@@ -296,6 +307,11 @@
 //           Un-Assigned stores Updated
           console.log("Store Updated");
         });
+      setTimeout(() => {
+//  dispatch Order to retrieve Unassigned store List
+        this.populateUnassignedStoreList();
+        this.selectLoading = false;
+      },2000);
     }
   }
 </script>

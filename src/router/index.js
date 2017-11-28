@@ -5,6 +5,7 @@ import Welcome from '../components/AppMain/Welcome.vue'
 import AddMerchandiser from '../components/AppMain/AddMerchandiser.vue'
 import Dashboard from '../components/AppMain/Dashboard.vue'
 import Merchandiser from '../components/AppMain/Merchandiser.vue'
+import Registration from '../components/Auth/Registration.vue'
 import Login from '../components/Auth/Login.vue'
 import Broadcast from '../components/AppMain/Broadcast.vue'
 import Reports from '../components/AppMain/Reports.vue'
@@ -14,7 +15,12 @@ Vue.use(Router);
 
 export const routes = [
     {
-      path: '/',
+      path: '/registration',
+      name: 'Registration',
+      component: Registration
+    },
+    {
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -29,7 +35,7 @@ export const routes = [
       component: AddMerchandiser
     },
     {
-      path: '/Landing',
+      path: '/',
       name: 'DashBoard',
       component: Dashboard
     },

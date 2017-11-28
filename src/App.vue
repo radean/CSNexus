@@ -4,6 +4,7 @@
     dark
   >
     <v-navigation-drawer
+      v-if="notLogin"
       persistent
       clipped
       enable-resize-watcher
@@ -16,9 +17,9 @@
         <v-divider></v-divider>
         <v-subheader class="mt-3 mb-3 grey--text text--darken-1">
           <v-avatar size="48px" class="mr-3">
-          <img :src="user.picture" alt="">
+          <img :src="userDetail.picture" alt="">
           </v-avatar>
-          {{ user.name }} [ {{ user.title }} ]
+          {{ userDetail.name }} [ {{ userDetail.title }} ]
         </v-subheader>
         <v-list-tile to="/Landing" ripple>
           <v-list-tile-action >
@@ -93,15 +94,15 @@
 
     <v-toolbar class="transper" dense fixed clipped-left app dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-side-icon v-if="notLogin" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         {{ appinfo.name }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
+      <v-toolbar-items v-if="notLogin">
         <v-btn icon pulse><v-icon>notifications</v-icon></v-btn>
         <v-btn icon pulse><v-icon>message</v-icon></v-btn>
         <v-btn pulse flat v-on:click="helpDialog = !helpDialog">help</v-btn>
-        <v-btn pulse flat>LOGOUT</v-btn>
+        <v-btn pulse flat v-on:click="onSignOut" >LOGOUT</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main>
@@ -173,10 +174,11 @@ export default {
     return {
 //      Settings
       drawer: false,
+      notLogin: false,
 //      User Details
       currentTime: null,
       currentDate: null,
-      user: {
+      userDetail: {
         name: 'Akram Khan',
         title: 'Admin',
         picture: 'https://randomuser.me/api/portraits/men/35.jpg',
@@ -186,9 +188,44 @@ export default {
 //      Toasts
     }
   },
+  watch: {
+    user(value){
+      if (value){
+        this.notLogin = true;
+      }else if(!value){
+        this.notLogin = false;
+      }
+    },
+    userInfo (value){
+      if (value !== null && value !== undefined) {
+        switch (this.userInfo.role) {
+
+          default:
+            this.notLogin = false;
+            break;
+
+          case "Administrator":
+            this.notLogin = true;
+            this.$router.push('/');
+            break;
+
+          case "Client":
+            this.notLogin = true;
+            this.$router.push('/merc');
+            break;
+        }
+      }
+    }
+  },
   computed: {
+      userInfo(){
+        return this.$store.getters.userInfo;
+      },
       appinfo(){
-          return this.$store.getters.appinfo
+        return this.$store.getters.appinfo
+      },
+      user (){
+        return this.$store.getters.user
       },
       appLoadingStats(){
         return this.$store.getters.mainLoading
@@ -201,17 +238,29 @@ export default {
       }
   },
   created(){
-      this.$store.dispatch('shopsListUPD');
-    setTimeout(() =>{
-      this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
-        let date = new Date(response.body.zones[0].timestamp * 1000);
-        let hours = date.getHours() - 5;
-        let minutes = "0" + date.getMinutes();
-        this.currentTime = hours + ':' + minutes.substr(-2);
-        this.currentDate = date.getDate() + '/' + (date.getMonth() + 1)
-      });
-      console.log('done')
-    }, 2000);
+      this.$store.dispatch('userSession');
+    if (this.$store.getters.user === null) {
+      this.notLogin = false;
+      this.$router.push('/')
+    }else{
+      this.$router.push('/Landing')
+      setTimeout(() =>{
+        this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
+          let date = new Date(response.body.zones[0].timestamp * 1000);
+          let hours = date.getHours() - 5;
+          let minutes = "0" + date.getMinutes();
+          this.currentTime = hours + ':' + minutes.substr(-2);
+          this.currentDate = date.getDate() + '/' + (date.getMonth() + 1)
+        });
+        console.log('done')
+      }, 2000)
+    }
+  },
+  methods:{
+    onSignOut(){
+      this.$store.dispatch('userSignOut');
+      this.$router.push('/')
+    }
   }
 }
 </script>

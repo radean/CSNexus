@@ -199,7 +199,9 @@
     },
     created(){
 //        getting Random store Details
-
+      if (this.$store.getters.user === null) {
+        this.$router.push('/login')
+      }
     },
 
     mounted () {

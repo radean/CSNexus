@@ -129,7 +129,7 @@
       </v-card>
     </v-dialog>
     <!--Loading Dialog-->
-    <v-dialog v-model="appLoadingStats" persistent >
+    <v-dialog v-model="appLoadingStats.mainLoading" persistent >
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card dark>
         <v-card-title class="headline">Please Wait </v-card-title>
@@ -259,7 +259,8 @@ export default {
   methods:{
     onSignOut(){
       this.$store.dispatch('userSignOut');
-      this.$router.push('/')
+      this.$router.push('/login')
+      document.location.reload(true);
     }
   }
 }

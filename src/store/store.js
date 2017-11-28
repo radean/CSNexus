@@ -303,7 +303,7 @@ export const store = new Vuex.Store({
       return state.merchandiserReports
     },
     mainLoading (state){
-      return state.mainLoading
+      return state.loadingState
     },
     successMsg (state){
       return state.successMsg

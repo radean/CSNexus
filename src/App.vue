@@ -71,15 +71,15 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-subheader class="mt-3 grey--text text--darken-1">Other Optinos</v-subheader>
+        <v-subheader class="mt-3 grey--text text--darken-1">Date</v-subheader>
         <v-divider></v-divider>
-        <v-flex xs2 offset-xs2> <h2>{{ currentTime }}</h2> </v-flex>
+        <v-flex xs6 offset-xs3> <h3>{{ currentDate }}</h3> </v-flex>
         <v-divider></v-divider>
-        <v-list-tile @click="" ripple to="addbrandAmbassador">
+        <v-list-tile @click="" ripple to="edit">
           <v-list-tile-action>
             <v-icon >add_circle_outline</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title>Add Brand Ambassador</v-list-tile-title>
+          <v-list-tile-title>Update User Parameters</v-list-tile-title>
         </v-list-tile>
         <v-list-tile @click=""ripple>
           <v-list-tile-action>
@@ -105,7 +105,7 @@
         <v-btn pulse flat v-on:click="onSignOut" >LOGOUT</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <main>
+    <!--<main>-->
       <v-content>
         <v-container>
           <transition name="fade">
@@ -114,7 +114,7 @@
           </transition>
         </v-container>
       </v-content>
-    </main>
+    <!--</main>-->
     <!--DIALOGS-->
     <!--HELP DIALOG-->
     <v-dialog v-model="helpDialog" persistent>
@@ -175,7 +175,6 @@ export default {
       drawer: false,
       notLogin: false,
 //      User Details
-      currentTime: null,
       currentDate: null,
       userDetail: {
         name: '',
@@ -216,6 +215,22 @@ export default {
       }
     }
   },
+  created(){
+    this.$store.dispatch('userSession');
+    if (this.$store.getters.user === null) {
+      this.$router.push('/')
+    };
+    setTimeout(() => {
+      this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
+        let date = new Date((response.body.zones[0].timestamp * 1000) - response.body.zones[0].gmtOffset * 1000);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        this.currentDate = month + '-' + day;
+      });
+      this.setUpUser();
+      console.log('done')
+    }, 6000)
+  },
   computed: {
       userInfo(){
         return this.$store.getters.userInfo;
@@ -235,24 +250,6 @@ export default {
       successFlag(){
         return this.$store.getters.successFlag
       }
-  },
-  created(){
-      this.$store.dispatch('userSession');
-    if (this.$store.getters.user === null) {
-      this.$router.push('/')
-    }else{
-      setTimeout(() =>{
-        this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
-          let date = new Date(response.body.zones[0].timestamp * 1000);
-          let hours = date.getHours() - 5;
-          let minutes = "0" + date.getMinutes();
-          this.currentTime = hours + ':' + minutes.substr(-2);
-          this.currentDate = date.getDate() + '/' + (date.getMonth() + 1)
-        });
-        this.setUpUser();
-        console.log('done')
-      }, 3000)
-    }
   },
   methods:{
     onSignOut(){

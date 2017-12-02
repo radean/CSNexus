@@ -34,18 +34,20 @@
                       <v-flex xs10 offset-xs1>
                         <v-text-field
                           required
-                          name="emailId"
+                          name="email"
                           label="E-MAIL"
                           v-model="addBA.email"
+                          max="5"
+                          :counter="true"
+                          :clearable="true"
                         ></v-text-field>
                       </v-flex>
                       <!--username-->
                       <v-flex xs10 offset-xs1>
                         <v-text-field
                           required
-                          name="userId"
+                          name="name"
                           label="NAME"
-                          id="testing"
                           v-model="addBA.name"
                         ></v-text-field>
                       </v-flex>
@@ -53,9 +55,8 @@
                       <v-flex xs10 offset-xs1>
                         <v-text-field
                           required
-                          name="userId"
+                          name="address"
                           label="ADDRESS"
-                          id="testing"
                           v-model="addBA.address"
                         ></v-text-field>
                       </v-flex>
@@ -63,9 +64,8 @@
                       <v-flex xs10 offset-xs1>
                         <v-text-field
                           required
-                          name="userPassword"
+                          name="Password"
                           label="PASSCODE"
-                          id="testing"
                           min="6"
                           v-model="addBA.password"
                           :type="'password'"
@@ -75,11 +75,11 @@
                       <v-flex xs10 offset-xs1>
                         <v-select
                         v-bind:items="unAssignedStores"
-                        v-model="addBA.storeId"
+                        v-model="addBA.store"
                         label="ASSIGN STORE"
                         single-line
                         item-text="name"
-                        item-value="id"
+                        item-value="id,name"
                         :loading="selectLoading"
                         bottom
                         ></v-select>
@@ -130,7 +130,6 @@
                         required
                         name="userId"
                         label="USERNAME"
-                        id="testing"
                         v-model="addSupervisor.name"
                       ></v-text-field>
                     </v-flex>
@@ -221,8 +220,7 @@
           address: '',
           email: '',
           password: '',
-          storeId: '',
-          role: 'BrandAmbassador',
+          store: '',
         },
 //        Add Store
         addStore: {
@@ -249,19 +247,14 @@
           'LHR',
           'ISD'
         ],
-        //      userInfo
-        useremail: '',
-        username: '',
-        v_key: '',
-        userpass: '',
       }
     },
     methods:{
       onBAReg() {
-        this.$store.dispatch('brandAmbassadorReg', {email: this.useremail, password: this.userpass, ba: this.addBA})
+        this.$store.dispatch('brandAmbassadorReg', {email: this.addBA.email, password: this.addBA.password, ba: this.addBA})
       },
       onSupervisorReg() {
-        this.$store.dispatch('supervisorReg', {email: this.useremail, password: this.userpass, supervisor: this.supervisor})
+        this.$store.dispatch('supervisorReg', {email: this.addSupervisor.email, password: this.addSupervisor.password, supervisor: this.addSupervisor})
       },
       onStoreReg() {
         this.$store.dispatch('storeReg', this.addStore)
@@ -283,7 +276,6 @@
         return this.$store.getters.unAssignedStores
       },
 
-
 //      Validating Fields
       supervisorFormValid(){
         return this.addSupervisor.name !== ''
@@ -303,6 +295,10 @@
       },
     },
     created(){
+      //        getting Random store Details
+      if (this.$store.getters.user === null) {
+        this.$router.push('/login')
+      }
         this.$store.dispatch('unAssignedStoresListUPD').then(() => {
 //           Un-Assigned stores Updated
           console.log("Store Updated");

@@ -4,6 +4,7 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/bams-e190d-firebase-adminsdk-i080n-2dfe5c788d.json
 
 # Editor directories and files
 .idea

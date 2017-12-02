@@ -10,6 +10,9 @@ import { store } from './store/store'
 import { routes } from './router';
 
 
+// FirebaseApp.initializeApp(options);
+
+
 
 // Vue Usage
 Vue.use(Vuetify);
@@ -38,13 +41,14 @@ new Vue({
   template: '<App/>',
   components: { App },
   created (){
-    firebase.initializeApp({
+    let config = {
       apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
       authDomain: "bams-e190d.firebaseapp.com",
       databaseURL: "https://bams-e190d.firebaseio.com",
       projectId: "bams-e190d",
       storageBucket: "bams-e190d.appspot.com",
       messagingSenderId: "110309011275"
-    });
+    };
+    firebase.initializeApp(config);
   }
 });

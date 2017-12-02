@@ -5,6 +5,7 @@ import Welcome from '../components/AppMain/Welcome.vue'
 import AddBrandAmbassador from '../components/AppMain/AddBrandAmbassador.vue'
 import Dashboard from '../components/AppMain/Dashboard.vue'
 import Create from '../components/AppMain/Create.vue'
+import Edit from '../components/AppMain/Edit.vue'
 import Registration from '../components/Auth/Registration.vue'
 import Login from '../components/Auth/Login.vue'
 import Broadcast from '../components/AppMain/Broadcast.vue'
@@ -43,6 +44,11 @@ export const routes = [
       path: '/create',
       name: 'Create',
       component: Create
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      component: Edit
     },
     {
       path: '/reports',

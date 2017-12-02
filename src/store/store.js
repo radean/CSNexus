@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 // importing Firebase
 import * as firebase from 'firebase'
 
-
 Vue.use(Vuex);
 
 
@@ -42,6 +41,7 @@ export const store = new Vuex.Store({
     },
     // Data
     unAssignedStores: [],
+    selectedBa: {},
     stores: [],
     storeDetails: [],
     merchandiserReports: [],
@@ -73,6 +73,9 @@ export const store = new Vuex.Store({
     },
     setBaList (state, payload){
       state.baList = payload;
+    },
+    setSelectedBa (state, payload){
+      state.selectedBa = payload;
     },
     setUserInfo (state, payload){
       state.userinfo = payload;
@@ -137,17 +140,26 @@ export const store = new Vuex.Store({
       );
     },
     userSignIn({commit}, payload){
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-        .then(firebase.auth().onAuthStateChanged(appUser => {
-          commit('setUser', appUser)
-        })).catch(
-        error => {
-          commit('SET_USER_ERROR', true);
-          console.log(error);
-          setTimeout(() => {
-            commit('SET_USER_ERROR', false);
-          }, 4000)
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(function() {
+          // Existing and future Auth states are now persisted in the current
+          // session only. Closing the window would clear any existing state even
+          // if a user forgets to sign out.
+          // ...
+          // New sign-in will be persisted with session persistence.
+          return firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+            .then(firebase.auth().onAuthStateChanged(appUser => {
+              commit('setUser', appUser)
+            })).catch(
+              error => {
+                commit('SET_USER_ERROR', true);
+                console.log(error);
+                setTimeout(() => {
+                  commit('SET_USER_ERROR', false);
+                }, 4000)
+              })
         })
+
     },
     // user Log out
     userSignOut({commit}){
@@ -201,9 +213,34 @@ export const store = new Vuex.Store({
         commit('SET_MAIN_LOADING', false);
       });
     },
-
 //     ===================
+
+
+
+    // USER UPDATES
+    updateSelectedBa({getters},payload){
+      // initiate Loading
+      commit('SET_MAIN_LOADING', true);
+      firebase.database().ref('stores/' + getters.selectedBa.store.id).update({
+        assign: 'none'
+      }).then(() => {
+        return firebase.database().ref('users/' + getters.selectedBa.id + '/').update({
+          name: payload.name,
+          store: payload.store
+        }).then(() => {
+          return firebase.database().ref('stores/' + payload.store.id + '/').update({
+            assign: getters.selectedBa.uniqueId
+          }).then(() => {
+            commit('SET_MAIN_LOADING', false);
+          })
+        });
+      })
+    },
+    //==============
+
+
     // Fetching Data
+    // Total Store list
     shopsListUPD({commit}){
       firebase.database().ref('storedata').on('value', (storelist) => {
         const stores = [];
@@ -234,6 +271,80 @@ export const store = new Vuex.Store({
         commit('SET_UNASSIGNED_STORES', stores);
       });
     },
+    // All B.A list
+    baListUPD({commit}){
+      firebase.database().ref('users').orderByChild('role').equalTo('BrandAmbassador').on('value', (balist) => {
+        const ba = [];
+        const obj = balist.val();
+        for (let key in obj) {
+          ba.push({
+            id: key,
+            name: obj[key].name,
+            storeName: obj[key].store.name,
+            address: obj[key].address,
+            email: obj[key].email,
+            uniqueId: obj[key].uniqueId,
+          })
+        }
+        commit('setBaList', ba);
+      });
+    },
+    // All B.A list
+    fetchSelectedBa({commit}, payload){
+      firebase.database().ref('users').orderByKey().equalTo(payload).on('value', (baValue) => {
+        let ba = {};
+        const obj = baValue.val();
+         for (let key in obj) {
+           ba = ({
+             id: key,
+             name: obj[key].name,
+             store: obj[key].store,
+             address: obj[key].address,
+             email: obj[key].email,
+             uniqueId: obj[key].uniqueId,
+           });
+         }
+        console.log(ba);
+        commit('setSelectedBa', ba);
+      });
+    },
+    // Fetching Store Details
+    fetchShopDetails({commit, getters}, payload){
+      firebase.database().ref('stores').orderByKey().equalTo(payload).once('value', (storedetails) => {
+        const storeDetail = getters.storeDetails;
+        if(getters.storeDetails.length === 3){
+          getters.storeDetails.shift();
+        }
+        const obj = storedetails.val();
+        for (let key in obj) {
+          storeDetail.push({
+            id: key,
+            name: obj[key].name,
+            location: obj[key].location
+          });
+        }
+        commit('SET_STORE_DETAILS', storeDetail)
+      });
+    },
+    // Fetch By Merchandiser
+    fetchMerchandiserReport({commit},){
+      firebase.database().ref('storedata').once('value', (report) => {
+        const reports = [];
+        const obj = report.val();
+        for (let key in obj) {
+          reports.push({
+            id: key,
+            time: obj[key].time,
+            name: obj[key].merchandiserName,
+            store: obj[key].storename,
+            storeId: obj[key].storeid,
+            storeImg: obj[key].storePicImgUrl,
+          });
+        }
+        commit('SET_MERCHANDISER_REPORTS', reports)
+      });
+    },
+
 
 
 
@@ -244,59 +355,129 @@ export const store = new Vuex.Store({
     brandAmbassadorReg({commit}, payload){
       // Start Loading
       commit('SET_MAIN_LOADING', true);
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            const newUser = {
-              id: user.uid,
-            };
+      // Authenticate Firebase User
+      var config = {
+        apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
+        authDomain: "bams-e190d.firebaseapp.com",
+        databaseURL: "https://bams-e190d.firebaseio.com"
+      };
+      let secondaryApp = firebase.initializeApp(config, "Secondaryy");
+      // admin.auth().createUser({
+      //   email: payload.email,
+      //   displayName: payload.ba.name,
+      //   emailVerified: false,
+      //   password: payload.password
+      // })
+      secondaryApp.auth().createUserWithEmailAndPassword(payload.email, payload.password).then((user) => {
+        const brandAmbassador = {
+          uniqueId: user.uid,
+          name: payload.ba.name,
+          address: payload.ba.address,
+          email: payload.email,
+          password: payload.password,
+          store: payload.ba.store,
+          role: 'BrandAmbassador'
+        };
+        return firebase.database().ref('users').push(brandAmbassador).then(() => {
+          // assign store
+          return firebase.database().ref('stores/' + payload.ba.store.id + '/').update({
+            assign: user.uid
+          }).then(() => {
             // End Loading
-           commit('SET_MAIN_LOADING', false);
-           // Sending Success Message
-           commit('SET_SUCCESS_MSG', 'Merchandiser Successfully Registered');
+            secondaryApp.auth().signOut();
+            commit('SET_MAIN_LOADING', false);
+            // Sending Success Message
+            commit('SET_SUCCESS_MSG', 'B.A Successfully Created');
             setTimeout(() => {
               commit('SET_SUCCESS_MSG', 'Operation Successful');
-            },4000);
-           console.log('Registerd')
-          }
-        ).catch(
-        error => {
-          commit('SET_USER_ERROR', true);
-          console.log(error);
-          setTimeout(() => {
-            commit('SET_USER_ERROR', false);
-          },4000)
-        }
-      )
+            }, 4000);
+          })
+        });
+      });
     },
+    //UPD
+    updbrandAmbassadorReg({commit}, payload){
+      // Start Loading
+      commit('SET_MAIN_LOADING', true);
+      // Authenticate Firebase User
+      var config = {
+        apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
+        authDomain: "bams-e190d.firebaseapp.com",
+        databaseURL: "https://bams-e190d.firebaseio.com"
+      };
+      let secondaryApp = firebase.initializeApp(config, "Secondary");
+      // admin.auth().createUser({
+      //   email: payload.email,
+      //   displayName: payload.ba.name,
+      //   emailVerified: false,
+      //   password: payload.password
+      // })
+      secondaryApp.auth().createUserWithEmailAndPassword(payload.email, payload.password).then((user) => {
+        const brandAmbassador = {
+          uniqueId: user.uid,
+          name: payload.ba.name,
+          address: payload.ba.address,
+          email: payload.email,
+          password: payload.password,
+          store: payload.ba.store,
+          role: 'BrandAmbassador'
+        };
+        return firebase.database().ref('users').push(brandAmbassador).then(() => {
+          // assign store
+          return firebase.database().ref('stores/' + payload.ba.store.id + '/').update({
+            assign: user.uid
+          }).then(() => {
+            // End Loading
+            secondaryApp.auth().signOut();
+            commit('SET_MAIN_LOADING', false);
+            // Sending Success Message
+            commit('SET_SUCCESS_MSG', 'B.A Successfully Created');
+            setTimeout(() => {
+              commit('SET_SUCCESS_MSG', 'Operation Successful');
+            }, 4000);
+          })
+        });
+      });
+    },
+
+
     // Supervisor PUT
     supervisorReg({commit}, payload){
       // Start Loading
       commit('SET_MAIN_LOADING', true);
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            const newUser = {
-              id: user.uid,
-            };
+      // Authenticate Firebase User
+      var config = {
+        apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
+        authDomain: "bams-e190d.firebaseapp.com",
+        databaseURL: "https://bams-e190d.firebaseio.com"
+      };
+      let secondaryApp = firebase.initializeApp(config, "Secondaryy");
+      // admin.auth().createUser({
+      //   email: payload.email,
+      //   displayName: payload.ba.name,
+      //   emailVerified: false,
+      //   password: payload.password
+      // })
+      secondaryApp.auth().createUserWithEmailAndPassword(payload.email, payload.password).then((user) => {
+        const supervisor = {
+          uniqueId: user.uid,
+          name: payload.supervisor.name,
+          address: payload.supervisor.address,
+          email: payload.email,
+          password: payload.password,
+          role: 'Supervisor'
+        };
+        return firebase.database().ref('users').push(supervisor).then(() => {
             // End Loading
+            secondaryApp.auth().signOut();
             commit('SET_MAIN_LOADING', false);
             // Sending Success Message
-            commit('SET_SUCCESS_MSG', 'Merchandiser Successfully Registered');
+            commit('SET_SUCCESS_MSG', 'B.A Successfully Created');
             setTimeout(() => {
               commit('SET_SUCCESS_MSG', 'Operation Successful');
-            },4000);
-            console.log('Registerd')
-          }
-        ).catch(
-        error => {
-          commit('SET_USER_ERROR', true);
-          console.log(error);
-          setTimeout(() => {
-            commit('SET_USER_ERROR', false);
-          },4000)
-        }
-      )
+            }, 4000);
+          })
+        });
     },
     // Store PUT
     storeReg({commit}, payload){
@@ -322,45 +503,8 @@ export const store = new Vuex.Store({
             commit('SET_USER_ERROR', false);
           },4000)
       });
-    },
-
-    // Fetching Store Details
-    fetchShopDetails({commit, getters}, payload){
-      firebase.database().ref('stores').orderByKey().equalTo(payload).once('value', (storedetails) => {
-        const storeDetail = getters.storeDetails;
-        if(getters.storeDetails.length === 3){
-            getters.storeDetails.shift();
-        }
-        const obj = storedetails.val();
-        for (let key in obj) {
-          storeDetail.push({
-            id: key,
-            name: obj[key].name,
-            location: obj[key].location
-          });
-        }
-        commit('SET_STORE_DETAILS', storeDetail)
-      });
-    },
-
-    // Fetch By Merchandiser
-    fetchMerchandiserReport({commit},){
-      firebase.database().ref('storedata').once('value', (report) => {
-        const reports = [];
-        const obj = report.val();
-        for (let key in obj) {
-          reports.push({
-            id: key,
-            time: obj[key].time,
-            name: obj[key].merchandiserName,
-            store: obj[key].storename,
-            storeId: obj[key].storeid,
-            storeImg: obj[key].storePicImgUrl,
-          });
-        }
-        commit('SET_MERCHANDISER_REPORTS', reports)
-      });
     }
+
   },
   getters: {
     // Application Details
@@ -375,6 +519,12 @@ export const store = new Vuex.Store({
     },
     unAssignedStores (state){
       return state.unAssignedStores
+    },
+    availableBA (state){
+      return state.baList
+    },
+    selectedBa (state){
+      return state.selectedBa
     },
     storeList (state){
       return state.stores

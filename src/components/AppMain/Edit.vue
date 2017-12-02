@@ -217,12 +217,13 @@
       },
     },
     created(){
-      //        getting Random store Details
+//        getting Random store Details
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
         this.$store.dispatch('baListUPD').then(() => {
 //           Un-Assigned stores Updated
+          this.$store.dispatch('unAssignedStoresListUPD');
           console.log("BA List Updated");
         });
 

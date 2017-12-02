@@ -44,7 +44,7 @@ export const store = new Vuex.Store({
     selectedBa: {},
     stores: [],
     storeDetails: [],
-    merchandiserReports: [],
+    stockReports: [],
     // Workers List
     // B.A List
     baList: {},
@@ -75,6 +75,9 @@ export const store = new Vuex.Store({
       state.baList = payload;
     },
     setSelectedBa (state, payload){
+      state.selectedBa = payload;
+    },
+    setStockReport (state, payload){
       state.selectedBa = payload;
     },
     setUserInfo (state, payload){

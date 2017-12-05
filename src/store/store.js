@@ -44,7 +44,8 @@ export const store = new Vuex.Store({
     selectedBa: {},
     stores: [],
     storeDetails: [],
-    stockReports: [],
+    storeStockReports: [],
+    storeStoreReports: [],
     // Workers List
     // B.A List
     baList: {},
@@ -78,7 +79,10 @@ export const store = new Vuex.Store({
       state.selectedBa = payload;
     },
     setStockReport (state, payload){
-      state.selectedBa = payload;
+      state.storeStockReports = payload;
+    },
+    setStoreReport (state, payload){
+      state.storeStoreReports = payload;
     },
     setUserInfo (state, payload){
       state.userinfo = payload;
@@ -221,8 +225,9 @@ export const store = new Vuex.Store({
 
 
     // USER UPDATES
-    updateSelectedBa({getters},payload){
+    updateSelectedBa({commit, getters},payload){
       // initiate Loading
+      console.log("Reached Action");
       commit('SET_MAIN_LOADING', true);
       firebase.database().ref('stores/' + getters.selectedBa.store.id).update({
         assign: 'none'
@@ -244,15 +249,16 @@ export const store = new Vuex.Store({
 
     // Fetching Data
     // Total Store list
-    shopsListUPD({commit}){
-      firebase.database().ref('storedata').on('value', (storelist) => {
+    storeListUPD({commit}){
+      firebase.database().ref('stores').on('value', (storelist) => {
         const stores = [];
         const obj = storelist.val();
         for (let key in obj) {
           stores.push({
             id: key,
             name: obj[key].name,
-            location: obj[key].location,
+            address: obj[key].address,
+            city: obj[key].city,
           })
         }
         commit('SET_STORES', stores);
@@ -329,22 +335,51 @@ export const store = new Vuex.Store({
         commit('SET_STORE_DETAILS', storeDetail)
       });
     },
-    // Fetch By Merchandiser
-    fetchMerchandiserReport({commit},){
-      firebase.database().ref('storedata').once('value', (report) => {
+    // Fetch By ADMIN --ONLY
+    fetchStockReports({commit}, payload){
+      firebase.database().ref('stockdata').orderByChild('date').equalTo(payload.toString()).once('value', (report) => {
         const reports = [];
         const obj = report.val();
         for (let key in obj) {
           reports.push({
             id: key,
-            time: obj[key].time,
-            name: obj[key].merchandiserName,
-            store: obj[key].storename,
+            date: obj[key].date,
+            // Images
+            baPictureUrl: obj[key].baPictureImgUrl,
+            storePictureUrl: obj[key].storePicImgUrl,
+            shelfPictureUrl: obj[key].shelfPictureImgUrl,
+            // Store info
+            baName: obj[key].baName,
+            interceptions: obj[key].interceptions,
             storeId: obj[key].storeid,
-            storeImg: obj[key].storePicImgUrl,
+            storeName: obj[key].storename,
+            userName: obj[key].userName,
+            // Stock Information
+            stock : obj[key].soyaSupremeStock
           });
         }
-        commit('SET_MERCHANDISER_REPORTS', reports)
+        commit('setStockReport', reports)
+      });
+    },
+    // Fetch By ADMIN --ONLY
+    fetchStoreReports({commit}, payload){
+      firebase.database().ref('storedata/' + payload).once('value', (report) => {
+        const reports = [];
+        const obj = report.val();
+        for (let key in obj) {
+          reports.push({
+            id: key,
+            // Customer Information
+            customerName: obj[key].customerName,
+            customerContact: obj[key].customerContact,
+            // Store info
+            storeName: obj[key].storeName,
+            userName: obj[key].userName,
+            // Stock Information
+            purchased : obj[key].purchased
+          });
+        }
+        commit('setStoreReport', reports)
       });
     },
 
@@ -467,6 +502,10 @@ export const store = new Vuex.Store({
           name: payload.supervisor.name,
           address: payload.supervisor.address,
           email: payload.email,
+          store: {
+            id: 'none',
+            name: 'none'
+          },
           password: payload.password,
           role: 'Supervisor'
         };
@@ -475,7 +514,7 @@ export const store = new Vuex.Store({
             secondaryApp.auth().signOut();
             commit('SET_MAIN_LOADING', false);
             // Sending Success Message
-            commit('SET_SUCCESS_MSG', 'B.A Successfully Created');
+            commit('SET_SUCCESS_MSG', 'Supervisor Successfully Created');
             setTimeout(() => {
               commit('SET_SUCCESS_MSG', 'Operation Successful');
             }, 4000);
@@ -535,8 +574,11 @@ export const store = new Vuex.Store({
     storeDetails (state) {
       return state.storeDetails
     },
-    merchandiserReports (state) {
-      return state.merchandiserReports
+    storeStockReports (state) {
+      return state.storeStockReports
+    },
+    storeStoreReports (state) {
+      return state.storeStoreReports
     },
     mainLoading (state){
       return state.loadingState

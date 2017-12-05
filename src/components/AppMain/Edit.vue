@@ -52,7 +52,7 @@
                       </v-flex>
                       <!--submission-->
                       <v-flex xs12>
-                        <v-btn large v-on:click="onBAUPD" type="submit" class="green" > + UPDATE <v-icon right>refresh</v-icon></v-btn>
+                        <v-btn large type="submit" class="green" > + UPDATE <v-icon right>refresh</v-icon></v-btn>
                       </v-flex>
 
                     </form>

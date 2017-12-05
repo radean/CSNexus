@@ -146,7 +146,7 @@
 
 
     <!--Messages-->
-    <!--Merchanser Registration-->
+    <!--Snackers-->
     <v-snackbar
       v-model="successFlag"
       :top="true"
@@ -266,6 +266,10 @@ export default {
 </script>
 
 <style>
+  ::-webkit-scrollbar-button{ display: none; height: 8px; border-radius: 0px; background-color: #4a4a4a; } ::-webkit-scrollbar-button:hover{ background-color: #414141; } ::-webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 4px; } ::-webkit-scrollbar-track{ background-color: #737373; } ::-webkit-scrollbar-track:hover{ background-color: #000000; } ::-webkit-scrollbar{ width: 8px; }
+
+  /*-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #4a4a4a; } -webkit-scrollbar-button:hover{ background-color: #414141; } -webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 8px; } -webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 8px; } -webkit-scrollbar-track{ background-color: #737373; } -webkit-scrollbar-track:hover{ background-color: #000000; } -webkit-scrollbar{ width: 4px; }*/
+
   #inspire{
     background: #085078;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #85D8CE, #085078);  /* Chrome 10-25, Safari 5.1-6 */

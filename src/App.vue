@@ -51,13 +51,13 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile ripple>
+        <v-list-tile to="stockreports" ripple>
           <v-list-tile-action>
-            <v-icon>lock</v-icon>
+            <v-icon>local_shipping</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              Broadcast
+              Stock Reports
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -223,7 +223,7 @@ export default {
     setTimeout(() => {
       this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
         let date = new Date((response.body.zones[0].timestamp * 1000) - response.body.zones[0].gmtOffset * 1000);
-        let day = date.getDate();
+        let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
         this.currentDate = month + '-' + day;
       });

@@ -7,7 +7,7 @@
         </v-toolbar>
         <v-tabs-bar class="blue">
           <v-tabs-slider color="yellow"></v-tabs-slider>
-          <v-tabs-item href="c1">
+          <v-tabs-item href="c1" v-on:click="fetchStoreList">
             <v-icon>people</v-icon>
             Add B.A
           </v-tabs-item>
@@ -259,6 +259,10 @@
       onStoreReg() {
         this.$store.dispatch('storeReg', this.addStore)
       },
+      fetchStoreList(){
+//        Fetching Required Data
+        this.$store.dispatch('unAssignedStoresListUPD')
+      },
       populateUnassignedStoreList(){
 //      Converting Firebase Raw Returns to Vialable Form
         let obj = this.unAssignedStore;
@@ -299,10 +303,8 @@
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
-        this.$store.dispatch('unAssignedStoresListUPD').then(() => {
-//           Un-Assigned stores Updated
-          console.log("Store Updated");
-        });
+      this.$store.dispatch('unAssignedStoresListUPD').then(() => {
+      });
       setTimeout(() => {
 //  dispatch Order to retrieve Unassigned store List
         this.populateUnassignedStoreList();

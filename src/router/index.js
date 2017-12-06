@@ -10,6 +10,7 @@ import Registration from '../components/Auth/Registration.vue'
 import Login from '../components/Auth/Login.vue'
 import Broadcast from '../components/AppMain/Broadcast.vue'
 import Reports from '../components/AppMain/Reports.vue'
+import StockReports from '../components/AppMain/StockReports.vue'
 import Monitor from '../components/AppMain/Monitor.vue'
 
 Vue.use(Router);
@@ -52,8 +53,13 @@ export const routes = [
     },
     {
       path: '/reports',
-      name: 'Reportd',
+      name: 'Reports',
       component: Reports
+    },
+    {
+      path: '/stockreports',
+      name: 'StockReports',
+      component: StockReports
     },
     {
       path: '/monitor',

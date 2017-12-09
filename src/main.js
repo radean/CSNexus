@@ -8,14 +8,14 @@ import * as firebase from 'firebase'
 import VueRouter from 'vue-router';
 import { store } from './store/store'
 import { routes } from './router';
-
-
+import lodash from 'lodash';
 // FirebaseApp.initializeApp(options);
 
 
 
 // Vue Usage
 Vue.use(Vuetify);
+Vue.use(lodash);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 

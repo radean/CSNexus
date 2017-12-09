@@ -45,7 +45,7 @@ export const store = new Vuex.Store({
     stores: [],
     storeDetails: [],
     storeStockReports: [],
-    storeStoreReports: [],
+    consumerStoreReports: [],
     compileReports: [],
     // Workers List
     // B.A List
@@ -79,8 +79,8 @@ export const store = new Vuex.Store({
     setSelectedBa (state, payload){
       state.selectedBa = payload;
     },
-    setStoreReport (state, payload){
-      state.storeStoreReports = payload;
+    setConsumerReport (state, payload){
+      state.consumerStoreReports = payload;
     },
     setCompileReport (state, payload){
       state.compileReports = payload;
@@ -372,7 +372,7 @@ export const store = new Vuex.Store({
       });
     },
     // Fetch By ADMIN --ONLY
-    fetchStoreReports({commit}, payload){
+    fetchConsumerReports({commit}, payload){
       commit('SET_MAIN_LOADING', true);
       firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.store).once('value', (report) => {
         const reports = [];
@@ -391,7 +391,7 @@ export const store = new Vuex.Store({
           });
         }
         commit('SET_MAIN_LOADING', false);
-        commit('setStoreReport', reports)
+        commit('setConsumerReport', reports)
       });
     },
     // Fetch Store Reports By Campaign
@@ -411,15 +411,11 @@ export const store = new Vuex.Store({
               customerContact: obj[key].customerContact,
               // Store info
               storeName: obj[key].store.name,
+              store: obj[key].store,
               userName: obj[key].userName,
               // Stock Information
               purchased : obj[key].purchased
             });
-            // for (let nkey in obj[key].purchased){
-            //   console.log(nkey)
-              // totals = totals.add(nkey);
-            // }
-            // console.log(total)
           }
         });
         commit('SET_MAIN_LOADING', false);
@@ -533,7 +529,7 @@ export const store = new Vuex.Store({
         authDomain: "bams-e190d.firebaseapp.com",
         databaseURL: "https://bams-e190d.firebaseio.com"
       };
-      let secondaryApp = firebase.initializeApp(config, "Secondaryy");
+      let secondaryApp = firebase.initializeApp(config, "Secondary");
       // admin.auth().createUser({
       //   email: payload.email,
       //   displayName: payload.ba.name,
@@ -621,8 +617,8 @@ export const store = new Vuex.Store({
     storeStockReports (state) {
       return state.storeStockReports
     },
-    storeStoreReports (state) {
-      return state.storeStoreReports
+    consumerStoreReports (state) {
+      return state.consumerStoreReports
     },
     compileReport (state) {
       return state.compileReports

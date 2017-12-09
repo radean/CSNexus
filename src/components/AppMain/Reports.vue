@@ -10,7 +10,7 @@
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1">
             <v-icon>store</v-icon>
-            Stores Reports
+            Consumers Reports
           </v-tabs-item>
           <v-tabs-item href="c2">
             <v-icon>view_module</v-icon>
@@ -23,7 +23,7 @@
               <v-card-text>
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
-                    <v-flex xs12 ><h6>STORE REPORT</h6></v-flex>
+                    <v-flex xs12 ><h6>CONSUMER REPORT</h6></v-flex>
                     <v-flex xs6 class="text-xs-left">SORTING OPTIONS</v-flex>
                     <v-flex xs12>
                       <v-divider></v-divider>
@@ -32,7 +32,7 @@
                           lazy
                           :close-on-content-click="false"
                           :close-on-click="false"
-                          v-model="storeMenu"
+                          v-model="consumerMenu"
                           transition="scale-transition"
                           offset-y
                           full-width
@@ -43,11 +43,11 @@
                           <v-text-field
                             slot="activator"
                             label="By Date"
-                            v-model="storeSelectedDate"
+                            v-model="consumerSelectedDate"
                             prepend-icon="event"
                             readonly
                           ></v-text-field>
-                          <v-date-picker v-model="storeSelectedDate" no-title scrollable actions>
+                          <v-date-picker v-model="consumerSelectedDate" no-title scrollable actions>
                             <template slot-scope="{ save, cancel }">
                               <v-card-actions>
                                 <v-spacer></v-spacer>
@@ -63,7 +63,7 @@
                       <v-divider></v-divider>
                       <v-container fluid style="min-height: 0;" grid-list-lg>
                         <v-layout row wrap >
-                          <v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchStoreReport(store)">
+                          <v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchConsumerReport(store)">
                             <v-card color="grey lighten-2" class="black--text elevation-12">
                               <v-card-title primary-title>
                                 <div class="headline">{{ store.name }} Report</div>
@@ -80,13 +80,13 @@
                       </v-container>
                     </v-flex>
                     <v-flex xs12 >
-                      <v-dialog v-model="storeReportDialog" maxWidth="1200px" >
+                      <v-dialog v-model="consumerReportDialog" maxWidth="1200px" >
                         <v-card>
                           <v-card-title>
                             <span class="headline">{{ selectedStore }} Report</span>
                           </v-card-title>
                           <v-card-text>
-                            <div class="table__overflow" id="storeHeaderData" style="overflow-x: hidden" >
+                            <div class="table__overflow" id="consumerHeaderData" style="overflow-x: hidden" >
                               <table style="width: 1450px; overflow-y: scroll" >
                                 <thead>
                                 <th style="width: 240px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">BASIC INFORMATION</th>
@@ -98,10 +98,10 @@
                               </table>
                             </div>
                             <v-data-table
-                              v-bind:headers="storeReportListHeaders"
-                              v-bind:onscroll="syncStoreScroll"
-                              id="storeTableData"
-                              :items="storeReport"
+                              v-bind:headers="consumerReportListHeaders"
+                              v-bind:onscroll="syncConsumerScroll"
+                              id="consumerTableData"
+                              :items="consumerReport"
                               hide-actions
                               :loading="selectLoading"
                             >
@@ -138,15 +138,49 @@
                                 <td class="text-xs-center">{{ props.item.purchased.ssbotin5ltr }}</td>
                                 <td class="text-xs-center">{{ props.item.purchased.ssbotin25ltr }}</td>
                               </template>
+                              <!--Total Footer-->
+                              <template slot="footer">
+                                <!--Soya Supreme Cooking Oil-->
+                                <td class="text-xs-left grey darken-1" ></td>
+                                <td class="text-xs-center grey darken-1"></td>
+                                <td class="text-xs-left grey darken-1">Total</td>
+                                <td class="text-xs-center grey darken-1"></td>
+                                <!--Soya Supreme Cooking Oil-->
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle1ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle3ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscpoly1_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscpresspour3ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscpresspour5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin2_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin10ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscjcan10ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.sscjcan16ltr }}</td>
+                                <!--Smart Cooking OIl-->
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle1ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle3ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle4_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scpoly1_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scjcan10ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.scjcan16ltr }}</td>
+                                <!--Soya Supreme Banaspati-->
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbpoly1_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbtin5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbtin25ltr }}</td>
+                                <!--Soya Supreme banaspati with olive oil-->
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbopoly1_5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbotin5ltr }}</td>
+                                <td class="text-xs-center grey darken-1">{{ consumerTotal.ssbotin25ltr }}</td>
+                              </template>
                             </v-data-table>
                           </v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" flat="flat" @click="storeReportDialog = false">OK</v-btn>
+                            <v-btn color="green darken-1" flat="flat" @click="consumerReportDialog = false">OK</v-btn>
                           </v-card-actions>
                         </v-card>
                       </v-dialog>
-
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -244,15 +278,15 @@
                             v-bind:headers="compileReportListHeaders"
                             v-bind:onscroll="syncCompileScroll"
                             id="compileTableData"
-                            :items="compileReports"
+                            :items="compileReport"
                             hide-actions
                             :loading="selectLoading"
                           >
                             <template slot="items" slot-scope="props" >
                               <td class="text-xs-left">{{ props.item.storeName }}</td>
-                              <td class="text-xs-center">{{ props.item.customerName }}</td>
-                              <td class="text-xs-left">{{ props.item.customerContact }}</td>
                               <td class="text-xs-center">{{ props.item.userName }}</td>
+                              <td class="text-xs-left">{{ props.item.userName }}</td>
+                              <td class="text-xs-center">{{ props.item.interception }}</td>
                               <!--Soya Supreme Cooking Oil-->
                               <td class="text-xs-center">{{ props.item.purchased.sscbottle1ltr }}</td>
                               <td class="text-xs-center">{{ props.item.purchased.sscbottle3ltr }}</td>
@@ -340,9 +374,9 @@
     data () {
       return {
 //      GUI DATA
-        storeScrollPosition: null,
-        storeMenu: false,
-        storeReportDialog: false,
+        consumerScrollPosition: null,
+        consumerMenu: false,
+        consumerReportDialog: false,
         compileMenu: {
           to: false,
           from: false
@@ -351,9 +385,11 @@
         selectedStore: 'Store',
         compileSelectedStore: 'Compile',
 //      PROCESSED
-        compileTotal: {},
+        compileTotal: [],
+        compileReport: [],
+        consumerTotal: [],
 //      GUI HEADERS
-        storeReportListHeaders: [
+        consumerReportListHeaders: [
           { text: 'Store Name', value: 'storeName', align: 'left'},
           { text: 'Customer', value: 'customer', align: 'left' },
           { text: 'Contact', value: 'contact', align: 'left' },
@@ -388,9 +424,9 @@
         ],
         compileReportListHeaders: [
           { text: 'Store Name', value: 'storeName', align: 'left', class: 'grey darken-1' },
-          { text: 'Interceptions', value: 'interceptions', align: 'left', class: 'grey darken-1' },
+          { text: 'Location', value: 'location', align: 'left', class: 'grey darken-1' },
           { text: 'B.A Name', value: 'baName', align: 'left', class: 'grey darken-1' },
-          { text: 'Supervisor', value: 'supervisor', align: 'left', class: 'grey darken-1' },
+          { text: 'Interceptions', value: 'interceptions', align: 'left', class: 'grey darken-1' },
 //          Soya Supreme
           { text: 'B 1', value: 'stock.sscbottle1ltr', align: 'left', class: 'red' },
           { text: 'B 3', value: 'stock.sscbottle3ltr', align: 'left', class: 'red' },
@@ -420,110 +456,143 @@
           { text: 'T 5', value: 'stock.ssbotin5ltr', align: 'left',class:'amber darken-3' },
         ],
 //      Fetched Data
-        storeStockReport: [],
+        consumerStockReport: [],
 //      Sent Data
         compileMonth: {
           to: null,
           from: null
         },
-        storeSelectedDate: null,
+        consumerSelectedDate: null,
       }
     },
     computed: {
       compileDateValid(){
-          return this.compileMonth.to !== null && this.compileMonth.from !== null
+        return this.compileMonth.to !== null && this.compileMonth.from !== null
       },
       storeList(){
         return this.$store.getters.storeList
       },
-      storeReport(){
-        return this.$store.getters.storeStoreReports
-      },
-      compileReports(){
-        let report = this.$store.getters.compileReport;
+      consumerReport(){
+        let report = this.$store.getters.consumerStoreReports;
         let purchased = [];
         let total = {};
-        let totalPurchased = {
-        sscbottle1ltr: 0,
-        sscbottle3ltr: 0,
-        sscbottle5ltr: 0,
-        sscpoly1_5ltr: 0,
-        sscpresspour3ltr: 0,
-        sscpresspour5ltr: 0,
-        ssctin2_5ltr: 0,
-        ssctin5ltr: 0,
-        ssctin10ltr: 0,
-        sscjcan10ltr: 0,
-        sscjcan16ltr: 0,
-//          Smart Cooking OIl
-        scbottle1ltr: 0,
-        scbottle3ltr: 0,
-        scbottle4_5ltr: 0,
-        scpoly1_5ltr: 0,
-        scjcan10ltr: 0,
-        scjcan16ltr: 0,
-//          Soya Supreme Banaspati
-        ssbpoly1_5ltr: 0,
-        ssbtin5ltr: 0,
-        ssbtin25ltr: 0,
-//          Soya Supreme banaspati with olive oil
-        ssbopoly1_5ltr: 0,
-        ssbotin5ltr: 0,
-        ssbotin25ltr: 0
-        };
+//        Calculating all the Entries
         for (let key in report){
           purchased.push(report[key].purchased);
         };
-        // iterate over the input array
         purchased.forEach(function(obj) {
-          // get key from object and iterate
           Object.keys(obj).forEach(function(k) {
-            // define or increment object property value
             total[k] = (total[k] || 0) + parseInt(obj[k]);
           })
         })
-//        })
-//        for (let key in report){
-//          console.log((1 + parseInt(report[key].purchased.sscbottle1ltr)));
-//          totalPurchased.sscbottle1ltr += parseInt(report[key].purchased.sscbottle1ltr);
-//          totalPurchased.sscbottle3ltr += parseInt(report[key].purchased.sscbottle3ltr);
-//          totalPurchased.sscbottle5ltr += parseInt(report[key].purchased.sscbottle5ltr);
-//          totalPurchased.sscpoly1_5ltr += parseInt(report[key].purchased.sscpoly1_5ltr);
-//          totalPurchased.sscpresspour3ltr += parseInt(report[key].purchased.sscpresspour3ltr);
-//          totalPurchased.sscpresspour5ltr += parseInt(report[key].purchased.sscpresspour5ltr);
-//          totalPurchased.ssctin2_5ltr += parseInt(report[key].purchased.ssctin2_5ltr);
-//          totalPurchased.ssctin5ltr += parseInt(report[key].purchased.ssctin5ltr);
-//          totalPurchased.ssctin10ltr += parseInt(report[key].purchased.ssctin10ltr);
-//          totalPurchased.sscjcan10ltr += parseInt(report[key].purchased.sscjcan10ltr);
-//          totalPurchased.sscjcan16ltr += parseInt(report[key].purchased.sscjcan16ltr);
-////          Smart Cooking OIl
-//          totalPurchased.scbottle1ltr += parseInt(report[key].purchased.scbottle1ltr);
-//          totalPurchased.scbottle3ltr += parseInt(report[key].purchased.scbottle3ltr);
-//          totalPurchased.scbottle4_5ltr += parseInt(report[key].purchased.scbottle4_5ltr);
-//          totalPurchased.scpoly1_5ltr += parseInt(report[key].purchased.scpoly1_5ltr);
-//          totalPurchased.scjcan10ltr += parseInt(report[key].purchased.scjcan10ltr);
-//          totalPurchased.scjcan16ltr += parseInt(report[key].purchased.scjcan16ltr);
-////          Soya Supreme Banaspati
-//          totalPurchased.ssbpoly1_5ltr += parseInt(report[key].purchased.ssbpoly1_5ltr);
-//          totalPurchased.ssbtin5ltr += parseInt(report[key].purchased.ssbtin5ltr);
-//          totalPurchased.ssbtin25ltr += parseInt(report[key].purchased.ssbtin25ltr);
-////          Soya Supreme banaspati with olive oil
-//          totalPurchased.ssbopoly1_5ltr += parseInt(report[key].purchased.ssbopoly1_5ltr);
-//          totalPurchased.ssbotin5ltr += parseInt(report[key].purchased.ssbotin5ltr);
-//          totalPurchased.ssbotin25ltr += parseInt(report[key].purchased.ssbotin25ltr);
-//        }
-//        console.log(purchased);
-        this.compileTotal = total;
-        return report
+        this.consumerTotal = total;
+        return this.$store.getters.consumerStoreReports
       },
+      compileReportStores(){
+//      Main Fetched Report
+        let report = this.$store.getters.compileReport;
+        let purchased = [];
+//      Making Purchases count
+        for (let key in report){
+          purchased.push(report[key].purchased);
+        };
+//      Store List
+        let stores = this.$store.getters.storeList;
+        let storeid = [];
+//      Getting store IDs in storeList
+        for (let key in stores){
+          storeid.push(stores[key].id);
+        }
+//      CompiledReport
+        let compiledReport = [];
+        let CleanPurchased = [];
+//      Compile Total
+        let compiledReportTotal = [];
+//      Finding Store in Each Report
+        for (let key in storeid){
+          let matchedStore = [];
+          let storeClean = [];
+          let matchedPurchased = [];
+          let storeInterception = 0;
+          let total = {};
+            report.forEach((obj) => {
+                if(obj.store.id === storeid[key]){
+//                Add interception
+                  storeInterception = storeInterception + 1;
+//                Save to matched Stores
+                  matchedStore = {
+                    id: obj.id,
+                    customerName: obj.customerName,
+                    customerContact: obj.customerContact,
+                    store: obj.store,
+                    storeName: obj.store.name,
+                    userName: obj.userName,
+                    interception: storeInterception,
+                  };
+//                Save to MatchedStores Purchased
+                  matchedPurchased.push(obj.purchased);
+//                 Cleaning Array
+//                Summing All matched purchases of iterated Store
+                  matchedPurchased.forEach(function(obj) {
+                    Object.keys(obj).forEach(function(k) {
+                      total[k] = (total[k] || 0) + parseInt(obj[k]);
+                    });
+                    let Purchased = {
+                      purchased: total
+                    };
+                    storeClean = Object.assign(matchedStore, Purchased);
+                  });
+                }
+                else return null;
+              total = {};
+            });
+          storeInterception = 0;
+          compiledReport.push(storeClean);
+          matchedPurchased = [];
+        }
+//      Cleaning Array
+        compiledReport = compiledReport.filter((n) => { return n != ''});
+
+//      Calculating Total purchases
+//      Removing Empty Arrays
+        for (let key in compiledReport){
+          CleanPurchased.push(compiledReport[key].purchased);
+        };
+        CleanPurchased.forEach(function(obj) {
+          Object.keys(obj).forEach(function(k) {
+            compiledReportTotal[k] = (compiledReportTotal[k] || 0) + parseInt(obj[k]);
+          })
+        });
+
+//        SETTING GVARIABLES
+        this.compileReport = compiledReport;
+        this.compileTotal = compiledReportTotal;
+        return true;
+      },
+//      compileReports(){
+//        let report = this.$store.getters.compileReport;
+//        let purchased = [];
+//        let total = {};
+//        for (let key in report){
+//          purchased.push(report[key].purchased);
+//        };
+//        purchased.forEach(function(obj) {
+//          Object.keys(obj).forEach(function(k) {
+//            total[k] = (total[k] || 0) + parseInt(obj[k]);
+//          })
+//        });
+////        DISABLED
+////        this.compileTotal = total;
+//        return true;
+//      },
 //      Date Validator
       compileDateQuery(){
         let to = this.compileMonth.to.slice(5,10);
         let from = this.compileMonth.from.slice(5,10);
         return {to: to, from: from}
       },
-      storeDateQuery(){
-        return this.storeSelectedDate.slice(5,10);
+      consumerDateQuery(){
+        return this.consumerSelectedDate.slice(5,10);
       }
     },
     methods: {
@@ -534,7 +603,7 @@
         let year = date.getFullYear();
         this.compileMonth.to = year + '-' + month + '-' + day;
         this.compileMonth.from = year + '-' + month + '-' + day;
-        this.storeSelectedDate = year + '-' + month + '-' + day;
+        this.consumerSelectedDate = year + '-' + month + '-' + day;
       },
       sumObjects(){
         return Array.from(arguments).reduce((a, b) => {
@@ -552,28 +621,29 @@
         console.log(query);
         this.$store.dispatch('fetchCompileReports', query).then(() =>{
           setTimeout(() => {
+            this.compileReportStores;
             this.selectLoading = false;
           },3000);
         });
 //        this.storeMenu = false;
       },
 //      STORE QUERY
-      fetchStoreReport(storeinfo){
+      fetchConsumerReport(storeinfo){
         this.selectedStore = storeinfo.name;
         this.selectLoading = true;
-        let init = {date: this.storeDateQuery, store: storeinfo.id};
-        this.$store.dispatch('fetchStoreReports', init).then(() =>{
+        let init = {date: this.consumerDateQuery, store: storeinfo.id};
+        this.$store.dispatch('fetchConsumerReports', init).then(() =>{
           setTimeout(() => {
             this.selectLoading = false;
-            this.storeReportDialog = true;
+            this.consumerReportDialog = true;
           },2000);
         });
-        this.storeMenu = false;
+        this.consumerMenu = false;
       },
 //      SCROLLS SYNCING
-      syncStoreScroll(e){
+      syncConsumerScroll(e){
         let obj = e.srcElement.scrollLeft;
-        document.getElementById('storeHeaderData').scrollLeft = obj;
+        document.getElementById('consumerHeaderData').scrollLeft = obj;
       },
       syncCompileScroll(e){
         let obj = e.srcElement.scrollLeft;
@@ -591,11 +661,11 @@
 //        After 1 Second
         setTimeout(() => {
 //            Syncing Scrolls
-          document.getElementById('storeTableData').onscroll = this.syncStoreScroll;
+          document.getElementById('consumerTableData').onscroll = this.syncConsumerScroll;
           document.getElementById('compileTableData').onscroll = this.syncCompileScroll;
 //          Fetching Base Data Queries
           this.$store.dispatch('storeListUPD');
-//          this.$store.dispatch('fetchStoreReports', this.dateQuery);
+//          this.$store.dispatch('fetchCompileReportsByStores');
 //          Stop Loading
           this.selectLoading = false;
         }, 2000)

@@ -3,9 +3,11 @@
     <extensionMap>
       <mapping pattern="ShopListEnum" type="JavaScript" />
       <mapping pattern="UserCount" type="JavaScript" />
+      <mapping pattern="ssCanolaOil.js" type="JavaScript" />
       <mapping pattern="CityProgress" type="JavaScript" />
       <mapping pattern="stocks" type="JavaScript" />
       <mapping pattern="ShopListEnum.js" type="PLAIN_TEXT" />
+      <mapping pattern="ssBanaspati.js" type="PLAIN_TEXT" />
       <mapping pattern="MerchandiserCount.js" type="PLAIN_TEXT" />
     </extensionMap>
   </component>

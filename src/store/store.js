@@ -40,12 +40,15 @@ export const store = new Vuex.Store({
       subscription: true
     },
     // Data
+    totalInterceptions: 0,
+    totalPurchases: [],
     unAssignedStores: [],
     selectedBa: {},
     stores: [],
     storeDetails: [],
     storeStockReports: [],
     consumerStoreReports: [],
+    storeReports: [],
     compileReports: [],
     // Workers List
     // B.A List
@@ -70,6 +73,12 @@ export const store = new Vuex.Store({
     setMode(state, payload){
       state.app.mode = payload;
     },
+    setTotalInterceptions (state, payload){
+      state.totalInterceptions = payload;
+    },
+    setTotalPurchases (state, payload){
+      state.totalPurchases = payload;
+    },
     setUser (state, payload){
       state.user = payload;
     },
@@ -84,6 +93,12 @@ export const store = new Vuex.Store({
     },
     setCompileReport (state, payload){
       state.compileReports = payload;
+    },
+    setStoreReport (state, payload){
+      state.storeReports = payload;
+    },
+    setStockReport (state, payload){
+      state.storeStockReports = payload;
     },
     setUserInfo (state, payload){
       state.userinfo = payload;
@@ -248,6 +263,28 @@ export const store = new Vuex.Store({
     //==============
 
 
+    // DASHBOARD GUI DATA
+    // ===================
+
+    fetchTotalInterceptions({commit}){
+      // Fetching List of Dates
+      firebase.database().ref('storedata').on('value', (report) => {
+        // Creating a temporary Variable
+        let totalInterceptions = 0;
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          // reports[currentKey] = new Array;
+          for (let key in obj) {
+            // Counting Objects Means interceptions
+            totalInterceptions += 1;
+          }
+        });
+        commit('setTotalInterceptions', totalInterceptions);
+      })
+    },
+
+    // ==============
+
     // Fetching Data
     // Total Store list
     storeListUPD({commit}){
@@ -395,6 +432,39 @@ export const store = new Vuex.Store({
       });
     },
     // Fetch Store Reports By Campaign
+    fetchStoreReports({commit}, payload){
+      commit('SET_MAIN_LOADING', true);
+      firebase.database().ref('storedata').once('value', (report) => {
+        let reports = [];
+        let currentKey = null;
+        // console.log(reports.val)
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          currentKey = childReport.key;
+          // reports[currentKey] = new Array;
+          for (let key in obj){
+            reports.push({
+              id: key,
+              date: childReport.key,
+              // Customer Information
+              customerName: obj[key].customerName,
+              customerContact: obj[key].customerContact,
+              // Store info
+              storeName: obj[key].store.name,
+              store: obj[key].store,
+              userName: obj[key].userName,
+              // Stock Information
+              purchased: obj[key].purchased
+            });
+          }
+          currentKey = null;
+        });
+        // console.log(reports)
+        commit('SET_MAIN_LOADING', false);
+        commit('setStoreReport', reports);
+        });
+    },
+    // Fetch Compile Reports By Campaign
     fetchCompileReports({commit}, payload){
       commit('SET_MAIN_LOADING', true);
       firebase.database().ref('storedata').orderByKey().startAt(payload.from).endAt(payload.to).once('value', (report) => {
@@ -420,6 +490,25 @@ export const store = new Vuex.Store({
         });
         commit('SET_MAIN_LOADING', false);
         commit('setCompileReport', reports)
+      });
+    },
+    // Fetch Compile Reports By Campaign
+    fetchCampaignReports({commit}){
+      firebase.database().ref('storedata').on('value', (report) => {
+        const reports = [];
+        // let purchased;
+        // let totals;
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          for (let key in obj) {
+            reports.push({
+              // Stock Information
+              purchased : obj[key].purchased
+            });
+          }
+        });
+        // console.log(reports);
+        commit('setTotalPurchases', reports)
       });
     },
 
@@ -602,6 +691,12 @@ export const store = new Vuex.Store({
     unAssignedStores (state){
       return state.unAssignedStores
     },
+    totalInterceptions (state){
+      return state.totalInterceptions
+    },
+    totalPurchases (state){
+      return state.totalPurchases
+    },
     availableBA (state){
       return state.baList
     },
@@ -622,6 +717,9 @@ export const store = new Vuex.Store({
     },
     compileReport (state) {
       return state.compileReports
+    },
+    storeReport (state) {
+      return state.storeReports
     },
     mainLoading (state){
       return state.loadingState

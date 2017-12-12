@@ -1,14 +1,14 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-layout row wrap >
-      <v-toolbar class="green lighten-2">
-        <v-toolbar-title>DASHBOARD</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon>
-        <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn flat>STATS</v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
+    <v-layout row wrap class="mb-5 pb-5">
+      <!--<v-toolbar class="green lighten-2">-->
+        <!--<v-toolbar-title>DASHBOARD</v-toolbar-title>-->
+        <!--<v-spacer></v-spacer>-->
+        <!--<v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon>-->
+        <!--<v-toolbar-items class="hidden-sm-and-down">-->
+          <!--<v-btn flat>STATS</v-btn>-->
+        <!--</v-toolbar-items>-->
+      <!--</v-toolbar>-->
         <!--Store Amount-->
       <v-flex xs4 class="GraphsContainer elevation-20">
         <!--user chart-->
@@ -18,25 +18,24 @@
       </v-flex>
 
 
-
-
       <!--ACTIVE USERS-->
       <v-flex d-flex xs12 sm6 md3>
         <v-layout row wrap>
           <v-flex d-flex>
             <v-card class="dashCards elevation-20" >
-              <v-card-title primary-title><h4>ACTIVE USER</h4></v-card-title>
+              <v-card-title primary-title><h5 class="ma-0 pa-0">INTERCEPTIONS</h5></v-card-title>
               <v-card-text>
-                <h2 class="green--text">{{ activeMerchandiser }}</h2>
+                <h2 class="green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
               </v-card-text>
             </v-card>
           </v-flex>
           <v-flex d-flex>
             <v-layout row wrap>
               <v-flex d-flex xs12>
-                <v-card class="dashCards elevation-20">
+                <v-card class="dashCards">
+                  <v-card-title primary-title><h5 class="ma-0 pa-0">TOTAL SALES</h5></v-card-title>
                   <v-card-text>
-                    All Widgets in this page are dynamic.
+                    <h2 class="green--text ma-0 pa-0">{{ totalPurchases }}</h2>
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -46,95 +45,91 @@
       </v-flex>
 
 
-
-
       <v-flex xs4 class="GraphsContainer elevation-20">
         <div class="header">RECENT STORES</div>
-        <!--Store Detail List-->
-        <transition-group name="list">
-        <v-list two-line  v-for="store in storeData" v-bind:key="rndNumber">
-          <template>
-            <v-divider></v-divider>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ store.id }} | {{ store.name }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ store.location }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </template>
-        </v-list>
-       </transition-group>
       </v-flex>
       <!--Active users-->
       <!--<v-flex xs3 class="GraphsContainer elevation-20" style="height: 100px">-->
         <!--<div class="header">ACTIVE USER</div>-->
           <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
       <!--</v-flex>-->
-      <!--Store Visits-->
-      <v-flex xs5 class="reportContainer elevation-20">
-        <div class="header">STORE VISITS</div>
+      <!--Soya Supreme Cooking Oil-->
+      <v-flex xs11 class="reportContainer elevation-21">
+        <div class="header">SOYA SUPREME COOKING OIL</div>
             <div class="barChart">
-              <app-city-progress  :chart-data="CityDataCollection" :options="optionsCity"></app-city-progress>
+              <ssCookingOil :chart-data="soyaSupremeCookingOilChart" :options="optionsCity"></ssCookingOil>
             </div>
-            <!--<v-flex xs4>-->
-              <!--<h6>KHI</h6>-->
-              <!--<h6 style="margin-top: 40%"> 200 / 640</h6>-->
-            <!--</v-flex>-->
-            <!--<v-flex xs4>-->
-              <!--<h6>LHR</h6>-->
-              <!--<h6 style="margin-top: 40%"> 150 / 420</h6>-->
-            <!--</v-flex>-->
-            <!--<v-flex xs4>-->
-              <!--<h6>ISD</h6>-->
-              <!--<h6 style="margin-top: 40%"> 260 / 370</h6>-->
-            <!--</v-flex>-->
       </v-flex>
-      <!--Shop Visited by Cities-->
-      <v-flex xs4 class="reportContainer elevation-20">
-        <div class="header">REPORT</div>
-        <v-container grid-list-md text-xs-center>
-          <v-layout row wrap>
-            <v-flex xs6>
-              <h6>TODAY</h6>
-              <v-progress-circular
-                v-bind:size="100"
-                v-bind:width="15"
-                v-bind:rotate="360"
-                v-bind:value="todayProgress"
-                color="green"
-              >
-                {{ todayProgress }}
-              </v-progress-circular>
-            </v-flex>
-            <v-flex xs6>
-              <h6>MONTH</h6>
-              <v-progress-circular
-                v-bind:size="100"
-                v-bind:width="15"
-                v-bind:rotate="360"
-                v-bind:value="monthProgress"
-                color="yellow"
-              >
-                {{ monthProgress }}
-              </v-progress-circular>
-            </v-flex>
-          </v-layout>
-        </v-container>
+      <!--Soya Supreme Canola Oil-->
+      <v-flex xs11 class="reportContainer elevation-20">
+        <div class="header">SOYA SUPREME CANOLA OIL</div>
+        <div class="barChart">
+          <ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>
+        </div>
       </v-flex>
+      <!--Soya Supreme Banaspati-->
+      <v-flex xs5 class="reportContainer elevation-20">
+        <div class="header">SOYA SUPREME BANASPATI</div>
+        <div class="barChart">
+          <ssBanaspatiOil :chart-data="soyaSupremeBanaspatiChart" :options="optionsCity"></ssBanaspatiOil>
+        </div>
+      </v-flex>
+      <!--Soya Supreme Banaspati with Olive Oil-->
+      <v-flex xs5 class="reportContainer elevation-20">
+        <div class="header">SOYA SUPREME BANASPATI WITH OLIVE OIL</div>
+        <div class="barChart">
+          <ssBanaspatiWOlive :chart-data="soyaSupremeBanaspatiOliveChart" :options="optionsCity"></ssBanaspatiWOlive>
+        </div>
+      </v-flex>
+      <!--<v-flex xs4 class="reportContainer elevation-20">-->
+        <!--<div class="header">REPORT</div>-->
+        <!--<v-container grid-list-md text-xs-center>-->
+          <!--<v-layout row wrap>-->
+            <!--<v-flex xs6>-->
+              <!--<h6>TODAY</h6>-->
+              <!--<v-progress-circular-->
+                <!--v-bind:size="100"-->
+                <!--v-bind:width="15"-->
+                <!--v-bind:rotate="360"-->
+                <!--v-bind:value="todayProgress"-->
+                <!--color="green"-->
+              <!--&gt;-->
+                <!--{{ todayProgress }}-->
+              <!--</v-progress-circular>-->
+            <!--</v-flex>-->
+            <!--<v-flex xs6>-->
+              <!--<h6>MONTH</h6>-->
+              <!--<v-progress-circular-->
+                <!--v-bind:size="100"-->
+                <!--v-bind:width="15"-->
+                <!--v-bind:rotate="360"-->
+                <!--v-bind:value="monthProgress"-->
+                <!--color="yellow"-->
+              <!--&gt;-->
+                <!--{{ monthProgress }}-->
+              <!--</v-progress-circular>-->
+            <!--</v-flex>-->
+          <!--</v-layout>-->
+        <!--</v-container>-->
+      <!--</v-flex>-->
     </v-layout>
   </v-container>
 </template>
 
 <script>
 //  importing Charts
-  import CityProgress from '../Charts/CityProgress'
+  import ssCookingOil from '../Charts/ssCanolaOil'
   import UserCount from '../Charts/LineChart'
+  import ssCanolaOil from '../Charts/ssCanolaOil'
+  import ssBanaspati from '../Charts/ssBanaspatiGhee'
+  import ssBanaspatiWOlive from '../Charts/ssBanaspatiWOlive'
+
 
   export default {
     data () {
       return {
 //      data
-        rndNumber: 0,
+        totalSales: 0,
         storeData: [],
 //      progress Bars
         showProgress: true,
@@ -147,7 +142,43 @@
 //      Charts Data
         StoreDataCollection: null,
         CityDataCollection: null,
+        soyaSupremeCookingOilChart: null,
+        soyaSupremeCanolaOilChart: null,
+        soyaSupremeBanaspatiChart: null,
+        soyaSupremeBanaspatiOliveChart: null,
+        soyaSupremeSKU: {
+          sscbottle1ltr: 1,
+          sscbottle3ltr: 2,
+          sscbottle5ltr: 3,
+          sscpoly1_5ltr: 18,
+          ssctin2_5ltr: 5,
+          ssctin5ltr: 6,
+          ssctin10ltr: 66,
+          sscpresspour3ltr: 8,
+          sscpresspour5ltr: 9,
+          sscjcan10ltr: 10,
+          sscjcan16ltr: 11,
+          scbottle1ltr: 1,
+          scbottle3ltr: 2,
+          scbottle4_5ltr: 3,
+          scpoly1_5ltr: 18,
+          sctin2_5ltr: 5,
+          scjcan10ltr: 6,
+          scjcan16ltr: 66,
+          ssbpoly1_5ltr: 1,
+          ssbtin25ltr: 23,
+          ssbtin5ltr: 3,
+          ssbopoly1_5ltr: 33,
+          ssbotin25ltr: 23,
+          ssbotin5ltr: 3
+        },
         stores: 20,
+        Purchases: {
+          sSCO: 32,
+          sCO: 48,
+          sSB: 8,
+          sSBO: 16
+        },
         optionsCity: {
           responsive: true,
           maintainAspectRatio: false,
@@ -194,7 +225,10 @@
 
     components:{
       'app-user-count': UserCount,
-      'app-city-progress': CityProgress
+      'ssCookingOil': ssCookingOil,
+      'ssCanolaOil': ssCanolaOil,
+      'ssBanaspatiOil': ssBanaspati,
+      'ssBanaspatiWOlive': ssBanaspatiWOlive
     },
 
     created(){
@@ -202,6 +236,12 @@
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
+//      Fetching Interception Action
+      this.$store.dispatch('fetchTotalInterceptions');
+      this.$store.dispatch('fetchCampaignReports');
+//      setTimeout(() => {
+//        this.$store.dispatch('fetchCampaignReports');
+//      },4000)
     },
 
     mounted () {
@@ -210,17 +250,89 @@
         this.fillData();
         this.updateStore();
 //        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
-      }, 4000);
+      }, 3000);
 
     },
 
     computed:{
-      storelist(){
-        return this.$store.getters.storeList.length;
-      },
+//      storelist(){
+//        return this.$store.getters.storeList.length;
+//      },
       storeDetails(){
         this.storeData = this.$store.getters.storeDetails;
-      }
+      },
+//      fetching interception
+      totalInterceptions(){
+        return this.$store.getters.totalInterceptions;
+      },
+      totalPurchases (){
+//        GVs
+        let sSCO = 0;
+        let sCO = 0;
+        let sSB = 0;
+        let sSBO = 0;
+        let sortSKU = []
+        let totalSales = []
+        let totalSaleCount = 0;
+//        Getting Total Number of Purchases Form Server
+        let totalPurchases = this.$store.getters.totalPurchases;
+//        Breaking Down to Categories
+        let obj = totalPurchases;
+        for (let key in obj){
+          sortSKU.push(obj[key].purchased)
+        }
+//        Total Sale Calculate
+        sortSKU.forEach((obj) => {
+          Object.keys(obj).forEach(function(k) {
+            totalSales[k] = (totalSales[k] || 0) + parseInt(obj[k]);
+          })
+        })
+
+        for (let key in totalSales){
+            totalSaleCount += totalSales[key];
+        }
+//        Total soya supreme banaspati with Olive Oil
+        sSBO = totalSales.ssbopoly1_5ltr + totalSales.ssbotin5ltr + totalSales.ssbotin25ltr;
+
+//        Total smart canola oil
+        sCO =
+          totalSales.scbottle1ltr +
+          totalSales.scbottle3ltr +
+          totalSales.scbottle4_5ltr +
+          totalSales.scpoly1_5ltr +
+          totalSales.sctin2_5ltr +
+          totalSales.scjcan10ltr +
+          totalSales.scjcan16ltr;
+
+//        Total soyaSupremeStock
+        sSCO =
+          totalSales.sscbottle1ltr +
+          totalSales.sscbottle3ltr +
+          totalSales.sscbottle5ltr +
+          totalSales.sscpoly1_5ltr +
+          totalSales.ssctin2_5ltr +
+          totalSales.ssctin5ltr +
+          totalSales.ssctin10ltr +
+          totalSales.sscpresspour3ltr +
+          totalSales.sscpresspour5ltr +
+          totalSales.sscjcan10ltr +
+          totalSales.sscjcan16ltr;
+
+//        Total Soya Supreme Banaspati
+        sSB =
+          totalSales.ssbpoly1_5ltr +
+          totalSales.ssbtin25ltr +
+          totalSales.ssbtin5ltr;
+
+        this.soyaSupremeSKU = totalSales;
+//        Assigning to GVBs
+        this.Purchases.sSCO = parseInt(sSCO);
+        this.Purchases.sCO = parseInt(sCO);
+        this.Purchases.sSB = parseInt(sSB);
+        this.Purchases.sSBO = parseInt(sSBO);
+//        this.totalSales = totalSaleCount;
+        return totalSaleCount;
+      },
     },
 
     methods: {
@@ -249,16 +361,99 @@
             },
           ],
         };
-//          Store Progress
-        this.StoreDataCollection = {
-          labels: ['Stores', 'Total Stores'],
+//        soyaSupremeCookingOil Progress
+        this.soyaSupremeCookingOilChart = {
+          labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
 
           datasets: [
             {
-              backgroundColor: ['#FF4944', '#D80600'],
+              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
               borderWidth: 1,
-              color: ['#FF4944', '#D80600'],
-              data: [this.storelist,this.stores]
+              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+              data: [
+                this.soyaSupremeSKU.sscbottle1ltr,
+                this.soyaSupremeSKU.sscbottle3ltr,
+                this.soyaSupremeSKU.sscbottle5ltr,
+                this.soyaSupremeSKU.sscpoly1_5ltr,
+                this.soyaSupremeSKU.ssctin2_5ltr,
+                this.soyaSupremeSKU.ssctin5ltr,
+                this.soyaSupremeSKU.ssctin10ltr,
+                this.soyaSupremeSKU.sscpresspour3ltr,
+                this.soyaSupremeSKU.sscpresspour5ltr,
+                this.soyaSupremeSKU.sscjcan10ltr,
+                this.soyaSupremeSKU.sscjcan16ltr
+              ]
+            },
+          ],
+        }
+//        soyaSupremeCanola Progress
+        this.soyaSupremeCanolaOilChart = {
+          labels: ['1 Ltr', '3 Ltr', '4.5 Ltr', '1x5 Poly', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+
+          datasets: [
+            {
+              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+              borderWidth: 1,
+              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+              data: [
+                this.soyaSupremeSKU.scbottle1ltr,
+                this.soyaSupremeSKU.scbottle3ltr,
+                this.soyaSupremeSKU.scbottle4_5ltr,
+                this.soyaSupremeSKU.scpoly1_5ltr,
+                this.soyaSupremeSKU.scjcan10ltr,
+                this.soyaSupremeSKU.scjcan16ltr
+              ]
+            },
+          ],
+        }
+//        soyaSupremeBanaspati Progress
+        this.soyaSupremeBanaspatiChart = {
+          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+
+          datasets: [
+            {
+              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+              backgroundColor: ['#FF4944', '#D80600', '#990000'],
+              borderWidth: 1,
+              color: ['#FF4944', '#D80600', '#990000'],
+              data: [
+                this.soyaSupremeSKU.ssbpoly1_5ltr,
+                this.soyaSupremeSKU.ssbtin25ltr,
+                this.soyaSupremeSKU.ssbtin5ltr
+              ]
+            },
+          ],
+        }
+//        soyaSupremeBanaspatiOlive Progress
+        this.soyaSupremeBanaspatiOliveChart = {
+          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+
+          datasets: [
+            {
+              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+              backgroundColor: ['#FF4944', '#D80600', '#990000'],
+              borderWidth: 1,
+              color: ['#FF4944', '#D80600', '#990000'],
+              data: [
+                this.soyaSupremeSKU.ssbopoly1_5ltr,
+                this.soyaSupremeSKU.ssbotin25ltr,
+                this.soyaSupremeSKU.ssbotin5ltr
+              ]
+            },
+          ],
+        }
+//          Store Progress
+        this.StoreDataCollection = {
+          labels: ['SSCO', 'SCO', 'SSB', 'SSBO'],
+
+          datasets: [
+            {
+              backgroundColor: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
+              borderWidth: 1,
+              color: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
+              data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
             },
           ],
 
@@ -297,8 +492,9 @@
   }
   .reportContainer .header {
     background-color: rgba(30,30,30,0.3);
-    height: 30%;
-    font-size: 48px;
+    height: 20%;
+    line-height: 200%;
+    font-size: 18px;
   }
   .dashCards {
     max-width: 100%;
@@ -315,6 +511,13 @@
     height: 120px;
   }
   .barChart div{
+    height: 180px;
+  }
+  soyaSupremeCookingOilbarChart{
+    width: 100%;
+    height: 260px;
+  }
+  .soyaSupremeCookingOilbarChart div{
     height: 160px;
   }
   .list-item {

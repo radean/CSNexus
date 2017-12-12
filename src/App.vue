@@ -221,7 +221,7 @@ export default {
       this.$router.push('/')
     };
     setTimeout(() => {
-      this.$http.get('http://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
+      this.$http.get('https://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
         let date = new Date((response.body.zones[0].timestamp * 1000) - response.body.zones[0].gmtOffset * 1000);
         let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
@@ -266,34 +266,46 @@ export default {
 </script>
 
 <style>
+  /*importing Font*/
+  @import url('https://fonts.googleapis.com/css?family=BenchNine');
+  /*Applying Font*/
+  body {
+    font-family: 'BenchNine', sans-serif;
+  }
   ::-webkit-scrollbar-button{ display: none; height: 8px; border-radius: 0px; background-color: #4a4a4a; } ::-webkit-scrollbar-button:hover{ background-color: #414141; } ::-webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 4px; } ::-webkit-scrollbar-track{ background-color: #737373; } ::-webkit-scrollbar-track:hover{ background-color: #000000; } ::-webkit-scrollbar{ width: 8px; }
 
   /*-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #4a4a4a; } -webkit-scrollbar-button:hover{ background-color: #414141; } -webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 8px; } -webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 8px; } -webkit-scrollbar-track{ background-color: #737373; } -webkit-scrollbar-track:hover{ background-color: #000000; } -webkit-scrollbar{ width: 4px; }*/
 
   #inspire{
-    background: #085078;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #85D8CE, #085078);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #85D8CE, #085078); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #000046;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #1CB5E0, #000046);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
+
   .transper {
     background-color: rgba(60,60,60,0.4);
     color: white;
   }
+
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    /*font-family: 'Barlow', sans-serif;*/
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
     margin-top: 0px;
   }
+
   .input-group__details:after {
     background-color: rgba(255, 255, 255, 0.32) !important;
   }
+
   a {color: inherit !important;}
+
   form {
     margin: 0px; padding: 0px; width: 100%;
   }
+
   .fade-enter-active, .fade-leave-active {
     transition-property: opacity;
     transition-duration: .25s;
@@ -306,5 +318,4 @@ export default {
   .fade-enter, .fade-leave-active {
     opacity: 0
   }
-
 </style>

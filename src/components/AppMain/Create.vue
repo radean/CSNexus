@@ -251,7 +251,11 @@
     },
     methods:{
       onBAReg() {
-        this.$store.dispatch('brandAmbassadorReg', {email: this.addBA.email, password: this.addBA.password, ba: this.addBA})
+        this.$store.dispatch('brandAmbassadorReg', {email: this.addBA.email, password: this.addBA.password, ba: this.addBA}).then(() => {
+            setTimeout(() => {
+                document.location.reload();
+            },6000)
+        })
       },
       onSupervisorReg() {
         this.$store.dispatch('supervisorReg', {email: this.addSupervisor.email, password: this.addSupervisor.password, supervisor: this.addSupervisor})

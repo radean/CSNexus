@@ -10,10 +10,10 @@
         <!--</v-toolbar-items>-->
       <!--</v-toolbar>-->
         <!--Store Amount-->
-      <v-flex xs4 class="GraphsContainer elevation-20">
+      <v-flex xs3 class="GraphsContainer elevation-20">
         <!--user chart-->
         <div class="header">STORES</div>
-        <v-progress-circular  v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
+        <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
         <app-user-count :chart-data="StoreDataCollection" :options="optionsLine"></app-user-count>
       </v-flex>
 
@@ -186,7 +186,10 @@
             display: false,
             labels: {
               // This more specific font property overrides the global property
-              fontColor: '#FFFFFF'
+              fontColor: '#FFFFFF',
+              padding: 10,
+              boxWidth: 10,
+              usePointStyle: false
             }
           },
           scales: {
@@ -216,10 +219,37 @@
           legend: {
             labels: {
               // This more specific font property overrides the global property
-              fontColor: 'white'
+              fontColor: 'white',
+              padding: 10,
+              boxWidth: 20,
+              usePointStyle: true
             }
           }
         },
+        optionsDoughnut: {
+          responsive: true,
+          maintainAspectRatio: false,
+          fullWidth: false,
+          layout:{
+            padding: {
+              left: 0,
+              right: 0,
+              top: 10,
+              bottom: 20
+            },
+          },
+          legend: {
+            position: 'bottom',
+            reverse: true,
+            labels: {
+              // This more specific font property overrides the global property
+              fontColor: 'white',
+              padding: 10,
+              boxWidth: 20,
+              usePointStyle: true
+            }
+          }
+        }
       }
     },
 
@@ -286,11 +316,12 @@
           Object.keys(obj).forEach(function(k) {
             totalSales[k] = (totalSales[k] || 0) + parseInt(obj[k]);
           })
-        })
+        });
 
         for (let key in totalSales){
             totalSaleCount += totalSales[key];
         }
+
 //        Total soya supreme banaspati with Olive Oil
         sSBO = totalSales.ssbopoly1_5ltr + totalSales.ssbotin5ltr + totalSales.ssbotin25ltr;
 
@@ -429,7 +460,6 @@
 //        soyaSupremeBanaspatiOlive Progress
         this.soyaSupremeBanaspatiOliveChart = {
           labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-
           datasets: [
             {
               labels: ['1 Poly', '2.5 Tin', '5 Tin',],
@@ -468,7 +498,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .GraphsContainer {
-    max-width: 50%;
+    max-width: 25%;
     background-color: rgba(120,120,120,0.2);
     margin: 10px;
     text-align: center;

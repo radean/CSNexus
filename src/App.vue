@@ -13,7 +13,7 @@
       width="240"
     >
       <v-list>
-        <img align-center src="./assets/mlogo.png" style="padding-left: 25%" />
+        <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%" />
         <v-divider></v-divider>
         <v-subheader class="mt-3 mb-3 grey--text text--darken-1">
           <v-avatar size="48px" class="mr-3">
@@ -61,9 +61,9 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile ripple>
+        <v-list-tile ripple to="broadcast" ripple>
           <v-list-tile-action>
-            <v-icon>lock</v-icon>
+            <v-icon>map</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -223,6 +223,11 @@ export default {
     setTimeout(() => {
       this.$http.get('https://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
         let date = new Date((response.body.zones[0].timestamp * 1000) - response.body.zones[0].gmtOffset * 1000);
+        let day = ("0" + date.getDate()).slice(-2);
+        let month = date.getMonth() + 1;
+        this.currentDate = month + '-' + day;
+      }).catch(() => {
+        let date = new Date();
         let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
         this.currentDate = month + '-' + day;

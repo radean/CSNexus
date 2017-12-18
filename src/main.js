@@ -19,7 +19,9 @@ Vue.use(lodash);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-
+// Setting HTTP
+// Vue.http.headers.common['Content-Type'] = 'application/json';
+// Vue.http.headers.common['Authorization'] = 'key=AIzaSyDOUy35eMYN7woRgGdiRw0ypeShbHMDxgM';
 
 Vue.config.productionTip = false;
 

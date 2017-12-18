@@ -12,7 +12,6 @@
         <v-text-field
           name="useremail"
           label="USERNAME"
-          id="testing"
           v-model="useremail"
         ></v-text-field>
       </v-flex>
@@ -21,7 +20,6 @@
         <v-text-field
           name="userPassword"
           label="PASSWORD"
-          id="testing"
           min="6"
           v-model="userpass"
           type="password"

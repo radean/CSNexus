@@ -68,7 +68,7 @@
                       <v-container fluid style="min-height: 0;" grid-list-lg>
                         <v-layout row wrap >
                           <v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchConsumerReport(store)">
-                            <v-card color="grey lighten-2" class="black--text elevation-12">
+                            <v-card color="grey lighten-2" class="black--text elevation-12" ripple>
                               <v-card-title primary-title>
                                 <div class="headline">{{ store.name }} Report </div>
                                 <v-flex xs6 offset-xs3><v-icon x-large class="black--text">store</v-icon></v-flex>
@@ -237,7 +237,7 @@
                       <v-container fluid style="min-height: 0;" grid-list-lg>
                         <v-layout row wrap >
                           <v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchStoreReport(store)">
-                            <v-card color="grey lighten-2" class="black--text elevation-12">
+                            <v-card color="grey lighten-2" class="black--text elevation-12" ripple>
                               <v-card-title primary-title>
                                 <div class="headline">{{ store.name }} Report </div>
                                 <v-flex xs6 offset-xs3><v-icon x-large class="black--text">store</v-icon></v-flex>

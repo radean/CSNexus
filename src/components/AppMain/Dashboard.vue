@@ -9,40 +9,35 @@
           <!--<v-btn flat>STATS</v-btn>-->
         <!--</v-toolbar-items>-->
       <!--</v-toolbar>-->
+
+      <!--NUMBER WIDGETS-->
+      <v-flex flex xs2>
+        <v-card class="dashCards elevation-10">
+          <v-card-title primary-title class="ma-0 pa-1"><h6 class="ma-0 pa-0">TOTAL SALES</h6></v-card-title>
+          <v-card-text>
+            <h2 class="green--text ma-0 pa-0">{{ totalPurchases }}</h2>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex flex xs2>
+        <v-card class="dashCards elevation-5" >
+          <v-card-title primary-title class="ma-0 pa-1"><h6 class="ma-0 pa-0">INTERCEPTIONS</h6></v-card-title>
+          <v-card-text>
+            <h2 class="green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
         <!--Store Amount-->
       <v-flex xs3 class="GraphsContainer elevation-20">
         <!--user chart-->
         <div class="header">STORES</div>
         <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-        <app-user-count :chart-data="StoreDataCollection" :options="optionsLine"></app-user-count>
+        <app-user-count :chart-data="StoreDataCollection" :options="optionsDoughnut"></app-user-count>
       </v-flex>
 
 
-      <!--ACTIVE USERS-->
-      <v-flex d-flex xs12 sm6 md3>
-        <v-layout row wrap>
-          <v-flex d-flex>
-            <v-card class="dashCards elevation-20" >
-              <v-card-title primary-title><h5 class="ma-0 pa-0">INTERCEPTIONS</h5></v-card-title>
-              <v-card-text>
-                <h2 class="green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-          <v-flex d-flex>
-            <v-layout row wrap>
-              <v-flex d-flex xs12>
-                <v-card class="dashCards">
-                  <v-card-title primary-title><h5 class="ma-0 pa-0">TOTAL SALES</h5></v-card-title>
-                  <v-card-text>
-                    <h2 class="green--text ma-0 pa-0">{{ totalPurchases }}</h2>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-      </v-flex>
+
 
 
       <v-flex xs4 class="GraphsContainer elevation-20">
@@ -228,24 +223,16 @@
         },
         optionsDoughnut: {
           responsive: true,
-          maintainAspectRatio: false,
-          fullWidth: false,
-          layout:{
-            padding: {
-              left: 0,
-              right: 0,
-              top: 10,
-              bottom: 20
-            },
-          },
+          maintainAspectRatio: true,
+          fullWidth: true,
           legend: {
             position: 'bottom',
-            reverse: true,
+            display: true,
             labels: {
               // This more specific font property overrides the global property
               fontColor: 'white',
-              padding: 10,
-              boxWidth: 20,
+              padding: 20,
+              boxWidth: 0,
               usePointStyle: true
             }
           }
@@ -476,7 +463,7 @@
         }
 //          Store Progress
         this.StoreDataCollection = {
-          labels: ['SSCO', 'SCO', 'SSB', 'SSBO'],
+          labels: ['Cooking Oil', 'Canola Oil', 'Banaspati', 'Banaspati with Olive'],
 
           datasets: [
             {
@@ -506,7 +493,6 @@
     border: 1px solid #333;
     border-radius: 2px;
   }
-
   .GraphsContainer .header {
     background-color: rgba(30,30,30,0.3);
     font-size:24px;

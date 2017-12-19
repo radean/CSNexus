@@ -22,6 +22,7 @@ export default {
       options: {
         legend: {
           // position: 'bottom',
+
           labels: {
             // This more specific font property overrides the global property
             fontColor: 'white',

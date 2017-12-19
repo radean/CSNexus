@@ -44,6 +44,7 @@ export const store = new Vuex.Store({
     totalPurchases: [],
     unAssignedStores: [],
     selectedBa: {},
+    recentReports: [],
     stores: [],
     storeDetails: [],
     storeStockReports: [],
@@ -96,6 +97,9 @@ export const store = new Vuex.Store({
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
+    },
+    setAllStoreReport (state, payload){
+      state.recentReports = payload
     },
     setStockReport (state, payload){
       state.storeStockReports = payload;
@@ -464,6 +468,36 @@ export const store = new Vuex.Store({
         commit('setStoreReport', reports);
         });
     },
+    // Fetch All Last Reports
+    fetchAllStoreReports({commit}){
+      commit('SET_MAIN_LOADING', true);
+      firebase.database().ref('storedata').on('value', (report) => {
+        let reports = [];
+        let currentKey = null;
+        // console.log(reports.val)
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          currentKey = childReport.key;
+          // reports[currentKey] = new Array;
+          for (let key in obj){
+            reports.push({
+              id: key,
+              date: childReport.key,
+              // Customer Information
+              customerName: obj[key].customerName,
+              // Store info
+              store: obj[key].store,
+              userName: obj[key].userName,
+            });
+          }
+          currentKey = null;
+        });
+        let crypted = reports.slice(-3);
+        // console.log(reports)
+        commit('SET_MAIN_LOADING', false);
+        commit('setAllStoreReport', crypted);
+      });
+    },
     // Fetch Compile Reports By Campaign
     fetchCompileReports({commit}, payload){
       commit('SET_MAIN_LOADING', true);
@@ -711,6 +745,9 @@ export const store = new Vuex.Store({
     },
     storeStockReports (state) {
       return state.storeStockReports
+    },
+    recentReport (state){
+      return state.recentReports
     },
     consumerStoreReports (state) {
       return state.consumerStoreReports

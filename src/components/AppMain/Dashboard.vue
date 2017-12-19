@@ -11,19 +11,39 @@
       <!--</v-toolbar>-->
 
       <!--NUMBER WIDGETS-->
-      <v-flex flex xs2>
-        <v-card class="dashCards elevation-10">
-          <v-card-title primary-title class="ma-0 pa-1"><h6 class="ma-0 pa-0">TOTAL SALES</h6></v-card-title>
+      <!--TOTAL PURCHASE-->
+      <v-flex flex xs3>
+        <v-card class="dashCards elevation-5">
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
             <h2 class="green--text ma-0 pa-0">{{ totalPurchases }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex flex xs2>
-        <v-card class="dashCards elevation-5" >
-          <v-card-title primary-title class="ma-0 pa-1"><h6 class="ma-0 pa-0">INTERCEPTIONS</h6></v-card-title>
+      <!--TOTAL INTERCEPTION-->
+      <v-flex flex xs3>
+        <v-card class="dashCards elevation-10" >
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Inerceptions</h6></v-card-title>
           <v-card-text>
             <h2 class="green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <!--TOTAL INTERCEPTION-->
+      <v-flex flex xs3>
+        <v-card class="dashCards elevation-15" >
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Brand Ambassador</h6></v-card-title>
+          <v-card-text>
+            <h2 class="green--text ma-0 pa-0" >5</h2>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <!--TOTAL INTERCEPTION-->
+      <v-flex flex xs3>
+        <v-card class="dashCards elevation-20" >
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">INTERCEPTIONS</h6></v-card-title>
+          <v-card-text>
+            <h2 class="green--text ma-0 pa-0" >1</h2>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -31,7 +51,7 @@
         <!--Store Amount-->
       <v-flex xs3 class="GraphsContainer elevation-20">
         <!--user chart-->
-        <div class="header">STORES</div>
+        <div class="header">SALES</div>
         <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
         <app-user-count :chart-data="StoreDataCollection" :options="optionsDoughnut"></app-user-count>
       </v-flex>
@@ -40,38 +60,46 @@
 
 
 
-      <v-flex xs4 class="GraphsContainer elevation-20">
-        <div class="header">RECENT STORES</div>
+      <v-flex xs3 class="GraphsContainer elevation-20">
+        <div class="header" >RECENT STORES</div>
+        <v-list two-line>
+          <v-list-tile v-for="store in recentStore" v-bind:key="store.title" @click="">
+            <v-list-tile-content>
+              <v-list-tile-title >{{ store.title }} | {{ store.address }}</v-list-tile-title>
+              <v-list-tile-sub-title class="grey--text text--lighten-2">BA:{{ store.baName }} | Customer: {{ store.customer }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
       </v-flex>
       <!--Active users-->
       <!--<v-flex xs3 class="GraphsContainer elevation-20" style="height: 100px">-->
         <!--<div class="header">ACTIVE USER</div>-->
           <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
       <!--</v-flex>-->
-      <!--Soya Supreme Cooking Oil-->
-      <v-flex xs11 class="reportContainer elevation-21">
-        <div class="header">SOYA SUPREME COOKING OIL</div>
-            <div class="barChart">
-              <ssCookingOil :chart-data="soyaSupremeCookingOilChart" :options="optionsCity"></ssCookingOil>
-            </div>
-      </v-flex>
       <!--Soya Supreme Canola Oil-->
-      <v-flex xs11 class="reportContainer elevation-20">
-        <div class="header">SOYA SUPREME CANOLA OIL</div>
+      <v-flex xs5 class="reportContainer elevation-20">
+        <div class="header indigo">CANOLA OIL</div>
         <div class="barChart">
           <ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>
         </div>
       </v-flex>
+      <!--Soya Supreme Cooking Oil-->
+      <v-flex xs7 class="reportContainer elevation-21">
+        <div class="header blue">COOKING OIL</div>
+        <div class="barChart">
+          <ssCookingOil :chart-data="soyaSupremeCookingOilChart" :options="optionsCity"></ssCookingOil>
+        </div>
+      </v-flex>
       <!--Soya Supreme Banaspati-->
-      <v-flex xs5 class="reportContainer elevation-20">
-        <div class="header">SOYA SUPREME BANASPATI</div>
+      <v-flex xs2 class="reportContainer elevation-20">
+        <div class="header red">BANASPATI</div>
         <div class="barChart">
           <ssBanaspatiOil :chart-data="soyaSupremeBanaspatiChart" :options="optionsCity"></ssBanaspatiOil>
         </div>
       </v-flex>
       <!--Soya Supreme Banaspati with Olive Oil-->
-      <v-flex xs5 class="reportContainer elevation-20">
-        <div class="header">SOYA SUPREME BANASPATI WITH OLIVE OIL</div>
+      <v-flex xs2 class="reportContainer elevation-20">
+        <div class="header orange">BANASPATI WITH OLIVE OIL</div>
         <div class="barChart">
           <ssBanaspatiWOlive :chart-data="soyaSupremeBanaspatiOliveChart" :options="optionsCity"></ssBanaspatiWOlive>
         </div>
@@ -135,6 +163,11 @@
         lhr_Stores_visited: 15,
         isd_Stores_visited: 24,
 //      Charts Data
+        recentStore: [
+          {title: 'loading...'},
+          {title: 'loading...'},
+          {title: 'loading...git '},
+        ],
         StoreDataCollection: null,
         CityDataCollection: null,
         soyaSupremeCookingOilChart: null,
@@ -215,9 +248,6 @@
             labels: {
               // This more specific font property overrides the global property
               fontColor: 'white',
-              padding: 10,
-              boxWidth: 20,
-              usePointStyle: true
             }
           }
         },
@@ -231,9 +261,7 @@
             labels: {
               // This more specific font property overrides the global property
               fontColor: 'white',
-              padding: 20,
-              boxWidth: 0,
-              usePointStyle: true
+              usePointStyle: false
             }
           }
         }
@@ -256,6 +284,7 @@
 //      Fetching Interception Action
       this.$store.dispatch('fetchTotalInterceptions');
       this.$store.dispatch('fetchCampaignReports');
+      this.$store.dispatch('fetchAllStoreReports');
 //      setTimeout(() => {
 //        this.$store.dispatch('fetchCampaignReports');
 //      },4000)
@@ -360,11 +389,28 @@
         this.lhr_Stores_visited = this.lhr_Stores_visited + Math.floor(Math.random() * (4 - 1 + 1)) + 1;
         this.isd_Stores_visited = this.isd_Stores_visited + Math.floor(Math.random() * (5 - 1 + 1)) + 1;
       },
+      recentPurchase() {
+        let storeReport = [];
+        storeReport = this.$store.getters.recentReport;
+        let check = [];
+        for (let key in storeReport){
+          check.push({
+            title: storeReport[key].store.name,
+            address: storeReport[key].store.address,
+            customer: storeReport[key].customerName,
+            baName: storeReport[key].userName
+          })
+        }
+        this.recentStore = check
+        return console.log(check)
+      },
       fillData () {
         this.showProgress = false;
         this.todayProgress = Math.floor((Math.random() * 100) + 1);
         this.monthProgress = Math.floor((Math.random() * 100) + 1);
         this.activeMerchandiser = Math.floor((Math.random() * 100) + 1);
+//        Recent Purchase
+        this.recentPurchase();
 //        City progress
         this.CityDataCollection = {
           labels: ['KHI', 'LHR', 'ISD'],
@@ -447,6 +493,7 @@
 //        soyaSupremeBanaspatiOlive Progress
         this.soyaSupremeBanaspatiOliveChart = {
           labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+          responsive: true,
           datasets: [
             {
               labels: ['1 Poly', '2.5 Tin', '5 Tin',],
@@ -468,7 +515,7 @@
           datasets: [
             {
               backgroundColor: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
-              borderWidth: 1,
+              borderWidth: 0,
               color: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
               data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
             },
@@ -495,20 +542,20 @@
   }
   .GraphsContainer .header {
     background-color: rgba(30,30,30,0.3);
-    font-size:24px;
+    font-size:18px;
   }
   .reportContainer {
-    min-width: 40%;
+    min-width: 30%;
     background-color: rgba(120,120,120,0.2);
     margin: 10px;
     height: 240px;
-    padding-bottom: 10px;
+    padding: 10px;
     border: 1px solid #333;
     border-radius: 2px;
   }
   .reportContainer .header {
-    background-color: rgba(30,30,30,0.3);
-    height: 20%;
+    height: 16%;
+    margin-bottom: 10px;
     line-height: 200%;
     font-size: 18px;
   }
@@ -521,9 +568,8 @@
     border: 1px solid #333;
     border-radius: 2px;
   }
-
   .barChart {
-    width: 90%;
+    width: 100%;
     height: 120px;
   }
   .barChart div{

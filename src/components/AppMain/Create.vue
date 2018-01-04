@@ -2,10 +2,10 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs fixed icons centered >
-        <v-toolbar color="blue" dark>
+        <v-toolbar class="gradientHead" dark>
           <v-toolbar-title class="display-1">CREATE</v-toolbar-title>
         </v-toolbar>
-        <v-tabs-bar class="blue">
+        <v-tabs-bar class="gradientHead">
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1" v-on:click="fetchStoreList">
             <v-icon>people</v-icon>
@@ -26,7 +26,10 @@
               <v-card-text>
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
-                    <v-flex xs12><h6>ADD BRANDAMBASSADOR</h6> All fields are required</v-flex>
+                    <v-flex xs12 class="title">ADD BRANDAMBASSADOR</v-flex>
+                    <v-flex xs12 class="body-2"> Create a new Brand Ambassador.</v-flex>
+                    <v-flex xs12 class="body-1"> Please fill all fields and then click on CREATE.</v-flex>
+                    <v-flex xs12 class="caption"> Please make sure you have created a store for new brand ambassador </br> or Assign store field will be blank</v-flex>
 
                     <form @submit.prevent="onBAReg" class="mb-5">
 
@@ -101,8 +104,9 @@
             <v-card-text>
               <v-container grid-list-md text-xs-center>
                 <v-layout row wrap>
-                  <v-flex xs12><h6>ADD SUPERVISOR</h6> All fields are required</v-flex>
-
+                  <v-flex xs12 class="title">ADD SUPERVISOR </v-flex>
+                  <v-flex xs12 class="body-2"> Create a new Supervisor.</v-flex>
+                  <v-flex xs12 class="body-1"> Please fill all fields and then click on SUBMIT.</v-flex>
                   <form @submit.prevent="onSupervisorReg" class="mb-5">
                     <!--username-->
                     <v-flex xs10 offset-xs1>
@@ -160,8 +164,9 @@
               <v-card-text>
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
-                    <v-flex xs12><h6>ADD STORE</h6> All fields are required</v-flex>
-
+                    <v-flex xs12 class="title">ADD STORE </v-flex>
+                    <v-flex xs12 class="body-2"> Create a new Store.</v-flex>
+                    <v-flex xs12 class="body-1"> Please fill all fields and then click on Add Store.</v-flex>
                     <form @submit.prevent="onStoreReg" class="mb-5">
                       <!--username-->
                       <v-flex xs10 offset-xs1>

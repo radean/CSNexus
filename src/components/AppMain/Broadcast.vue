@@ -2,23 +2,16 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs dark grow>
-        <v-toolbar color="cyan" dark>
+        <v-toolbar color="cyan" class="gradientHead" dark>
           <v-toolbar-side-icon></v-toolbar-side-icon>
           <v-toolbar-title>Monitor B.A</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon>
-            <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>more_vert</v-icon>
-          </v-btn>
-          <v-tabs-bar class="cyan" slot="extension">
+          <v-tabs-bar class="gradientHead" slot="extension">
             <v-tabs-slider color="yellow"></v-tabs-slider>
             <v-tabs-item href="B1">
-              Boradcast
+              Broadcast
             </v-tabs-item>
             <v-tabs-item href="B2">
-              Position
+              GEO
             </v-tabs-item>
           </v-tabs-bar>
         </v-toolbar>
@@ -29,6 +22,8 @@
                 <v-container fluid style="min-height: 0;" >
                   <v-layout row wrap >
                     <v-flex xs12 class="title"> BROADCAST PUSHES </v-flex>
+                    <v-flex xs12 class="body-2"> Use push notification to broadcast a message to your employees. </v-flex>
+                    <v-flex xs12 class="body-1"> Kindly push only one Message in 5 minutes. </v-flex>
                     <v-divider></v-divider>
                     <!--Notification Title-->
                     <v-flex xs12><v-text-field box label="Notification Title" min="6" max="32" counter="32" v-model="nTitle"></v-text-field></v-flex>
@@ -47,6 +42,8 @@
                 <v-container fluid style="min-height: 0;" >
                   <v-layout row wrap >
                     <v-flex xs12 class="title"> MONITOR EMPLOYEE POSITION </v-flex>
+                    <v-flex xs12 class="body-2"> Monitor Empolyees Position via Google™ GEO Tagging & Google™ GEO Fencing. </v-flex>
+                    <v-flex xs12 class="body-1"> This feature will soon be available.</v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
@@ -55,6 +52,17 @@
         </v-tabs-items>
       </v-tabs>
     </v-layout>
+    <!--Messages-->
+    <!--Snackers-->
+    <v-snackbar
+      v-model="successFlag"
+      :top="true"
+      class="green"
+      dark
+    >
+      {{ successMsg }}
+      <v-btn flat color="white" @click.native="successFlag = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -65,6 +73,9 @@
 //        GUI Nodes
         nBody: '',
         nTitle: '',
+        successFlag: false,
+        successMsg: 'Operation Successful',
+
 
         items: [
           'Broadcast', 'shopping', 'videos'
@@ -98,6 +109,12 @@
             }
           }
         ).then((response) => {
+          this.successMsg = 'Notification Sent';
+          this.successFlag = true;
+          setTimeout(() => {
+            this.successMsg = 'Operation Successful';
+            this.successFlag = false;
+          },5000);
           console.log(response);
         })
       }
@@ -107,5 +124,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

@@ -13,9 +13,9 @@
       width="240"
     >
       <v-list>
-        <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%" />
+        <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>
-        <v-subheader class="mt-3 mb-3 grey--text text--darken-1">
+        <v-subheader class="mt-3 mb-3 grey--text text--lighten-3">
           <v-avatar size="48px" class="mr-3">
           <img :src="userDetail.picture" alt="">
           </v-avatar>
@@ -81,11 +81,11 @@
           </v-list-tile-action>
           <v-list-tile-title>Update User Parameters</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile @click=""ripple>
+        <v-list-tile @click="bugReportDialog =!bugReportDialog"ripple>
           <v-list-tile-action>
-            <v-icon color="grey darken-1" >settings</v-icon>
+            <v-icon>bug_report</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">Subscription Settings</v-list-tile-title>
+          <v-list-tile-title>Bug Reporting</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
@@ -116,6 +116,18 @@
       </v-content>
     <!--</main>-->
     <!--DIALOGS-->
+    <!--Bug Report Dialog-->
+    <v-dialog v-model="bugReportDialog" persistent>
+      <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
+      <v-card>
+        <v-card-title class="headline">BUG REPORTING</v-card-title>
+        <v-card-text>Email: help@vdm.com.pk<br>Phone #: (021)-85432156</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat @click.native="bugReportDialog = false">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <!--HELP DIALOG-->
     <v-dialog v-model="helpDialog" persistent>
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
@@ -157,11 +169,25 @@
       <v-btn flat color="white" @click.native="successFlag = false">Close</v-btn>
     </v-snackbar>
 
+    <!--Errors-->
+    <!--B.A Sign in Error-->
+    <v-dialog v-model="appError" persistent >
+      <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
+      <v-card>
+        <v-card-title class="headline">Authorization Error</v-card-title>
+        <v-card-text>Please double check your Username and Password.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" flat>Wait 5 seconds</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <!--Footer-->
     <v-footer class="pa-3 transper" fixed dark>
-      <div>{{ appinfo.fullname }}</div>
+      <div>{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
       <v-spacer></v-spacer>
-      <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.authorEmail }}</div>
+      <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.company }}</div>
     </v-footer>
 
   </v-app>
@@ -182,6 +208,7 @@ export default {
         picture: './static/img/app/placeholder.jpg',
       },
 //      Dialogs
+      bugReportDialog: false,
       helpDialog: false,
 //      Toasts
     }
@@ -213,12 +240,18 @@ export default {
             break;
         }
       }
+      else if(value == null ) {
+          console.log('user info Error')
+          this.$router.push('/login')
+      }
     }
   },
   created(){
     this.$store.dispatch('userSession');
-    if (this.$store.getters.user === null) {
-      this.$router.push('/')
+    let user = this.$store.getters.user;
+    if (user === null) {
+      console.log('created user Error')
+      this.$router.push('/login')
     };
     setTimeout(() => {
       this.$http.get('https://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
@@ -243,6 +276,15 @@ export default {
       appinfo(){
         return this.$store.getters.appinfo
       },
+      appError(){
+        let error = this.$store.getters.userError
+        if (error) {
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 4000)
+        }
+        return error
+      },
       user (){
         return this.$store.getters.user
       },
@@ -264,7 +306,6 @@ export default {
     },
     setUpUser(){
       this.userDetail.name = this.userInfo.name;
-      this.userDetail.title = this.userInfo.role.substr(0, 6);
     }
   }
 }
@@ -272,23 +313,33 @@ export default {
 
 <style>
   /*importing Font*/
-  @import url('https://fonts.googleapis.com/css?family=BenchNine');
+  @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
   /*Applying Font*/
   body {
-    font-family: 'BenchNine', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     user-select: none;
   }
-  ::-webkit-scrollbar-button{ display: none; height: 8px; border-radius: 0px; background-color: #4a4a4a; } ::-webkit-scrollbar-button:hover{ background-color: #414141; } ::-webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 4px; } ::-webkit-scrollbar-track{ background-color: #737373; } ::-webkit-scrollbar-track:hover{ background-color: #000000; } ::-webkit-scrollbar{ width: 8px; }
+  ::-webkit-scrollbar-button{ display: none; height: 8px; border-radius: 0px; background-color: #4a4a4a; } ::-webkit-scrollbar-button:hover{ background-color: #414141; } ::-webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 4px; } ::-webkit-scrollbar-track{ background-color: #737373; } ::-webkit-scrollbar-track:hover{ background-color: #000000; } ::-webkit-scrollbar{ width: 12px; }
 
   /*-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #4a4a4a; } -webkit-scrollbar-button:hover{ background-color: #414141; } -webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 8px; } -webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 8px; } -webkit-scrollbar-track{ background-color: #737373; } -webkit-scrollbar-track:hover{ background-color: #000000; } -webkit-scrollbar{ width: 4px; }*/
 
   #inspire{
+    font-family: 'Noto Sans', sans-serif;
     background: #000046;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #1CB5E0, #000046);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   }
-
+  .gradientHead{
+    background: #0575E6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #021B79, #0575E6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #021B79, #0575E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .gradientDialog{
+    background: #000428;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
   .transper {
     background-color: rgba(60,60,60,0.4);
     color: white;

@@ -2,11 +2,11 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs fixed icons centered class="mb-5 pb-5">
-        <v-toolbar color="blue" dark>
+        <v-toolbar class="gradientHead" dark>
           <v-spacer></v-spacer>
           <v-toolbar-title slot="extension" class="display-1">STOCK REPORTS</v-toolbar-title>
         </v-toolbar>
-        <v-tabs-bar class="blue">
+        <v-tabs-bar class="gradientHead">
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1">
             <v-icon>local_shipping</v-icon>
@@ -19,8 +19,9 @@
               <v-card-text>
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
-                    <v-flex xs12><h6>STOCK REPORT</h6></v-flex>
-                    <v-flex xs12>Stock shortage on stores</v-flex>
+                    <v-flex xs12 class="title">STOCK REPORT</v-flex>
+                    <v-flex xs12 class="body-2"> Report of stock shortage.</v-flex>
+                    <v-flex xs12 class="body-1"> Please select a date & let the system prepare report.</v-flex>
                     <v-flex xs12>
                       <v-flex xs4 offset-xs8>
                         <v-menu
@@ -46,7 +47,7 @@
                             <template slot-scope="{ save, cancel }">
                               <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn flat color="primary" @click="fetchStockReport">OK</v-btn>
+                                <v-btn color="black" class="gradientHead" @click="fetchStockReport">OK</v-btn>
                               </v-card-actions>
                             </template>
                           </v-date-picker>

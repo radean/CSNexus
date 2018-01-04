@@ -41,7 +41,7 @@
       <!--TOTAL INTERCEPTION-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-20" >
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">INTERCEPTIONS</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Supervisor</h6></v-card-title>
           <v-card-text>
             <h2 class="green--text ma-0 pa-0" >1</h2>
           </v-card-text>
@@ -51,17 +51,12 @@
         <!--Store Amount-->
       <v-flex xs3 class="GraphsContainer elevation-20">
         <!--user chart-->
-        <div class="header">SALES</div>
+        <div class="header">Sales</div>
         <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
         <app-user-count :chart-data="StoreDataCollection" :options="optionsDoughnut"></app-user-count>
       </v-flex>
-
-
-
-
-
       <v-flex xs3 class="GraphsContainer elevation-20">
-        <div class="header" >RECENT STORES</div>
+        <div class="header" >Recent Sale</div>
         <v-list two-line>
           <v-list-tile v-for="store in recentStore" v-bind:key="store.title" @click="">
             <v-list-tile-content>
@@ -78,28 +73,28 @@
       <!--</v-flex>-->
       <!--Soya Supreme Canola Oil-->
       <v-flex xs5 class="reportContainer elevation-20">
-        <div class="header indigo">CANOLA OIL</div>
+        <div class="header indigo">Canola Oil</div>
         <div class="barChart">
           <ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>
         </div>
       </v-flex>
       <!--Soya Supreme Cooking Oil-->
       <v-flex xs7 class="reportContainer elevation-21">
-        <div class="header blue">COOKING OIL</div>
+        <div class="header light-green">Cooking Oil</div>
         <div class="barChart">
           <ssCookingOil :chart-data="soyaSupremeCookingOilChart" :options="optionsCity"></ssCookingOil>
         </div>
       </v-flex>
       <!--Soya Supreme Banaspati-->
       <v-flex xs2 class="reportContainer elevation-20">
-        <div class="header red">BANASPATI</div>
+        <div class="header red">Banaspati</div>
         <div class="barChart">
           <ssBanaspatiOil :chart-data="soyaSupremeBanaspatiChart" :options="optionsCity"></ssBanaspatiOil>
         </div>
       </v-flex>
       <!--Soya Supreme Banaspati with Olive Oil-->
       <v-flex xs2 class="reportContainer elevation-20">
-        <div class="header orange">BANASPATI WITH OLIVE OIL</div>
+        <div class="header orange">Banaspati with Olive Oil</div>
         <div class="barChart">
           <ssBanaspatiWOlive :chart-data="soyaSupremeBanaspatiOliveChart" :options="optionsCity"></ssBanaspatiWOlive>
         </div>
@@ -290,7 +285,7 @@
 //      },4000)
     },
 
-    mounted () {
+    mounted() {
 //        sync Data after 2 seconds
       setInterval(() =>{
         this.fillData();
@@ -402,7 +397,7 @@
           })
         }
         this.recentStore = check
-        return console.log(check)
+        return true
       },
       fillData () {
         this.showProgress = false;
@@ -514,9 +509,9 @@
 
           datasets: [
             {
-              backgroundColor: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
+              backgroundColor: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
               borderWidth: 0,
-              color: ['#2196F3', '#673AB7', '#F44336', '#FFB300'],
+              color: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
               data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
             },
           ],

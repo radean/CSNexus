@@ -32,7 +32,7 @@ export const store = new Vuex.Store({
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : 'initial',
+      version : '0.27',
       status : true,
       theme: 'red accent-4',
       mode: '',
@@ -167,7 +167,7 @@ export const store = new Vuex.Store({
       );
     },
     userSignIn({commit}, payload){
-      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(function() {
           // Existing and future Auth states are now persisted in the current
           // session only. Closing the window would clear any existing state even
@@ -205,9 +205,8 @@ export const store = new Vuex.Store({
     },
     // User Session Check
     userSession({dispatch, commit}){
-      // Checking Firebase user
       // dispatch('appStatus');
-      firebase.auth().onAuthStateChanged(appUser => {
+      firebase.auth().onAuthStateChanged((appUser) => {
         if(appUser) {
           // setting Authorization
           commit('setUser', appUser);
@@ -220,7 +219,7 @@ export const store = new Vuex.Store({
       });
     },
     // user information update
-    subUserInfo({commit, getters}){
+    subUserInfo({commit, getters, dispatch}){
       // Setting Loading
       commit('SET_MAIN_LOADING', true);
       // setting user information
@@ -236,9 +235,19 @@ export const store = new Vuex.Store({
             role: obj[key].role
           };
         }
+        console.log('inside sub user',userinfo)
+        if(userinfo === _.isEmpty({})) {
+          console.log('No User Exist');
+          commit('SET_USER_ERROR', true);
+          setTimeout(() => {
+            commit('SET_USER_ERROR', false);
+            window.location.reload();
+          }, 4000)
+          dispatch('userSignOut');
+        }
         commit('setUserInfo', userinfo);
         commit('SET_MAIN_LOADING', false);
-      });
+      })
     },
 //     ===================
 
@@ -474,7 +483,7 @@ export const store = new Vuex.Store({
       firebase.database().ref('storedata').on('value', (report) => {
         let reports = [];
         let currentKey = null;
-        // console.log(reports.val)
+        console.log(reports)
         report.forEach((childReport) => {
           const obj = childReport.val();
           currentKey = childReport.key;
@@ -721,6 +730,9 @@ export const store = new Vuex.Store({
     },
     userInfo (state){
       return state.userinfo
+    },
+    userError(state){
+      return state.userError
     },
     unAssignedStores (state){
       return state.unAssignedStores

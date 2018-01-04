@@ -2,11 +2,11 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs fixed icons centered class="mb-5 pb-5">
-        <v-toolbar color="blue" dark>
+        <v-toolbar class="gradientHead" dark>
           <v-spacer></v-spacer>
           <v-toolbar-title slot="extension" class="display-1">REPORTS</v-toolbar-title>
         </v-toolbar>
-        <v-tabs-bar class="blue">
+        <v-tabs-bar class="gradientHead">
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1">
             <v-icon>store</v-icon>
@@ -370,7 +370,7 @@
                     <v-flex xs4>
                       <v-menu
                         lazy
-                        :close-on-content-click="false"
+                        :close-on-content-click="true"
                         :close-on-click="false"
                         v-model="compileMenu.from"
                         transition="scale-transition"
@@ -401,7 +401,7 @@
                     <v-flex xs4>
                       <v-menu
                         lazy
-                        :close-on-content-click="false"
+                        :close-on-content-click="true"
                         :close-on-click="false"
                         v-model="compileMenu.to"
                         transition="scale-transition"

@@ -12,6 +12,7 @@
         <v-text-field
           name="useremail"
           label="USERNAME"
+          autocomplete="username"
           v-model="useremail"
         ></v-text-field>
       </v-flex>
@@ -20,6 +21,7 @@
         <v-text-field
           name="userPassword"
           label="PASSWORD"
+          autocomplete="current-password"
           min="6"
           v-model="userpass"
           type="password"

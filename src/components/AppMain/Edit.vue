@@ -2,10 +2,10 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs fixed icons centered >
-        <v-toolbar color="blue" dark>
+        <v-toolbar class="gradientHead" dark>
           <v-toolbar-title class="display-1">UPDATE USER INFORMATION</v-toolbar-title>
         </v-toolbar>
-        <v-tabs-bar class="blue">
+        <v-tabs-bar class="gradientHead">
           <v-tabs-slider color="yellow"></v-tabs-slider>
           <v-tabs-item href="c1">
             <v-icon>people</v-icon>

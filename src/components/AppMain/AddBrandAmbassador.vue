@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Add Merchandiser Here</h3>
+    <h3>Add B.A Here</h3>
     <v-btn dark flat v-on:click="goBack">Back</v-btn>
   </div>
 </template>

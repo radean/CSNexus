@@ -1,8 +1,9 @@
 import { Bar, mixins } from 'vue-chartjs'
 
-const { reactiveProp } = mixins
+const { reactiveProp } = mixins;
 
 export default {
+  name: 'Bar-ChartsforDashBoard',
   extends: Bar,
   mixins: [reactiveProp],
   props: ['options'],

@@ -6,13 +6,13 @@
           <img class="bordered" src="../../assets/placeholder.jpg" alt="avatar">
         </v-avatar>
       </v-flex>
-      <form @submit.prevent="">
+      <form @submit.prevent="onSubmit">
       <!--username-->
       <v-flex xs10 md4 offset-md4>
         <v-text-field
           name="useremail"
-          label="E-MAIL"
-          id="testing"
+          label="USERNAME"
+          autocomplete="username"
           v-model="useremail"
         ></v-text-field>
       </v-flex>
@@ -20,8 +20,8 @@
       <v-flex xs10 md4 offset-md4 >
         <v-text-field
           name="userPassword"
-          label="PASSCODE"
-          id="testing"
+          label="PASSWORD"
+          autocomplete="current-password"
           min="6"
           v-model="userpass"
           type="password"
@@ -31,8 +31,9 @@
       <v-flex xs12>
         <v-btn color="green" :disabled="!formIsValid" type="submit"> SUBMIT <v-icon right>send</v-icon></v-btn>
       </v-flex>
+      <!--Registration -->
       <v-flex xs12>
-        <v-btn small color="red" :disabled="user" >Forgotten Pass</v-btn>
+        <v-btn small color="blue" to="Registration">Registration</v-btn>
       </v-flex>
     </form>
     </v-layout>
@@ -41,6 +42,7 @@
 
 
   <script>
+  //  importing Temps
   export default {
     data () {
       return {
@@ -49,10 +51,20 @@
         userpass: '',
       }
     },
+    created(){
+//      this.$store.dispatch('userSession');
+    },
     computed:{
       formIsValid(){
         return this.username !== '' && this.userpass !== ''
-      },
+      }
+    },
+    methods:{
+        onSubmit() {
+          this.$store.dispatch('userSignIn', {email: this.useremail, password: this.userpass}).then(() => {
+              this.$router.push('/Landing')
+          })
+        }
     }
   }
 </script>

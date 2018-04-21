@@ -325,10 +325,10 @@ export default {
 
   #inspire{
     font-family: 'Noto Sans', sans-serif;
-    background: #000046;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #1CB5E0, #000046);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    background: #24C6DC;  /* fallback for old browsers */
+    /*background-image: url("assets/bg.jpg");*/
+    background:  url("assets/bg.jpg"), -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
+    background: url("assets/bg.jpg"), linear-gradient(to left, #514A9D, #24C6DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .gradientHead{
     background: #0575E6;  /* fallback for old browsers */

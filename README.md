@@ -1,6 +1,6 @@
-# mcshead
+# BAMS NEXUS EMBORG
 
-> MSC Node monitor for Admins.
+> BAMS NEXUS monitor for Admins and Client sides.
 
 ## Build Setup
 

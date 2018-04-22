@@ -8,10 +8,10 @@
         </v-toolbar>
         <v-tabs-bar class="gradientHead">
           <v-tabs-slider color="yellow"></v-tabs-slider>
-          <v-tabs-item href="c1">
-            <v-icon>store</v-icon>
-            Consumers Reports
-          </v-tabs-item>
+          <!--<v-tabs-item href="c1">-->
+            <!--<v-icon>store</v-icon>-->
+            <!--Consumers Reports-->
+          <!--</v-tabs-item>-->
           <v-tabs-item href="c2">
             <v-icon>store</v-icon>
             Store Report

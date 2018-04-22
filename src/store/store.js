@@ -23,14 +23,14 @@ export const store = new Vuex.Store({
     // Application meta Information
     appinfo : {
       name : 'BAMS™ Emborg Nexus',
-      fullname: 'Brand Ambassador Nexus',
+      fullname: 'Brand Ambassador Management System Dashboard',
       author : 'radean',
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
       version : '0.27',
       status : true,
-      theme: 'red accent-4',
+      theme: 'purple accent-4',
       mode: '',
       broadcast: true,
       subscription: true

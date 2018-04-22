@@ -5,6 +5,7 @@
   >
     <v-navigation-drawer
       v-if="notLogin"
+      class="transper"
       persistent
       clipped
       enable-resize-watcher
@@ -12,14 +13,15 @@
       app
       width="240"
     >
-      <v-list>
+      <v-list class="transper">
         <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>
         <v-subheader class="mt-3 mb-3 grey--text text--lighten-3">
           <v-avatar size="48px" class="mr-3">
           <img :src="userDetail.picture" alt="">
           </v-avatar>
-          {{ userDetail.name }} [ {{ userDetail.title }} ]
+          {{ userDetail.name }}
+          <!--[ {{ userDetail.title }} ]-->
         </v-subheader>
         <v-list-tile to="/" ripple>
           <v-list-tile-action >
@@ -41,9 +43,10 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="create" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>people</v-icon>
+            <!--<v-icon>people</v-icon>-->
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -51,9 +54,10 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="stockreports" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>local_shipping</v-icon>
+            <!--<v-icon>local_shipping</v-icon>-->
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -61,9 +65,10 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile ripple to="broadcast" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>map</v-icon>
+            <!--<v-icon>map</v-icon>-->
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -73,11 +78,12 @@
         </v-list-tile>
         <v-subheader class="mt-3 grey--text text--darken-1">Date</v-subheader>
         <v-divider></v-divider>
-        <v-flex xs6 offset-xs3> <h3>{{ currentDate }}</h3> </v-flex>
+        <v-flex xs8 offset-xs2 class="pt-3"> <h4 style="font-weight: 100">{{ currentDate }}</h4> </v-flex>
         <v-divider></v-divider>
-        <v-list-tile @click="" ripple to="edit">
+        <v-list-tile @click="" >
           <v-list-tile-action>
-            <v-icon >add_circle_outline</v-icon>
+            <!--<v-icon >add_circle_outline</v-icon>-->
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-title>Update User Parameters</v-list-tile-title>
         </v-list-tile>
@@ -89,7 +95,6 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-
 
 
     <v-toolbar class="transper" dense fixed clipped-left app dark>
@@ -108,6 +113,24 @@
     <!--<main>-->
       <v-content>
         <v-container>
+          <vue-particles
+             class="flying"
+             color="#666"
+             :particleOpacity="0.2"
+             :particlesNumber="40"
+             shapeType="circle"
+             :particleSize="6"
+             linesColor="#dedede"
+             :linesWidth="1"
+             :lineLinked="true"
+             :lineOpacity="0.1"
+             :linesDistance="150"
+             :moveSpeed="1"
+             :hoverEffect="false"
+             hoverMode="none"
+             :clickEffect="true"
+             clickMode="push"
+          ></vue-particles>
           <transition name="fade">
             <!--Content goes here-->
             <router-view></router-view>
@@ -121,7 +144,11 @@
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card>
         <v-card-title class="headline">BUG REPORTING</v-card-title>
-        <v-card-text>Email: help@vdm.com.pk<br>Phone #: (021)-85432156</v-card-text>
+        <v-card-text>
+          Email: help@vdm.com.pk<br>Phone #: (021)-85432156 <br>
+          All the other tool will be active on next patch [1.2]. <br>
+          Release Date : TBA
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" flat @click.native="bugReportDialog = false">OK</v-btn>
@@ -155,8 +182,6 @@
         </v-container>
       </v-card>
     </v-dialog>
-
-
     <!--Messages-->
     <!--Snackers-->
     <v-snackbar
@@ -168,7 +193,6 @@
       {{ successMsg }}
       <v-btn flat color="white" @click.native="successFlag = false">Close</v-btn>
     </v-snackbar>
-
     <!--Errors-->
     <!--B.A Sign in Error-->
     <v-dialog v-model="appError" persistent >
@@ -182,18 +206,18 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <!--Footer-->
     <v-footer class="pa-3 transper" fixed dark>
       <div>{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
       <v-spacer></v-spacer>
       <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.company }}</div>
     </v-footer>
-
   </v-app>
 </template>
 
 <script>
+//  import 'particles.js';
+//  Adding Particles
 export default {
   data () {
     return {
@@ -256,14 +280,16 @@ export default {
     setTimeout(() => {
       this.$http.get('https://api.timezonedb.com/v2/list-time-zone?key=QNVJJL9QLWE4&format=json&country=PK').then(response => {
         let date = new Date((response.body.zones[0].timestamp * 1000) - response.body.zones[0].gmtOffset * 1000);
+        let year = 1900 + date.getYear();
         let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
-        this.currentDate = month + '-' + day;
+        this.currentDate = month + '-' + day + '-' + year;
       }).catch(() => {
         let date = new Date();
-        let day = ("0" + date.getDate()).slice(-2);
+          let year = 1900 + date.getYear();
+          let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
-        this.currentDate = month + '-' + day;
+        this.currentDate = month + '-' + day + '-' + year;
       });
       this.setUpUser();
       console.log('done')
@@ -313,27 +339,24 @@ export default {
 
 <style>
   /*importing Font*/
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+  @import url('https://fonts.googleapis.com/css?family=Raleway');
   /*Applying Font*/
   body {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     user-select: none;
   }
-  ::-webkit-scrollbar-button{ display: none; height: 8px; border-radius: 0px; background-color: #4a4a4a; } ::-webkit-scrollbar-button:hover{ background-color: #414141; } ::-webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 4px; } ::-webkit-scrollbar-track{ background-color: #737373; } ::-webkit-scrollbar-track:hover{ background-color: #000000; } ::-webkit-scrollbar{ width: 12px; }
-
-  /*-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #4a4a4a; } -webkit-scrollbar-button:hover{ background-color: #414141; } -webkit-scrollbar-thumb{ background-color: #c7c7c7; border-radius: 8px; } -webkit-scrollbar-thumb:hover{ background-color: #CCC; border-radius: 8px; } -webkit-scrollbar-track{ background-color: #737373; } -webkit-scrollbar-track:hover{ background-color: #000000; } -webkit-scrollbar{ width: 4px; }*/
-
   #inspire{
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     background: #24C6DC;  /* fallback for old browsers */
     /*background-image: url("assets/bg.jpg");*/
-    background:  url("assets/bg.jpg"), -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
-    background: url("assets/bg.jpg"), linear-gradient(to left, #514A9D, #24C6DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: url('assets/bg.jpg'), -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
+    background: url('assets/bg.jpg'), linear-gradient(to left, #360f93, #b73fff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-repeat: repeat;
   }
   .gradientHead{
-    background: #0575E6;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #021B79, #0575E6);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #021B79, #0575E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #673AB7;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #512DA8, #673AB7);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .gradientDialog{
     background: #000428;  /* fallback for old browsers */
@@ -341,10 +364,14 @@ export default {
     background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .transper {
-    background-color: rgba(60,60,60,0.4);
+    background-color: rgba(60,60,60,0.8) !important;
     color: white;
   }
-
+  .flying {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
   #app {
     /*font-family: 'Barlow', sans-serif;*/
     -webkit-font-smoothing: antialiased;

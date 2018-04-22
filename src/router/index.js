@@ -16,11 +16,11 @@ import Monitor from '../components/AppMain/Monitor.vue'
 Vue.use(Router);
 
 export const routes = [
-    {
-      path: '/registration',
-      name: 'Registration',
-      component: Registration
-    },
+    // {
+    //   path: '/registration',
+    //   name: 'Registration',
+    //   component: Registration
+    // },
     {
       path: '/login',
       name: 'Login',
@@ -31,44 +31,44 @@ export const routes = [
       name: 'Home',
       component: Welcome
     },
-    {
-      path: '/addbrandAmbassador',
-      name: 'AddBrandAmbassador',
-      component: AddBrandAmbassador
-    },
+    // {
+    //   path: '/addbrandAmbassador',
+    //   name: 'AddBrandAmbassador',
+    //   component: AddBrandAmbassador
+    // },
     {
       path: '/',
       name: 'DashBoard',
       component: Dashboard
     },
-    {
-      path: '/create',
-      name: 'Create',
-      component: Create
-    },
-    {
-      path: '/edit',
-      name: 'Edit',
-      component: Edit
-    },
-    {
-      path: '/reports',
-      name: 'Reports',
-      component: Reports
-    },
-    {
-      path: '/stockreports',
-      name: 'StockReports',
-      component: StockReports
-    },
-    {
-      path: '/monitor',
-      name: 'Monitor',
-      component: Monitor
-    },
-    {
-      path: '/broadcast',
-      name: 'Broadcast',
-      component: Broadcast
-    }
+    // {
+    //   path: '/create',
+    //   name: 'Create',
+    //   component: Create
+    // },
+    // {
+    //   path: '/edit',
+    //   name: 'Edit',
+    //   component: Edit
+    // },
+    // {
+    //   path: '/reports',
+    //   name: 'Reports',
+    //   component: Reports
+    // },
+    // {
+    //   path: '/stockreports',
+    //   name: 'StockReports',
+    //   component: StockReports
+    // },
+    // {
+    //   path: '/monitor',
+    //   name: 'Monitor',
+    //   component: Monitor
+    // },
+    // {
+    //   path: '/broadcast',
+    //   name: 'Broadcast',
+    //   component: Broadcast
+    // }
 ];

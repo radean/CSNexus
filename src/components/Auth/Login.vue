@@ -35,6 +35,8 @@
       <v-flex xs12>
         <v-btn small color="blue" to="Registration">Registration</v-btn>
       </v-flex>
+        <div class="smallFont pt-3">{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
+        <div class="smallFont pt-1">{{ appinfo.company }}</div>
     </form>
     </v-layout>
   </v-container>
@@ -57,6 +59,9 @@
     computed:{
       formIsValid(){
         return this.username !== '' && this.userpass !== ''
+      },
+      appinfo(){
+          return this.$store.getters.appinfo
       }
     },
     methods:{
@@ -71,5 +76,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .smallFont {
+    font-weight: 100;
+    font-size: 10px;
+    color: #aeb2b4;
+  }
 </style>

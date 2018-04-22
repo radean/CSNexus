@@ -43,7 +43,7 @@
         <!--user chart-->
         <div class="header">Sales</div>
         <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-        <app-user-count :chart-data="StoreDataCollection" :options="optionsDoughnut"></app-user-count>
+        <conversionChart :chart-data="StoreDataCollection" :options="optionsDoughnut"></conversionChart>
       </v-flex>
       <!--========================================-->
       <!--<v-flex xs3 class="GraphsContainer elevation-20">-->
@@ -125,6 +125,7 @@
           {title: 'loading...'},
           {title: 'loading...git'},
         ],
+        conversionData: null,
         StoreDataCollection: null,
         CityDataCollection: null,
         soyaSupremeCookingOilChart: null,
@@ -377,6 +378,7 @@
     },
 
     components:{
+      'conversionChart' : DoughNutChart,
       'app-user-count': UserCount,
       'ssCookingOil': ssCookingOil,
       'ssCanolaOil': ssCanolaOil,
@@ -497,7 +499,7 @@
         return totalSaleCount;
       },
     },
-
+//    All Charts Update Information
     methods: {
       updateStore(){
         this.rndNumber = Math.floor(Math.random() * (30506 - 30501 + 1)) + 30501;
@@ -530,7 +532,6 @@
 //        City progress
         this.CityDataCollection = {
           labels: ['KHI', 'LHR', 'ISD'],
-
           datasets: [
             {
               labels: ['KHI', 'LHR', 'ISD'],
@@ -624,6 +625,19 @@
             },
           ],
         }
+//        Conversion Progress
+        this.conversionData = {
+            labels: ['Yes', 'No'],
+
+            datasets: [
+                {
+                    backgroundColor: ['#800dc3', '#2c134d'],
+                    borderWidth: 0,
+                    color: ['#800dc3', '#2c134d'],
+                    data: [this.totalInterceptions, this.totalInterceptions]
+                },
+            ],
+        }
 //          Store Progress
         this.StoreDataCollection = {
           labels: ['Cooking Oil', 'Canola Oil', 'Banaspati', 'Banaspati with Olive'],
@@ -636,8 +650,6 @@
               data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
             },
           ],
-
-
         }
       }
     }

@@ -38,6 +38,7 @@ export const store = new Vuex.Store({
     // Data
     totalInterceptions: 0,
     totalPurchases: [],
+    totalConverison: null,
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -87,6 +88,9 @@ export const store = new Vuex.Store({
     },
     settotalBA (state, payload){
       state.totalBA = payload;
+    },
+    setTotalConversion (state, payload) {
+      state.totalConverison = payload;
     },
     setSelectedBa (state, payload){
       state.selectedBa = payload;
@@ -469,6 +473,8 @@ export const store = new Vuex.Store({
         report.forEach((childReport) => {
           const obj = childReport.val();
           currentKey = childReport.key;
+          // Conversion Variable
+          totalConversion = 0;
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -477,6 +483,13 @@ export const store = new Vuex.Store({
               // Customer Information
               customerName: obj[key].customerName,
               customerContact: obj[key].customerContact,
+              // Conversion
+              conversion: obj[key].conversion,
+              // Taste Trail
+              tasteTrial: obj[key].tasteTrial,
+              pUFrozen: obj[key].pUFrozen,
+              pUCheese: obj[key].pUCheese,
+              pUButter: obj[key].pUButter,
               // Store info
               storeName: obj[key].store.name,
               store: obj[key].store,
@@ -484,6 +497,12 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
+            // if Converted to Emborg
+            // Then we have to increment in state vriable to global access
+            // But first increment in local variable
+            if (obj[key].conversion === 'Yes'){
+                totalConversion = totalConversion + 1;
+            }
           }
           currentKey = null;
         });

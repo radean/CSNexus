@@ -25,16 +25,16 @@
         <v-card class="dashCards elevation-15" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Brand Ambassador</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0" >5</h2>
+            <h2 class="green--text ma-0 pa-0" >{{ totalBAs }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--TOTAL Conversion-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-20" >
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Conversion</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Stores</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0" >1</h2>
+            <h2 class="green--text ma-0 pa-0" >{{ totalStores }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -393,6 +393,8 @@
       this.$store.dispatch('fetchTotalInterceptions');
       this.$store.dispatch('fetchCampaignReports');
       this.$store.dispatch('fetchAllStoreReports');
+      this.$store.dispatch('baListUPD');
+      this.$store.dispatch('storeListUPD');
 //      setTimeout(() => {
 //        this.$store.dispatch('fetchCampaignReports');
 //      },4000)
@@ -409,6 +411,12 @@
     },
 
     computed:{
+      totalBAs(){
+        return this.$store.getters.totalBA;
+      },
+      totalStores(){
+        return this.$store.getters.totalStore;
+      },
 //      storelist(){
 //        return this.$store.getters.storeList.length;
 //      },

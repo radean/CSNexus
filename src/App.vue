@@ -339,14 +339,14 @@ export default {
 
 <style>
   /*importing Font*/
-  @import url('https://fonts.googleapis.com/css?family=Raleway');
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans:300');
   /*Applying Font*/
   body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     user-select: none;
   }
   #inspire{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background: #24C6DC;  /* fallback for old browsers */
     /*background-image: url("assets/bg.jpg");*/
     background: url('assets/bg.jpg'), -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */

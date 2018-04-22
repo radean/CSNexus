@@ -41,6 +41,8 @@ export const store = new Vuex.Store({
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
+    // Total Number of Stores
+    totalStore: 0,
     stores: [],
     storeDetails: [],
     storeStockReports: [],
@@ -50,6 +52,7 @@ export const store = new Vuex.Store({
     // Workers List
     // B.A List
     baList: {},
+    totalBA: null,
     // Super visor List
     supervisorList: {},
     // usersession
@@ -82,6 +85,9 @@ export const store = new Vuex.Store({
     setBaList (state, payload){
       state.baList = payload;
     },
+    settotalBA (state, payload){
+      state.totalBA = payload;
+    },
     setSelectedBa (state, payload){
       state.selectedBa = payload;
     },
@@ -90,6 +96,9 @@ export const store = new Vuex.Store({
     },
     setCompileReport (state, payload){
       state.compileReports = payload;
+    },
+    setTotalStore (state, payload) {
+      state.totalStore = payload;
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -295,12 +304,14 @@ export const store = new Vuex.Store({
     // ==============
 
     // Fetching Data
+    //   Fetching Total Number of Stores
     // Total Store list
     storeListUPD({commit}){
       commit('SET_MAIN_LOADING', true);
       firebase.database().ref('stores').on('value', (storelist) => {
         const stores = [];
         const obj = storelist.val();
+        let totalStores = 0;
         for (let key in obj) {
           stores.push({
             id: key,
@@ -308,7 +319,9 @@ export const store = new Vuex.Store({
             address: obj[key].address,
             city: obj[key].city,
           })
+          totalStores = totalStores + 1;
         }
+        commit('setTotalStore', totalStores)
         commit('SET_MAIN_LOADING', false);
         commit('SET_STORES', stores);
       });
@@ -330,22 +343,28 @@ export const store = new Vuex.Store({
       });
     },
     // All B.A list
+    //   Feching Total NUmbers of BA
     baListUPD({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('users').orderByChild('role').equalTo('BrandAmbassador').on('value', (balist) => {
+      firebase.database().ref('users').once('value', (balist) => {
         const ba = [];
         const obj = balist.val();
+        let totalBA = 0;
         for (let key in obj) {
           ba.push({
             id: key,
             name: obj[key].name,
-            storeName: obj[key].store.name,
+            // storeName: obj[key].store.name,
+            store: obj[key].store,
             address: obj[key].address,
             email: obj[key].email,
             uniqueId: obj[key].uniqueId,
           })
+            // Adding BA
+          totalBA = totalBA + 1;
         }
         commit('SET_MAIN_LOADING', false);
+        commit('settotalBA', totalBA);
         commit('setBaList', ba);
       });
     },
@@ -551,9 +570,6 @@ export const store = new Vuex.Store({
       });
     },
 
-
-
-
     // ========================
     // Employees CRUD
     // Adding New Registration Entries
@@ -739,11 +755,17 @@ export const store = new Vuex.Store({
     totalPurchases (state){
       return state.totalPurchases
     },
+    totalBA (state) {
+      return state.totalBA
+    },
     availableBA (state){
       return state.baList
     },
     selectedBa (state){
       return state.selectedBa
+    },
+    totalStore (state) {
+      return state.totalStore
     },
     storeList (state){
       return state.stores

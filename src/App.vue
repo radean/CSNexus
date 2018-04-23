@@ -222,7 +222,7 @@ export default {
   data () {
     return {
 //      Settings
-      drawer: false,
+      drawer: null,
       notLogin: false,
 //      User Details
       currentDate: null,

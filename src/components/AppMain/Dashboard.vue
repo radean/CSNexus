@@ -73,13 +73,27 @@
         <!--<div class="header">ACTIVE USER</div>-->
           <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
       <!--</v-flex>-->
-      <!--Soya Supreme Canola Oil-->
-      <!--<v-flex xs8 class="reportContainer elevation-20">-->
-        <!--<div class="header indigo">Canola Oil</div>-->
-        <!--<div class="barChart">-->
-          <!--<ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>-->
-        <!--</div>-->
-      <!--</v-flex>-->
+      <!--Previous Users of Butter-->
+      <v-layout row wrap class="mb-0 pb-0">
+        <v-flex xs4 class="reportContainer elevation-20">
+          <div class="header indigo">Butter Previous User</div>
+          <div class="barChart">
+            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+          </div>
+        </v-flex>
+        <v-flex xs3 class="reportContainer elevation-20">
+          <div class="header indigo">Cheese Previous User</div>
+          <div class="barChart">
+            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+          </div>
+        </v-flex>
+        <v-flex xs2 class="reportContainer elevation-20">
+          <div class="header indigo">Frozen Previous User</div>
+          <div class="barChart">
+            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+          </div>
+        </v-flex>
+      </v-layout>
       <!--Soya Supreme Cooking Oil-->
       <!--<v-flex xs7 class="reportContainer elevation-21">-->
         <!--<div class="header light-green">Cooking Oil</div>-->
@@ -110,6 +124,7 @@
   import ssCookingOil from '../Charts/ssCanolaOil'
   import UserCount from '../Charts/LineChart'
   import DoughNutChart from '../Charts/DoughNutChart'
+  import BarChart from '../Charts/BarChart'
   import ssCanolaOil from '../Charts/ssCanolaOil'
   import ssBanaspati from '../Charts/ssBanaspatiGhee'
   import ssBanaspatiWOlive from '../Charts/ssBanaspatiWOlive'
@@ -135,6 +150,7 @@
         ],
         conversionData: null,
         tasteTrialData: null,
+        previousUserButterData: null,
         StoreDataCollection: null,
         CityDataCollection: null,
         soyaSupremeCookingOilChart: null,
@@ -333,8 +349,8 @@
             labels: {
               // This more specific font property overrides the global property
               fontColor: '#FFFFFF',
-              padding: 10,
-              boxWidth: 10,
+              padding: 6,
+              boxWidth: 4,
               usePointStyle: false
             }
           },
@@ -389,6 +405,7 @@
       'ssCanolaOil': ssCanolaOil,
       'ssBanaspatiOil': ssBanaspati,
       'ssBanaspatiWOlive': ssBanaspatiWOlive,
+      'BarChart': BarChart
     },
 
     created(){
@@ -412,7 +429,6 @@
 //        sync Data after 2 seconds
       setInterval(() =>{
         this.fillData();
-        this.updateStore();
 //        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
       }, 3000);
 
@@ -433,6 +449,9 @@
       },
       totalSales() {
         return this.$store.getters.totalSales;
+      },
+      totalPreviousUserButter() {
+          return this.$store.getters.totalPreviousUserButter;
       },
 //      storelist(){
 //        return this.$store.getters.storeList.length;
@@ -516,12 +535,6 @@
     },
 //    All Charts Update Information
     methods: {
-      updateStore(){
-        this.rndNumber = Math.floor(Math.random() * (30506 - 30501 + 1)) + 30501;
-        this.khi_Stores_visited = this.khi_Stores_visited + Math.floor(Math.random() * (6 - 1 + 1)) + 1;
-        this.lhr_Stores_visited = this.lhr_Stores_visited + Math.floor(Math.random() * (4 - 1 + 1)) + 1;
-        this.isd_Stores_visited = this.isd_Stores_visited + Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-      },
       recentPurchase() {
         let storeReport = [];
         storeReport = this.$store.getters.recentReport;
@@ -642,6 +655,25 @@
 //        }
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
+        this.previousUserButterData = {
+            labels: ['Lurpak', 'Emborg', 'BlueBand', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'],
+            datasets: [
+                {
+                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    borderWidth: 0,
+                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    data: [
+                        this.totalPreviousUserButter.Lurpak,
+                        this.totalPreviousUserButter.Emborg,
+                        this.totalPreviousUserButter.Blueband,
+                        this.totalPreviousUserButter.Nurpur,
+                        this.totalPreviousUserButter.Aseel,
+                        this.totalPreviousUserButter.Mumtaz,
+                        this.totalPreviousUserButter.Other,
+                    ]
+                },
+            ],
+        }
         this.conversionData = {
             labels: ['Yes', 'No'],
             datasets: [
@@ -657,7 +689,7 @@
                 },
             ],
         }
-       //      Conversion Progress
+//      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
         this.tasteTrialData = {
             labels: ['Yes', 'No'],
@@ -714,9 +746,9 @@
     background-color: rgba(120,120,120,0.2);
     margin: 10px;
     height: 240px;
-    padding: 10px;
     border: 1px solid #333;
     border-radius: 2px;
+    z-index: 2;
   }
   .reportContainer .header {
     height: 16%;
@@ -732,13 +764,16 @@
     padding-bottom: 5px;
     border: 1px solid #333;
     border-radius: 2px;
+    z-index: 2;
   }
   .barChart {
     width: 100%;
     height: 120px;
+    z-index: 2;
   }
   .barChart div{
     height: 180px;
+    z-index: 2;
   }
   soyaSupremeCookingOilbarChart{
     width: 100%;

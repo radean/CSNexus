@@ -41,6 +41,7 @@ export const store = new Vuex.Store({
     totalConversion: 0,
     totalTasteTrial: 0,
     totalSales: 0,
+    totalPreviousUserButter: 0,
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -111,6 +112,9 @@ export const store = new Vuex.Store({
     },
     setTotalSales (state, payload){
       return state.totalSales = payload
+    },
+    setTotalPreviousUserButter (state, payload){
+      return state.totalPreviousUserButter = payload
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -480,6 +484,27 @@ export const store = new Vuex.Store({
         let TotalSales =0;
         let totalConversion = 0;
         let totalTasteTrial = 0;
+        // Previous User
+        //   For More information i omported all of these text from Node
+        //   These are current Competitors of Emborg
+        //     competitorButterList: [
+        //         'Lurpak', 'Emborg', 'Blueband', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'
+        //     ],
+        //     competitorCheeseList: [
+        //     'Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'
+        // ],
+        //     competitorFrozenList: [
+        //     'Star', 'Fresh & Freeze', 'Other'
+        // ],
+        let totalPreviousUserButter = {
+            Lurpak: 0,
+            Emborg: 0,
+            Blueband: 0,
+            Nurpur: 0,
+            Aseel: 0,
+            Mumtaz: 0,
+            Other: 0
+        };
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
@@ -489,6 +514,7 @@ export const store = new Vuex.Store({
           // Conversion Variable
           let conversion = 0;
           let tasteTrial = 0
+          let pUserButter = '';
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -511,6 +537,40 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
+            // Getting the Number of Previous Butter Consumers
+            // By using Switch statement
+            //   Cleaning Non-Entered Data
+              if (obj[key].pUButter == '' || obj[key].pUButter == null ){
+                  pUserButter = 'other'
+              }else {
+                  pUserButter = obj[key].pUButter;
+              }
+              // After Cleaning We should put them in thier suitable slots
+              switch(pUserButter) {
+                  case 'Lurpak':
+                      totalPreviousUserButter.Lurpak++;
+                      break;
+                  case 'Emborg':
+                      totalPreviousUserButter.Emborg++;
+                      break;
+                  case 'Blueband':
+                      totalPreviousUserButter.Blueband++;
+                      break;
+                  case 'Nurpur':
+                      totalPreviousUserButter.Nurpur++;
+                      break;
+                  case 'Aseel':
+                      totalPreviousUserButter.Aseel++;
+                      break;
+                  case 'Mumtaz':
+                      totalPreviousUserButter.Mumtaz++;
+                      break;
+                  case 'Other':
+                      totalPreviousUserButter.Other++;
+                      break;
+                  default:
+                      totalPreviousUserButter.Other++;
+              }
             // Calculating total number of unit sale
               let currentSales = obj[key].purchased;
               // Now i am iterating through a Object of Items
@@ -538,7 +598,9 @@ export const store = new Vuex.Store({
           TotalSales = TotalSales + Sales;
           currentKey = null;
         });
+        console.log(totalPreviousUserButter);
         // console.log(reports)
+        commit('setTotalPreviousUserButter', totalPreviousUserButter);
         commit('setTotalTasteTrial', totalTasteTrial);
         commit('setTotalConversion', totalConversion);
         commit('setTotalSales', TotalSales);
@@ -826,6 +888,9 @@ export const store = new Vuex.Store({
     },
     totalSales (state) {
       return state.totalSales
+    },
+    totalPreviousUserButter (state){
+      return state.totalPreviousUserButter
     },
     // ==================
 

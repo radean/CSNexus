@@ -478,6 +478,8 @@ export const store = new Vuex.Store({
         let reports = [];
         let currentKey = null;
         let TotalSales =0;
+        let totalConversion = 0;
+        let totalTasteTrial = 0;
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
@@ -485,8 +487,8 @@ export const store = new Vuex.Store({
           // TotalSale
           let Sales = 0;
           // Conversion Variable
-          let totalConversion = 0;
-          let totalTasteTrial = 0
+          let conversion = 0;
+          let tasteTrial = 0
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -523,20 +525,22 @@ export const store = new Vuex.Store({
             // Then we have to increment in state vriable to global access
             // But first increment in local variable
             if (obj[key].conversion === 'Yes'){
-              totalConversion = totalConversion + 1;
+                conversion = conversion + 1;
             }
             // We Also Take out other information such as TasteTrail & Gifts
             // Now Applying Same Method for TasteTrial
             if (obj[key].tasteTrial === 'Yes'){
-                totalTasteTrial = totalTasteTrial + 1;
+                tasteTrial = tasteTrial + 1;
             }
           }
+          totalConversion = totalConversion + conversion;
+          totalTasteTrial = totalTasteTrial + tasteTrial;
           TotalSales = TotalSales + Sales;
           currentKey = null;
-          commit('setTotalTasteTrial', totalTasteTrial);
-          commit('setTotalConversion', totalConversion);
         });
         // console.log(reports)
+        commit('setTotalTasteTrial', totalTasteTrial);
+        commit('setTotalConversion', totalConversion);
         commit('setTotalSales', TotalSales);
         commit('SET_MAIN_LOADING', false);
         commit('setStoreReport', reports);

@@ -7,6 +7,7 @@
         <v-card class="dashCards elevation-5">
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
+
             <h2 class="green--text ma-0 pa-0">
                 {{ totalSales }}
             </h2>
@@ -112,7 +113,6 @@
   import ssCanolaOil from '../Charts/ssCanolaOil'
   import ssBanaspati from '../Charts/ssBanaspatiGhee'
   import ssBanaspatiWOlive from '../Charts/ssBanaspatiWOlive'
-
 
   export default {
     data () {
@@ -388,7 +388,7 @@
       'ssCookingOil': ssCookingOil,
       'ssCanolaOil': ssCanolaOil,
       'ssBanaspatiOil': ssBanaspati,
-      'ssBanaspatiWOlive': ssBanaspatiWOlive
+      'ssBanaspatiWOlive': ssBanaspatiWOlive,
     },
 
     created(){

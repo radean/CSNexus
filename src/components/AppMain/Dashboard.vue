@@ -7,7 +7,9 @@
         <v-card class="dashCards elevation-5">
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0">{{ totalPurchases }}</h2>
+            <h2 class="green--text ma-0 pa-0">
+                {{ totalSales }}
+            </h2>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -29,7 +31,7 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <!--TOTAL Conversion-->
+      <!--Store Amount-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-20" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Stores</h6></v-card-title>
@@ -38,12 +40,19 @@
           </v-card-text>
         </v-card>
       </v-flex>
-        <!--Store Amount-->
+      <!--TOTAL Conversion-->
       <v-flex xs3 class="GraphsContainer elevation-20">
         <!--user chart-->
-        <div class="header">Sales</div>
+        <div class="header">Total Conversion</div>
         <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-        <conversionChart :chart-data="StoreDataCollection" :options="optionsDoughnut"></conversionChart>
+        <DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>
+      </v-flex>
+      <!--TOTAL TasteTrial-->
+      <v-flex xs3 class="GraphsContainer elevation-20">
+        <!--user chart-->
+        <div class="header">Total Consumer Tasted</div>
+        <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
+        <DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>
       </v-flex>
       <!--========================================-->
       <!--<v-flex xs3 class="GraphsContainer elevation-20">-->
@@ -64,12 +73,12 @@
           <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
       <!--</v-flex>-->
       <!--Soya Supreme Canola Oil-->
-      <v-flex xs8 class="reportContainer elevation-20">
-        <div class="header indigo">Canola Oil</div>
-        <div class="barChart">
-          <ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>
-        </div>
-      </v-flex>
+      <!--<v-flex xs8 class="reportContainer elevation-20">-->
+        <!--<div class="header indigo">Canola Oil</div>-->
+        <!--<div class="barChart">-->
+          <!--<ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>-->
+        <!--</div>-->
+      <!--</v-flex>-->
       <!--Soya Supreme Cooking Oil-->
       <!--<v-flex xs7 class="reportContainer elevation-21">-->
         <!--<div class="header light-green">Cooking Oil</div>-->
@@ -99,7 +108,7 @@
 //  importing Charts
   import ssCookingOil from '../Charts/ssCanolaOil'
   import UserCount from '../Charts/LineChart'
-  import conversionChart from '../Charts/DoughNutChart'
+  import DoughNutChart from '../Charts/DoughNutChart'
   import ssCanolaOil from '../Charts/ssCanolaOil'
   import ssBanaspati from '../Charts/ssBanaspatiGhee'
   import ssBanaspatiWOlive from '../Charts/ssBanaspatiWOlive'
@@ -109,7 +118,6 @@
     data () {
       return {
 //      data
-        totalSales: 0,
         storeData: [],
 //      progress Bars
         showProgress: true,
@@ -126,6 +134,7 @@
           {title: 'loading...git'},
         ],
         conversionData: null,
+        tasteTrialData: null,
         StoreDataCollection: null,
         CityDataCollection: null,
         soyaSupremeCookingOilChart: null,
@@ -361,24 +370,20 @@
           }
         },
         optionsDoughnut: {
-          responsive: true,
-          maintainAspectRatio: true,
-          fullWidth: true,
-          legend: {
-            position: 'bottom',
-            display: true,
-            labels: {
-              // This more specific font property overrides the global property
-              fontColor: 'white',
-              usePointStyle: false
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'white',
+                }
             }
-          }
         }
       }
     },
 
     components:{
-      'conversionChart' : DoughNutChart,
+      'DoughNutChart' : DoughNutChart,
       'app-user-count': UserCount,
       'ssCookingOil': ssCookingOil,
       'ssCanolaOil': ssCanolaOil,
@@ -393,6 +398,7 @@
       }
 //      Fetching Interception Action
       this.$store.dispatch('fetchTotalInterceptions');
+      this.$store.dispatch('fetchStoreReports');
       this.$store.dispatch('fetchCampaignReports');
       this.$store.dispatch('fetchAllStoreReports');
       this.$store.dispatch('baListUPD');
@@ -418,6 +424,15 @@
       },
       totalStores(){
         return this.$store.getters.totalStore;
+      },
+      totalConversion(){
+        return this.$store.getters.totalConversion;
+      },
+      totalTasteTrial(){
+        return this.$store.getters.totalTasteTrial;
+      },
+      totalSales() {
+        return this.$store.getters.totalSales;
       },
 //      storelist(){
 //        return this.$store.getters.storeList.length;
@@ -530,127 +545,148 @@
 //        Recent Purchase
         this.recentPurchase();
 //        City progress
-        this.CityDataCollection = {
-          labels: ['KHI', 'LHR', 'ISD'],
-          datasets: [
-            {
-              labels: ['KHI', 'LHR', 'ISD'],
-              backgroundColor: ['#FF4944', '#D80600', '#990000'],
-              borderWidth: 1,
-              color: ['#FF4944', '#D80600', '#990000'],
-              data: [this.khi_Stores_visited,this.lhr_Stores_visited,this.isd_Stores_visited]
-            },
-          ],
-        };
+//        this.CityDataCollection = {
+//          labels: ['KHI', 'LHR', 'ISD'],
+//          datasets: [
+//            {
+//              labels: ['KHI', 'LHR', 'ISD'],
+//              backgroundColor: ['#FF4944', '#D80600', '#990000'],
+//              borderWidth: 1,
+//              color: ['#FF4944', '#D80600', '#990000'],
+//              data: [this.khi_Stores_visited,this.lhr_Stores_visited,this.isd_Stores_visited]
+//            },
+//          ],
+//        };
 //        soyaSupremeCookingOil Progress
-        this.soyaSupremeCookingOilChart = {
-          labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-
-          datasets: [
-            {
-              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-              borderWidth: 1,
-              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-              data: [
-                this.soyaSupremeSKU.sscbottle1ltr,
-                this.soyaSupremeSKU.sscbottle3ltr,
-                this.soyaSupremeSKU.sscbottle5ltr,
-                this.soyaSupremeSKU.sscpoly1_5ltr,
-                this.soyaSupremeSKU.ssctin2_5ltr,
-                this.soyaSupremeSKU.ssctin5ltr,
-                this.soyaSupremeSKU.ssctin10ltr,
-                this.soyaSupremeSKU.sscpresspour3ltr,
-                this.soyaSupremeSKU.sscpresspour5ltr,
-                this.soyaSupremeSKU.sscjcan10ltr,
-                this.soyaSupremeSKU.sscjcan16ltr
-              ]
-            },
-          ],
-        }
+//        this.soyaSupremeCookingOilChart = {
+//          labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+//
+//          datasets: [
+//            {
+//              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+//              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+//              borderWidth: 1,
+//              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+//              data: [
+//                this.soyaSupremeSKU.sscbottle1ltr,
+//                this.soyaSupremeSKU.sscbottle3ltr,
+//                this.soyaSupremeSKU.sscbottle5ltr,
+//                this.soyaSupremeSKU.sscpoly1_5ltr,
+//                this.soyaSupremeSKU.ssctin2_5ltr,
+//                this.soyaSupremeSKU.ssctin5ltr,
+//                this.soyaSupremeSKU.ssctin10ltr,
+//                this.soyaSupremeSKU.sscpresspour3ltr,
+//                this.soyaSupremeSKU.sscpresspour5ltr,
+//                this.soyaSupremeSKU.sscjcan10ltr,
+//                this.soyaSupremeSKU.sscjcan16ltr
+//              ]
+//            },
+//          ],
+//        }
 //        soyaSupremeCanola Progress
-        this.soyaSupremeCanolaOilChart = {
-          labels: ['1 Ltr', '3 Ltr', '4.5 Ltr', '1x5 Poly', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-
-          datasets: [
-            {
-              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-              borderWidth: 1,
-              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-              data: [
-                this.soyaSupremeSKU.scbottle1ltr,
-                this.soyaSupremeSKU.scbottle3ltr,
-                this.soyaSupremeSKU.scbottle4_5ltr,
-                this.soyaSupremeSKU.scpoly1_5ltr,
-                this.soyaSupremeSKU.scjcan10ltr,
-                this.soyaSupremeSKU.scjcan16ltr
-              ]
-            },
-          ],
-        }
+//        this.soyaSupremeCanolaOilChart = {
+//          labels: ['1 Ltr', '3 Ltr', '4.5 Ltr', '1x5 Poly', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+//
+//          datasets: [
+//            {
+//              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
+//              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+//              borderWidth: 1,
+//              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
+//              data: [
+//                this.soyaSupremeSKU.scbottle1ltr,
+//                this.soyaSupremeSKU.scbottle3ltr,
+//                this.soyaSupremeSKU.scbottle4_5ltr,
+//                this.soyaSupremeSKU.scpoly1_5ltr,
+//                this.soyaSupremeSKU.scjcan10ltr,
+//                this.soyaSupremeSKU.scjcan16ltr
+//              ]
+//            },
+//          ],
+//        }
 //        soyaSupremeBanaspati Progress
-        this.soyaSupremeBanaspatiChart = {
-          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-
-          datasets: [
-            {
-              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-              backgroundColor: ['#FF4944', '#D80600', '#990000'],
-              borderWidth: 1,
-              color: ['#FF4944', '#D80600', '#990000'],
-              data: [
-                this.soyaSupremeSKU.ssbpoly1_5ltr,
-                this.soyaSupremeSKU.ssbtin25ltr,
-                this.soyaSupremeSKU.ssbtin5ltr
-              ]
-            },
-          ],
-        }
+//        this.soyaSupremeBanaspatiChart = {
+//          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+//
+//          datasets: [
+//            {
+//              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+//              backgroundColor: ['#FF4944', '#D80600', '#990000'],
+//              borderWidth: 1,
+//              color: ['#FF4944', '#D80600', '#990000'],
+//              data: [
+//                this.soyaSupremeSKU.ssbpoly1_5ltr,
+//                this.soyaSupremeSKU.ssbtin25ltr,
+//                this.soyaSupremeSKU.ssbtin5ltr
+//              ]
+//            },
+//          ],
+//        }
 //        soyaSupremeBanaspatiOlive Progress
-        this.soyaSupremeBanaspatiOliveChart = {
-          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-          responsive: true,
-          datasets: [
-            {
-              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-              backgroundColor: ['#FF4944', '#D80600', '#990000'],
-              borderWidth: 1,
-              color: ['#FF4944', '#D80600', '#990000'],
-              data: [
-                this.soyaSupremeSKU.ssbopoly1_5ltr,
-                this.soyaSupremeSKU.ssbotin25ltr,
-                this.soyaSupremeSKU.ssbotin5ltr
-              ]
-            },
-          ],
-        }
-//        Conversion Progress
+//        this.soyaSupremeBanaspatiOliveChart = {
+//          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+//          responsive: true,
+//          datasets: [
+//            {
+//              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
+//              backgroundColor: ['#FF4944', '#D80600', '#990000'],
+//              borderWidth: 1,
+//              color: ['#FF4944', '#D80600', '#990000'],
+//              data: [
+//                this.soyaSupremeSKU.ssbopoly1_5ltr,
+//                this.soyaSupremeSKU.ssbotin25ltr,
+//                this.soyaSupremeSKU.ssbotin5ltr
+//              ]
+//            },
+//          ],
+//        }
+//      Conversion Progress
+//      How Many peoples converted to Emborg from other brands
         this.conversionData = {
             labels: ['Yes', 'No'],
-
             datasets: [
                 {
-                    backgroundColor: ['#800dc3', '#2c134d'],
+                    backgroundColor: ['#d6a150', '#3f91db'],
                     borderWidth: 0,
-                    color: ['#800dc3', '#2c134d'],
-                    data: [this.totalInterceptions, this.totalInterceptions]
+                    color: ['#ffc85a', '#49a9ff'],
+                    data: [
+                        this.totalConversion,
+//                        Taking Out Peoples who said Nothing or Clearly Say "NO"
+                        (this.totalInterceptions - this.totalConversion)
+                    ]
                 },
             ],
         }
-//          Store Progress
-        this.StoreDataCollection = {
-          labels: ['Cooking Oil', 'Canola Oil', 'Banaspati', 'Banaspati with Olive'],
-
-          datasets: [
-            {
-              backgroundColor: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
-              borderWidth: 0,
-              color: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
-              data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
-            },
-          ],
+       //      Conversion Progress
+//      How Many peoples converted to Emborg from other brands
+        this.tasteTrialData = {
+            labels: ['Yes', 'No'],
+            datasets: [
+              {
+                  backgroundColor: ['#d6a150', '#3f91db'],
+                  borderWidth: 0,
+                  color: ['#ffc85a', '#49a9ff'],
+                  data: [
+                      this.totalTasteTrial,
+        //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
+                      (this.totalInterceptions - this.totalTasteTrial)
+                  ]
+              },
+            ],
         }
+//          Store Progress
+//        this.StoreDataCollection = {
+//          labels: ['Cooking Oil', 'Canola Oil', 'Banaspati', 'Banaspati with Olive'],
+//
+//          datasets: [
+//            {
+//              backgroundColor: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
+//              borderWidth: 0,
+//              color: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
+//              data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
+//            },
+//          ],
+//        }
       }
     }
 
@@ -667,6 +703,7 @@
     padding-bottom: 5px;
     border: 1px solid #333;
     border-radius: 2px;
+    z-index: 2;
   }
   .GraphsContainer .header {
     background-color: rgba(30,30,30,0.3);

@@ -38,7 +38,9 @@ export const store = new Vuex.Store({
     // Data
     totalInterceptions: 0,
     totalPurchases: [],
-    totalConverison: null,
+    totalConversion: 0,
+    totalTasteTrial: 0,
+    totalSales: 0,
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -90,7 +92,7 @@ export const store = new Vuex.Store({
       state.totalBA = payload;
     },
     setTotalConversion (state, payload) {
-      state.totalConverison = payload;
+      state.totalConversion = payload;
     },
     setSelectedBa (state, payload){
       state.selectedBa = payload;
@@ -103,6 +105,12 @@ export const store = new Vuex.Store({
     },
     setTotalStore (state, payload) {
       state.totalStore = payload;
+    },
+    setTotalTasteTrial (state, payload){
+      return state.totalTasteTrial = payload
+    },
+    setTotalSales (state, payload){
+      return state.totalSales = payload
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -464,17 +472,21 @@ export const store = new Vuex.Store({
       });
     },
     // Fetch Store Reports By Campaign
-    fetchStoreReports({commit}, payload){
+    fetchStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata').once('value', (report) => {
+      firebase.database().ref('storedata').on('value', (report) => {
         let reports = [];
         let currentKey = null;
+        let TotalSales =0;
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
           currentKey = childReport.key;
+          // TotalSale
+          let Sales = 0;
           // Conversion Variable
-          totalConversion = 0;
+          let totalConversion = 0;
+          let totalTasteTrial = 0
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -497,16 +509,35 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
-            // if Converted to Emborg
+            // Calculating total number of unit sale
+              let currentSales = obj[key].purchased;
+              // Now i am iterating through a Object of Items
+              for (let key in currentSales) {
+                let toInteger;
+                  if (currentSales.hasOwnProperty(key)) {
+                      toInteger = parseInt(currentSales[key]);
+                      Sales = Sales + toInteger;
+                  }
+              }
+            // if Consumer Converted to Emborg
             // Then we have to increment in state vriable to global access
             // But first increment in local variable
             if (obj[key].conversion === 'Yes'){
-                totalConversion = totalConversion + 1;
+              totalConversion = totalConversion + 1;
+            }
+            // We Also Take out other information such as TasteTrail & Gifts
+            // Now Applying Same Method for TasteTrial
+            if (obj[key].tasteTrial === 'Yes'){
+                totalTasteTrial = totalTasteTrial + 1;
             }
           }
+          TotalSales = TotalSales + Sales;
           currentKey = null;
+          commit('setTotalTasteTrial', totalTasteTrial);
+          commit('setTotalConversion', totalConversion);
         });
         // console.log(reports)
+        commit('setTotalSales', TotalSales);
         commit('SET_MAIN_LOADING', false);
         commit('setStoreReport', reports);
         });
@@ -768,6 +799,9 @@ export const store = new Vuex.Store({
     unAssignedStores (state){
       return state.unAssignedStores
     },
+
+    // Accumulative Figures
+
     totalInterceptions (state){
       return state.totalInterceptions
     },
@@ -777,14 +811,25 @@ export const store = new Vuex.Store({
     totalBA (state) {
       return state.totalBA
     },
+    totalStore (state) {
+        return state.totalStore
+    },
+    totalConversion (state) {
+      return state.totalConversion
+    },
+    totalTasteTrial (state) {
+      return state.totalTasteTrial
+    },
+    totalSales (state) {
+      return state.totalSales
+    },
+    // ==================
+
     availableBA (state){
       return state.baList
     },
     selectedBa (state){
       return state.selectedBa
-    },
-    totalStore (state) {
-      return state.totalStore
     },
     storeList (state){
       return state.stores

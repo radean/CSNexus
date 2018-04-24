@@ -2,7 +2,7 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap >
       <v-tabs fixed icons centered class="mb-5 pb-5">
-        <v-toolbar class="gradientHead" dark>
+        <v-toolbar class="gradientHead " dark>
           <v-spacer></v-spacer>
           <v-toolbar-title slot="extension" class="display-1">REPORTS</v-toolbar-title>
         </v-toolbar>
@@ -197,60 +197,89 @@
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
                     <v-flex xs12 ><h6>STORE REPORT</h6></v-flex>
-                    <v-flex xs6 class="text-xs-left">SORTING OPTIONS</v-flex>
+                    <v-flex xs6 class="text-xs-left">Details</v-flex>
                     <v-flex xs12>
                       <v-divider></v-divider>
                       <v-flex xs4 offset-xs8 class="mt-3">
-                        <!--<v-menu-->
-                          <!--lazy-->
-                          <!--:close-on-content-click="true"-->
-                          <!--:close-on-click="false"-->
-                          <!--v-model="storeMenu"-->
-                          <!--transition="scale-transition"-->
-                          <!--offset-y-->
-                          <!--full-width-->
-                          <!--:nudge-right="40"-->
-                          <!--max-width="290px"-->
-                          <!--min-width="290px"-->
-                        <!--&gt;-->
-                          <!--<v-text-field-->
-                            <!--slot="activator"-->
-                            <!--label="By Date"-->
-                            <!--v-model="storeSelectedDate"-->
-                            <!--prepend-icon="event"-->
-                            <!--readonly-->
-                          <!--&gt;</v-text-field>-->
-                          <!--<v-date-picker v-model="storeSelectedDate" no-title scrollable actions>-->
-                            <!--<template slot-scope="{ save, cancel }">-->
-                              <!--<v-card-actions>-->
-                                <!--<v-spacer></v-spacer>-->
-                                <!--<v-btn flat color="primary" @click="cancel">Cancel</v-btn>-->
-                                <!--<v-btn flat color="primary" @click="save">OK</v-btn>-->
-                              <!--</v-card-actions>-->
-                            <!--</template>-->
-                          <!--</v-date-picker>-->
-                        <!--</v-menu>-->
+                        <v-menu
+                                ref="menu"
+                                lazy
+                                :close-on-content-click="false"
+                                v-model="dateDialogue"
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                :nudge-right="40"
+                                min-width="290px"
+                                :return-value.sync="selectedDate"
+                        >
+                          <v-text-field
+                                  slot="activator"
+                                  label="Picker in menu"
+                                  v-model="selectedDate"
+                                  prepend-icon="event"
+                                  readonly
+                          ></v-text-field>
+                          <v-date-picker v-model="selectedDate" no-title scrollable>
+                            <v-spacer></v-spacer>
+                            <v-btn flat color="primary" @click="dateDialogue = false">Cancel</v-btn>
+                            <v-btn flat color="primary" @click="$refs.dateDialogue.save(selectedDate)">OK</v-btn>
+                          </v-date-picker>
+                        </v-menu>
                       </v-flex>
                     </v-flex>
                     <v-flex xs12>
                       <v-divider></v-divider>
-                      <v-container fluid style="min-height: 0;" grid-list-lg>
-                        <v-layout row wrap >
-                          <v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchStoreReport(store)">
-                            <v-card color="grey lighten-2" class="black--text elevation-12" ripple>
-                              <v-card-title primary-title>
-                                <div class="headline">{{ store.name }} Report </div>
-                                <v-flex xs6 offset-xs3><v-icon x-large class="black--text">store</v-icon></v-flex>
-                              </v-card-title>
-                              <v-card-actions >
-                                <v-flex xs8 offset-xs2>
-                                  <!--<v-btn flat class="black&#45;&#45;text">FETCH</v-btn>-->
-                                </v-flex>
-                              </v-card-actions>
-                            </v-card>
-                          </v-flex>
-                        </v-layout>
-                      </v-container>
+                      <v-card>
+                        <v-card-title>
+                          Stores List
+                          <v-spacer></v-spacer>
+                          <v-text-field
+                                  append-icon="search"
+                                  label="Search Store"
+                                  single-line
+                                  hide-details
+                                  v-model="storeSearch"
+                          ></v-text-field>
+                        </v-card-title>
+                        <v-data-table
+                                :headers="storeListHeaders"
+                                :items="currentStoreList"
+                                :search="storeSearch"
+                        >
+                          <template slot="items" slot-scope="props">
+                            <td class="text-xs-center">{{ props.item.id }}</td>
+                            <td class="text-xs-left">{{ props.item.name }}</td>
+                            <td class="text-xs-left">{{ props.item.city }}</td>
+                            <td class="text-xs-left">{{ props.item.address }}</td>
+                            <td class="text-xs-center">
+                              <v-btn outline fab color="purple" @click="fetchStoreReport(props.item)">
+                                <v-icon color="white">event_note</v-icon>
+                              </v-btn>
+                            </td>
+                          </template>
+                          <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                            Your search for "{{ storeSearch }}" found no results.
+                          </v-alert>
+                        </v-data-table>
+                      </v-card>
+                      <!--<v-container fluid style="min-height: 0;" grid-list-lg>-->
+                        <!--<v-layout row wrap >-->
+                          <!--<v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchStoreReport(store)">-->
+                            <!--<v-card color="grey lighten-2" class="black&#45;&#45;text elevation-12" ripple>-->
+                              <!--<v-card-title primary-title>-->
+                                <!--<div class="headline">{{ store.name }} Report </div>-->
+                                <!--<v-flex xs6 offset-xs3><v-icon x-large class="black&#45;&#45;text">store</v-icon></v-flex>-->
+                              <!--</v-card-title>-->
+                              <!--<v-card-actions >-->
+                                <!--<v-flex xs8 offset-xs2>-->
+                                  <!--&lt;!&ndash;<v-btn flat class="black&#45;&#45;text">FETCH</v-btn>&ndash;&gt;-->
+                                <!--</v-flex>-->
+                              <!--</v-card-actions>-->
+                            <!--</v-card>-->
+                          <!--</v-flex>-->
+                        <!--</v-layout>-->
+                      <!--</v-container>-->
                     </v-flex>
                     <v-flex xs12 >
                       <v-dialog v-model="storeReportDialog" maxWidth="1200px" >
@@ -571,6 +600,43 @@
         storeReport: [],
         storeTotal: [],
 //      GUI HEADERS
+//          StoreReport Gui Data
+        storeSearch: '',
+        storeListHeaders: [
+            {
+                text: 'ID',
+                align: 'center',
+                sortable: true,
+                value: 'id'
+            },
+            {
+                text: 'Name',
+                align: 'left',
+                sortable: true,
+                value: 'name'
+            },
+            {
+                text: 'City',
+                align: 'left',
+                sortable: true,
+                value: 'city'
+            },
+            {
+                text: 'Address',
+                align: 'left',
+                sortable: true,
+                value: 'address'
+            },
+            {
+                text: 'Actions',
+                align: 'center',
+                sortable: true,
+                value: 'action'
+            },
+        ],
+        currentStoreList: [],
+        selectedDate: null,
+        dateDialogue: false,
         consumerReportListHeaders: [
           { text: 'Date', value: 'date', align: 'left'},
           { text: 'Customer', value: 'customer', align: 'left' },
@@ -690,6 +756,7 @@
         return this.compileMonth.to !== null && this.compileMonth.from !== null
       },
       storeList(){
+        this.currentStoreList = this.$store.getters.storeList
         return this.$store.getters.storeList
       },
       storeReportDatewise(){
@@ -929,12 +996,13 @@
       fetchStoreReport(storeinfo){
         this.selectLoading = true;
 //        let init = {date: this.storeDateQuery, store: storeinfo};
-        this.$store.dispatch('fetchStoreReports', storeinfo).then(() =>{
+        this.$store.dispatch('fetchStoreReportsByObject', storeinfo).then(() =>{
           setTimeout(() => {
             this.selectLoading = false;
             this.storeReportDialog = true;
           },2000);
         });
+        console.log(storeinfo);
         this.storeSelected = storeinfo;
         this.storeMenu = false;
       },
@@ -979,12 +1047,12 @@
           document.getElementById('consumerTableData').onscroll = this.syncConsumerScroll;
           document.getElementById('compileTableData').onscroll = this.syncCompileScroll;
           document.getElementById('storeTableData').onscroll = this.syncStoreScroll;
-//          Fetching Base Data Queries
-          this.$store.dispatch('storeListUPD');
 //          this.$store.dispatch('fetchCompileReportsByStores');
 //          Stop Loading
           this.selectLoading = false;
         }, 2000)
+//          Fetching Base Data Queries
+        this.$store.dispatch('storeListUPD');
       }
     },
   }

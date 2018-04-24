@@ -343,6 +343,7 @@ export const store = new Vuex.Store({
         }
         commit('setTotalStore', totalStores)
         commit('SET_MAIN_LOADING', false);
+        // console.log(stores);
         commit('SET_STORES', stores);
       });
     },
@@ -728,7 +729,6 @@ export const store = new Vuex.Store({
                   product = 'Vegetable';
                   productCategories.Vegetable = productCategories.Vegetable + amount
               }
-                console.log(currentSales)
             }
 
             // if Consumer Converted to Emborg
@@ -760,6 +760,53 @@ export const store = new Vuex.Store({
         commit('setStoreReport', reports);
         });
     },
+      // Fetch Store Reports By Campaign
+    fetchStoreReportsByObject({commit}, payload){
+          commit('SET_MAIN_LOADING', true);
+          firebase.database().ref('storedata' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
+              let reports = [];
+              let currentKey = null;
+              // console.log(reports.val)
+              report.forEach((childReport) => {
+                  const obj = childReport.val();
+                  currentKey = childReport.key;
+                  // TotalSale
+                  let Sales = 0;
+                  // Conversion Variable
+                  let conversion = 0;
+                  let tasteTrial = 0
+                  let pUserButter = '';
+                  let pUserCheese = '';
+                  let pUserFrozen = '';
+                  // reports[currentKey] = new Array;
+                  for (let key in obj){
+                      reports.push({
+                          id: key,
+                          date: childReport.key,
+                          // Customer Information
+                          customerName: obj[key].customerName,
+                          customerContact: obj[key].customerContact,
+                          // Conversion
+                          conversion: obj[key].conversion,
+                          // Taste Trail
+                          tasteTrial: obj[key].tasteTrial,
+                          pUFrozen: obj[key].pUFrozen,
+                          pUCheese: obj[key].pUCheese,
+                          pUButter: obj[key].pUButter,
+                          // Store info
+                          storeName: obj[key].store.name,
+                          store: obj[key].store,
+                          userName: obj[key].userName,
+                          // Stock Information
+                          purchased: obj[key].purchased
+                      });
+                  }
+                  currentKey = null;
+              });
+              commit('SET_MAIN_LOADING', false);
+              commit('setStoreReport', reports);
+          });
+  },
     // Fetch All Last Reports
     fetchAllStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);
@@ -953,8 +1000,6 @@ export const store = new Vuex.Store({
         });
       });
     },
-
-
     // Supervisor PUT
     supervisorReg({commit}, payload){
       // Start Loading

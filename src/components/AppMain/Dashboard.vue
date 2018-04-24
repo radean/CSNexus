@@ -64,12 +64,12 @@
           <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
       <!--</v-flex>-->
       <!--Soya Supreme Canola Oil-->
-      <v-flex xs8 class="reportContainer elevation-20">
-        <div class="header indigo">Canola Oil</div>
-        <div class="barChart">
-          <ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>
-        </div>
-      </v-flex>
+      <!--<v-flex xs8 class="reportContainer elevation-20">-->
+        <!--<div class="header indigo">Canola Oil</div>-->
+        <!--<div class="barChart">-->
+          <!--<ssCanolaOil :chart-data="soyaSupremeCanolaOilChart" :options="optionsCity"></ssCanolaOil>-->
+        <!--</div>-->
+      <!--</v-flex>-->
       <!--Soya Supreme Cooking Oil-->
       <!--<v-flex xs7 class="reportContainer elevation-21">-->
         <!--<div class="header light-green">Cooking Oil</div>-->
@@ -391,8 +391,9 @@
       }
 //      Fetching Interception Action
       this.$store.dispatch('fetchTotalInterceptions');
-      this.$store.dispatch('fetchCampaignReports');
-      this.$store.dispatch('fetchAllStoreReports');
+//      this.$store.dispatch('fetchCampaignReports');
+      this.$store.dispatch('fetchPurchaseReports');
+//      this.$store.dispatch('fetchAllStoreReports');
       this.$store.dispatch('baListUPD');
       this.$store.dispatch('storeListUPD');
 //      setTimeout(() => {

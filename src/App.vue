@@ -115,12 +115,12 @@
         <v-container>
           <vue-particles
              class="flying"
-             color="#666"
-             :particleOpacity="0.2"
+             color="#FFF"
+             :particleOpacity="0.1"
              :particlesNumber="40"
              shapeType="circle"
              :particleSize="6"
-             linesColor="#dedede"
+             linesColor="#FFF"
              :linesWidth="1"
              :lineLinked="true"
              :lineOpacity="0.1"
@@ -293,7 +293,7 @@ export default {
       });
       this.setUpUser();
       console.log('done')
-    }, 6000)
+    }, 3000)
   },
   computed: {
       userInfo(){

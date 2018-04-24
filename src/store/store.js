@@ -255,9 +255,6 @@ export const store = new Vuex.Store({
       })
     },
 //     ===================
-
-
-
     // USER UPDATES
     updateSelectedBa({commit, getters},payload){
       // initiate Loading
@@ -279,11 +276,8 @@ export const store = new Vuex.Store({
       })
     },
     //==============
-
-
     // DASHBOARD GUI DATA
     // ===================
-
     fetchTotalInterceptions({commit}){
       // Fetching List of Dates
       firebase.database().ref('storedata').on('value', (report) => {
@@ -300,9 +294,7 @@ export const store = new Vuex.Store({
         commit('setTotalInterceptions', totalInterceptions);
       })
     },
-
     // ==============
-
     // Fetching Data
     //   Fetching Total Number of Stores
     // Total Store list
@@ -548,6 +540,30 @@ export const store = new Vuex.Store({
         });
         commit('SET_MAIN_LOADING', false);
         commit('setCompileReport', reports)
+      });
+    },
+    // Total Purchase Amount
+    fetchPurchaseReports({commit}){
+      firebase.database().ref('storedata').on('value', (report) => {
+        const reports = [];
+        // let purchased;
+        // let totals;
+        let totalPurchase = null;
+        let purchaseArray = [];
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          for (let key in obj) {
+            reports.push({
+                // Stock Information
+                purchased : obj[key].purchased
+            });
+            //  START HERE
+            purchaseArray.push(obj[key].purchased);
+          }
+        });
+        console.log(purchaseArray);
+        // console.log(reports);
+        commit('setTotalPurchases', reports)
       });
     },
     // Fetch Compile Reports By Campaign

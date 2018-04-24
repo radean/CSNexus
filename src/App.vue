@@ -12,7 +12,7 @@
       v-model="drawer"
       app
       width="240"
-    >git
+    >
       <v-list class="transper">
         <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>
@@ -274,7 +274,6 @@ export default {
     this.$store.dispatch('userSession');
     let user = this.$store.getters.user;
     if (user === null) {
-      console.log('created user Error')
       this.$router.push('/login')
     };
     setTimeout(() => {
@@ -370,7 +369,7 @@ export default {
   .flying {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 90%;
   }
   #app {
     /*font-family: 'Barlow', sans-serif;*/

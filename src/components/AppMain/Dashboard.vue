@@ -42,61 +42,45 @@
         </v-card>
       </v-flex>
       <!--TOTAL Conversion-->
-      <v-flex xs3 class="GraphsContainer elevation-20">
-        <!--user chart-->
-        <div class="header">Total Conversion</div>
-        <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-        <DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>
-      </v-flex>
-      <!--TOTAL TasteTrial-->
-      <v-flex xs3 class="GraphsContainer elevation-20">
-        <!--user chart-->
-        <div class="header">Total Consumer Tasted</div>
-        <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-        <DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>
-      </v-flex>
-      <!--========================================-->
-      <!--<v-flex xs3 class="GraphsContainer elevation-20">-->
-        <!--<div class="header" >Recent Sale</div>-->
-        <!--<v-list two-line>-->
-          <!--<v-list-tile v-for="store in recentStore" v-bind:key="store.title" @click="">-->
-            <!--<v-list-tile-content>-->
-              <!--<v-list-tile-title >{{ store.title }} | {{ store.address }}</v-list-tile-title>-->
-              <!--<v-list-tile-sub-title class="grey&#45;&#45;text text&#45;&#45;lighten-2">BA:{{ store.baName }} | Customer: {{ store.customer }}</v-list-tile-sub-title>-->
-            <!--</v-list-tile-content>-->
-          <!--</v-list-tile>-->
-        <!--</v-list>-->
-      <!--</v-flex>-->
-      <!--======================================-->
-      <!--Active users-->
-      <!--<v-flex xs3 class="GraphsContainer elevation-20" style="height: 100px">-->
-        <!--<div class="header">ACTIVE USER</div>-->
-          <!--<h3 class="green&#45;&#45;text">{{ activeMerchandiser }}</h3>-->
-      <!--</v-flex>-->
+        <v-layout row wrap >
+          <v-flex xs3 class="GraphsContainer elevation-20">
+            <!--user chart-->
+            <div class="header">Total Conversion</div>
+            <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
+            <DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>
+          </v-flex>
+          <!--TOTAL TasteTrial-->
+          <v-flex xs3 class="GraphsContainer elevation-20">
+            <!--user chart-->
+            <div class="header">Total Consumer Tasted</div>
+            <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
+            <DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>
+          </v-flex>
+            <v-flex xs5 class="reportContainer elevation-20">
+                <div class="header indigo">Cheese Previous User</div>
+                <div class="barChart">
+                    <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
+                </div>
+            </v-flex>
+        </v-layout>
       <!--Previous Users of Butter-->
       <v-layout row wrap class="mb-0 pb-0">
-        <v-flex xs4 class="reportContainer elevation-20">
-          <div class="header indigo">Butter Previous User</div>
-          <div class="barChart">
-            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
-          </div>
-        </v-flex>
-        <v-flex xs3 class="reportContainer elevation-20">
-          <div class="header indigo">Cheese Previous User</div>
-          <div class="barChart">
-            <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
-          </div>
-        </v-flex>
-        <v-flex xs2 class="reportContainer elevation-20">
-          <div class="header indigo">Frozen Previous User</div>
-          <div class="barChart">
-            <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
-          </div>
-        </v-flex>
+          <v-flex xs6 class="reportContainer elevation-20">
+              <div class="header indigo">Butter Previous User</div>
+              <div class="barChart">
+                  <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+              </div>
+          </v-flex>
+          <v-flex xs5 class="reportContainer elevation-20">
+              <div class="header indigo">Frozen Previous User</div>
+              <div class="barChart">
+                  <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
+              </div>
+          </v-flex>
       </v-layout>
       <v-flex xs12 class="reportContainer elevation-20">
-        <div class="header indigo">Frozen Previous User</div>
-        <div class="reportContainer">
+        <div class="header indigo">Sales By Category</div>
+        <div class="barChart">
           <BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>
         </div>
       </v-flex>
@@ -352,15 +336,16 @@
             labels: {
               // This more specific font property overrides the global property
               fontColor: '#FFFFFF',
-              padding: 6,
-              boxWidth: 4,
-              usePointStyle: false
+              padding: 1,
+              boxWidth: 1,
+              usePointStyle: true
             }
           },
           scales: {
             xAxes: [{
               ticks: {
                 fontColor: "white",
+                autoSkip: false
               },
               barPercentage: 1,
               gridLines: {
@@ -371,6 +356,7 @@
               ticks: {
                 beginAtZero:true,
                 fontColor: "white",
+
               },
               gridLines: {
                 offsetGridLines: false
@@ -390,7 +376,7 @@
         },
         optionsDoughnut: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             legend: {
                 labels: {
                     // This more specific font property overrides the global property
@@ -497,44 +483,9 @@
             totalSales[k] = (totalSales[k] || 0) + parseInt(obj[k]);
           })
         });
-
         for (let key in totalSales){
             totalSaleCount += totalSales[key];
         }
-
-//        Total soya supreme banaspati with Olive Oil
-        sSBO = totalSales.ssbopoly1_5ltr + totalSales.ssbotin5ltr + totalSales.ssbotin25ltr;
-
-//        Total smart canola oil
-        sCO =
-          totalSales.scbottle1ltr +
-          totalSales.scbottle3ltr +
-          totalSales.scbottle4_5ltr +
-          totalSales.scpoly1_5ltr +
-          totalSales.sctin2_5ltr +
-          totalSales.scjcan10ltr +
-          totalSales.scjcan16ltr;
-
-//        Total soyaSupremeStock
-        sSCO =
-          totalSales.sscbottle1ltr +
-          totalSales.sscbottle3ltr +
-          totalSales.sscbottle5ltr +
-          totalSales.sscpoly1_5ltr +
-          totalSales.ssctin2_5ltr +
-          totalSales.ssctin5ltr +
-          totalSales.ssctin10ltr +
-          totalSales.sscpresspour3ltr +
-          totalSales.sscpresspour5ltr +
-          totalSales.sscjcan10ltr +
-          totalSales.sscjcan16ltr;
-
-//        Total Soya Supreme Banaspati
-        sSB =
-          totalSales.ssbpoly1_5ltr +
-          totalSales.ssbtin25ltr +
-          totalSales.ssbtin5ltr;
-
         this.soyaSupremeSKU = totalSales;
 //        Assigning to GVBs
         this.Purchases.sSCO = parseInt(sSCO);
@@ -559,14 +510,11 @@
             baName: storeReport[key].userName
           })
         }
-        this.recentStore = check
+        this.recentStore = check;
         return true
       },
       fillData () {
         this.showProgress = false;
-        this.todayProgress = Math.floor((Math.random() * 100) + 1);
-        this.monthProgress = Math.floor((Math.random() * 100) + 1);
-        this.activeMerchandiser = Math.floor((Math.random() * 100) + 1);
 //        Recent Purchase
         this.recentPurchase();
 //        City progress
@@ -602,7 +550,7 @@
 //          console.log(this.productCategory);/**/
         this.productCategoryData = {
             labels: [
-                'Block Cheese',
+                'Cheese',
                 'Butter',
                 'Block Cheese Cream',
                 'Cream Food Service',
@@ -636,7 +584,7 @@
                         this.productCategory.Fruits,
                         this.productCategory.Meat,
                         this.productCategory.SeaFood,
-                        this.productCategory.Vegetable,
+                        this.productCategory.Vegetable
                     ]
                 },
             ],
@@ -658,7 +606,7 @@
                         this.totalPreviousUserButter.Nurpur,
                         this.totalPreviousUserButter.Aseel,
                         this.totalPreviousUserButter.Mumtaz,
-                        this.totalPreviousUserButter.Other,
+                        this.totalPreviousUserButter.Other
                     ]
                 },
             ],
@@ -677,7 +625,7 @@
                         this.totalPreviousUserCheese.Adams,
                         this.totalPreviousUserCheese.President,
                         this.totalPreviousUserCheese.Lactima,
-                        this.totalPreviousUserCheese.Other,
+                        this.totalPreviousUserCheese.Other
                     ]
                 },
             ],
@@ -739,11 +687,11 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .GraphsContainer {
-    max-width: 25%;
+    /*max-width: 50%;*/
     background-color: rgba(120,120,120,0.2);
     margin: 10px;
     text-align: center;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
     border: 1px solid #333;
     border-radius: 2px;
     z-index: 2;
@@ -762,21 +710,6 @@
     z-index: 2;
   }
   .reportContainer .header {
-    height: 16%;
-    margin-bottom: 10px;
-    line-height: 200%;
-    font-size: 18px;
-  }
-  .BigContainer {
-    min-width: 30%;
-    background-color: rgba(120,120,120,0.2);
-    margin: 10px;
-    height: 420px;
-    border: 1px solid #333;
-    border-radius: 2px;
-    z-index: 2;
-  }
-  .BigContainer .header {
     height: 16%;
     margin-bottom: 10px;
     line-height: 200%;

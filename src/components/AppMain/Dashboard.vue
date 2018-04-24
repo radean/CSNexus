@@ -94,6 +94,12 @@
           </div>
         </v-flex>
       </v-layout>
+      <v-flex xs12 class="reportContainer elevation-20">
+        <div class="header indigo">Frozen Previous User</div>
+        <div class="reportContainer">
+          <BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>
+        </div>
+      </v-flex>
       <!--Soya Supreme Cooking Oil-->
       <!--<v-flex xs7 class="reportContainer elevation-21">-->
         <!--<div class="header light-green">Cooking Oil</div>-->
@@ -150,6 +156,7 @@
         ],
         conversionData: null,
         tasteTrialData: null,
+        productCategoryData: null,
         previousUserButterData: null,
         previousUserCheeseData: null,
         previousUserFrozenData: null,
@@ -455,6 +462,9 @@
       totalPreviousUserFrozen() {
           return this.$store.getters.totalPreviousUserFrozen;
       },
+      productCategory() {
+          return this.$store.getters.productCategory;
+      },
 //      storelist(){
 //        return this.$store.getters.storeList.length;
 //      },
@@ -572,32 +582,6 @@
 //            },
 //          ],
 //        };
-//        soyaSupremeCookingOil Progress
-//        this.soyaSupremeCookingOilChart = {
-//          labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//
-//          datasets: [
-//            {
-//              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              borderWidth: 1,
-//              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              data: [
-//                this.soyaSupremeSKU.sscbottle1ltr,
-//                this.soyaSupremeSKU.sscbottle3ltr,
-//                this.soyaSupremeSKU.sscbottle5ltr,
-//                this.soyaSupremeSKU.sscpoly1_5ltr,
-//                this.soyaSupremeSKU.ssctin2_5ltr,
-//                this.soyaSupremeSKU.ssctin5ltr,
-//                this.soyaSupremeSKU.ssctin10ltr,
-//                this.soyaSupremeSKU.sscpresspour3ltr,
-//                this.soyaSupremeSKU.sscpresspour5ltr,
-//                this.soyaSupremeSKU.sscjcan10ltr,
-//                this.soyaSupremeSKU.sscjcan16ltr
-//              ]
-//            },
-//          ],
-//        }
 //      Category Wise Bar Chart
 //      first we have to Define how many Categories we have
 //        We have:
@@ -615,6 +599,48 @@
 //          Meat
 //          SeaFood
 //          Vegetable
+//          console.log(this.productCategory);/**/
+        this.productCategoryData = {
+            labels: [
+                'Block Cheese',
+                'Butter',
+                'Block Cheese Cream',
+                'Cream Food Service',
+                'Milk',
+                'Process Cheese',
+                'Shakes',
+                'Shredded Cheese',
+                'Fish',
+                'French Fries',
+                'Fruits',
+                'Meat',
+                'Sea Food',
+                'Vegetable'
+            ],
+            datasets: [
+                {
+                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    borderWidth: 0,
+                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    data: [
+                        this.productCategory.BlockCheese,
+                        this.productCategory.Butter,
+                        this.productCategory.BlockCheeseCream,
+                        this.productCategory.CreamFoodService,
+                        this.productCategory.Milk,
+                        this.productCategory.ProcessCheese,
+                        this.productCategory.Shakes,
+                        this.productCategory.ShreddedCheese,
+                        this.productCategory.Fish,
+                        this.productCategory.FrenchFries,
+                        this.productCategory.Fruits,
+                        this.productCategory.Meat,
+                        this.productCategory.SeaFood,
+                        this.productCategory.Vegetable,
+                    ]
+                },
+            ],
+        }
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
 //          For Butter
@@ -741,6 +767,21 @@
     line-height: 200%;
     font-size: 18px;
   }
+  .BigContainer {
+    min-width: 30%;
+    background-color: rgba(120,120,120,0.2);
+    margin: 10px;
+    height: 420px;
+    border: 1px solid #333;
+    border-radius: 2px;
+    z-index: 2;
+  }
+  .BigContainer .header {
+    height: 16%;
+    margin-bottom: 10px;
+    line-height: 200%;
+    font-size: 18px;
+  }
   .dashCards {
     max-width: 100%;
     background-color: rgba(50,50,50,0.2);
@@ -757,6 +798,15 @@
     z-index: 2;
   }
   .barChart div{
+    height: 180px;
+    z-index: 2;
+  }
+  .BigContainerChart{
+    width: 100%;
+    height: 180px;
+    z-index: 2;
+  }
+  .BigContainerChart div{
     height: 180px;
     z-index: 2;
   }

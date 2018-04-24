@@ -44,6 +44,7 @@ export const store = new Vuex.Store({
     totalPreviousUserButter: 0,
     totalPreviousUserCheese: 0,
     totalPreviousUserFrozen: 0,
+    productCategory: {},
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -123,6 +124,9 @@ export const store = new Vuex.Store({
     },
     setTotalPreviousUserFrozen (state, payload){
         return state.totalPreviousUserFrozen= payload
+    },
+    setProductCategory (state, payload){
+      return state.productCategory = payload;
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -724,6 +728,7 @@ export const store = new Vuex.Store({
                   product = 'Vegetable';
                   productCategories.Vegetable = productCategories.Vegetable + amount
               }
+                console.log(currentSales)
             }
 
             // if Consumer Converted to Emborg
@@ -744,7 +749,7 @@ export const store = new Vuex.Store({
           currentKey = null;
         });
         // console.log(totalPreviousUserCheese)
-        console.log(productCategories)
+        commit('setProductCategory', productCategories)
         commit('setTotalPreviousUserButter', totalPreviousUserButter);
         commit('setTotalPreviousUserCheese', totalPreviousUserCheese);
         commit('setTotalPreviousUserFrozen', totalPreviousUserFrozen);
@@ -1068,6 +1073,9 @@ export const store = new Vuex.Store({
     },
     totalPreviousUserFrozen (state){
         return state.totalPreviousUserFrozen
+    },
+    productCategory (state) {
+      return state.productCategory
     },
     // ==================
 

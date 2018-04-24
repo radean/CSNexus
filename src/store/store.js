@@ -42,6 +42,8 @@ export const store = new Vuex.Store({
     totalTasteTrial: 0,
     totalSales: 0,
     totalPreviousUserButter: 0,
+    totalPreviousUserCheese: 0,
+    totalPreviousUserFrozen: 0,
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -115,6 +117,12 @@ export const store = new Vuex.Store({
     },
     setTotalPreviousUserButter (state, payload){
       return state.totalPreviousUserButter = payload
+    },
+    setTotalPreviousUserCheese (state, payload){
+        return state.totalPreviousUserCheese= payload
+    },
+    setTotalPreviousUserFrozen (state, payload){
+        return state.totalPreviousUserFrozen= payload
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -497,6 +505,21 @@ export const store = new Vuex.Store({
             Mumtaz: 0,
             Other: 0
         };
+        // Total Consumer of Cheese
+        let totalPreviousUserCheese = {
+            Emborg: 0,
+            HappyCow: 0,
+            Adams: 0,
+            President: 0,
+            Lactima: 0,
+            Other: 0
+        };
+        // Total Consumer of Frozen
+        let totalPreviousUserFrozen = {
+            Star: 0,
+            FreshAndFreeze: 0,
+            Other: 0
+        };
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
@@ -507,6 +530,8 @@ export const store = new Vuex.Store({
           let conversion = 0;
           let tasteTrial = 0
           let pUserButter = '';
+          let pUserCheese = '';
+          let pUserFrozen = '';
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -529,40 +554,87 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
-            // Getting the Number of Previous Butter Consumers
+            // Getting the Number of Previous Butter, Cheese, Frozen Consumers
             // By using Switch statement
             //   Cleaning Non-Entered Data
-              if (obj[key].pUButter == '' || obj[key].pUButter == null ){
-                  pUserButter = 'other'
-              }else {
-                  pUserButter = obj[key].pUButter;
-              }
-              // After Cleaning We should put them in thier suitable slots
-              switch(pUserButter) {
-                  case 'Lurpak':
-                      totalPreviousUserButter.Lurpak++;
+            if (obj[key].pUButter == '' || obj[key].pUButter == null ){
+                pUserButter = 'other'
+            }else {
+                pUserButter = obj[key].pUButter;
+            }
+            // Cheese
+            if (obj[key].pUCheese == '' || obj[key].pUCheese == null ){
+                pUserCheese = 'other'
+            }else {
+                pUserCheese = obj[key].pUCheese;
+            }
+            // Frozen
+            if (obj[key].pUFrozen == '' || obj[key].pUFrozen == null ){
+                pUserFrozen = 'other'
+            }else {
+                pUserFrozen = obj[key].pUFrozen;
+            }
+            // After Cleaning We should put them in their suitable slots
+            switch(pUserButter) {
+                case 'Lurpak':
+                    totalPreviousUserButter.Lurpak++;
+                    break;
+                case 'Emborg':
+                    totalPreviousUserButter.Emborg++;
+                    break;
+                case 'Blueband':
+                    totalPreviousUserButter.Blueband++;
+                    break;
+                case 'Nurpur':
+                    totalPreviousUserButter.Nurpur++;
+                    break;
+                case 'Aseel':
+                    totalPreviousUserButter.Aseel++;
+                    break;
+                case 'Mumtaz':
+                    totalPreviousUserButter.Mumtaz++;
+                    break;
+                case 'Other':
+                    totalPreviousUserButter.Other++;
+                    break;
+                default:
+                    totalPreviousUserButter.Other++;
+            }
+            switch(pUserCheese) {
+                case 'Emborg':
+                    totalPreviousUserCheese.Emborg++;
+                    break;
+                case 'Happy Cow':
+                    totalPreviousUserCheese.HappyCow++;
+                    break;
+                case 'Adams':
+                    totalPreviousUserCheese.Adams++;
+                    break;
+                case 'President':
+                    totalPreviousUserCheese.President++;
+                    break;
+                case 'Lactima':
+                    totalPreviousUserCheese.Lactima++;
+                    break;
+                case 'Other':
+                    totalPreviousUserCheese.Other++;
+                    break;
+                default:
+                    totalPreviousUserCheese.Other++;
+            }
+            switch(pUserFrozen) {
+                  case 'Star':
+                      totalPreviousUserFrozen.Star++;
                       break;
-                  case 'Emborg':
-                      totalPreviousUserButter.Emborg++;
-                      break;
-                  case 'Blueband':
-                      totalPreviousUserButter.Blueband++;
-                      break;
-                  case 'Nurpur':
-                      totalPreviousUserButter.Nurpur++;
-                      break;
-                  case 'Aseel':
-                      totalPreviousUserButter.Aseel++;
-                      break;
-                  case 'Mumtaz':
-                      totalPreviousUserButter.Mumtaz++;
+                  case 'Fresh & Freeze':
+                      totalPreviousUserFrozen.FreshAndFreeze++;
                       break;
                   case 'Other':
-                      totalPreviousUserButter.Other++;
+                      totalPreviousUserFrozen.Other++;
                       break;
                   default:
-                      totalPreviousUserButter.Other++;
-              }
+                      totalPreviousUserFrozen.Other++;
+          }
             // Calculating total number of unit sale
               let currentSales = obj[key].purchased;
               // Now i am iterating through a Object of Items
@@ -590,9 +662,11 @@ export const store = new Vuex.Store({
           TotalSales = TotalSales + Sales;
           currentKey = null;
         });
-        console.log(totalPreviousUserButter);
-        // console.log(reports)
+        // console.log(totalPreviousUserCheese)
+        // console.log(totalPreviousUserFrozen)
         commit('setTotalPreviousUserButter', totalPreviousUserButter);
+        commit('setTotalPreviousUserCheese', totalPreviousUserCheese);
+        commit('setTotalPreviousUserFrozen', totalPreviousUserFrozen);
         commit('setTotalTasteTrial', totalTasteTrial);
         commit('setTotalConversion', totalConversion);
         commit('setTotalSales', TotalSales);
@@ -907,6 +981,12 @@ export const store = new Vuex.Store({
     },
     totalPreviousUserButter (state){
       return state.totalPreviousUserButter
+    },
+    totalPreviousUserCheese (state){
+        return state.totalPreviousUserCheese
+    },
+    totalPreviousUserFrozen (state){
+        return state.totalPreviousUserFrozen
     },
     // ==================
 

@@ -1,14 +1,14 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-layout row wrap class="mb-5 pb-5">
+    <v-layout row wrap justify-center class="mb-5 pb-5">
       <!--NUMBER WIDGETS-->
       <!--TOTAL PURCHASE-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-5">
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Total Sales</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
 
-            <h2 class="green--text ma-0 pa-0">
+            <h2 class="display-3 green--text ma-0 pa-0">
                 {{ totalSales }}
             </h2>
           </v-card-text>
@@ -17,27 +17,27 @@
       <!--TOTAL INTERCEPTION-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-10" >
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Interceptions</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Interceptions</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
+            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--TOTAL Brand Ambassador-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-15" >
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Brand Ambassador</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Brand Ambassador</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0" >{{ totalBAs }}</h2>
+            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalBAs }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--Store Amount-->
       <v-flex flex xs3>
         <v-card class="dashCards elevation-20" >
-          <v-card-title primary-title class="ma-0 pa-2"><h6 class="ma-0 pa-0">Stores</h6></v-card-title>
+          <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Stores</h6></v-card-title>
           <v-card-text>
-            <h2 class="green--text ma-0 pa-0" >{{ totalStores }}</h2>
+            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalStores }}</h2>
           </v-card-text>
         </v-card>
       </v-flex>

@@ -78,7 +78,7 @@
         </v-list-tile>
         <v-subheader class="mt-3 grey--text text--darken-1">Date</v-subheader>
         <v-divider></v-divider>
-        <v-flex xs8 offset-xs2 class="pt-3"> <h4 style="font-weight: 100">{{ currentDate }}</h4> </v-flex>
+        <v-flex xs8 offset-xs2 class="pt-3 pb-3"><h4 class="display-1" style="font-weight: 100">{{ currentDate }}</h4> </v-flex>
         <v-divider></v-divider>
         <v-list-tile @click="" >
           <v-list-tile-action>

@@ -117,7 +117,7 @@
              class="flying"
              color="#FFF"
              :particleOpacity="0.1"
-             :particlesNumber="40"
+             :particlesNumber="30"
              shapeType="circle"
              :particleSize="6"
              linesColor="#FFF"
@@ -222,7 +222,7 @@ export default {
   data () {
     return {
 //      Settings
-      drawer: false,
+      drawer: null,
       notLogin: false,
 //      User Details
       currentDate: null,
@@ -380,7 +380,26 @@ export default {
     color: #2c3e50;
     margin-top: 0px;
   }
+  /* ==========================================================================
+    W  I  N  D  O  W     S  T  Y  L  E
+   ========================================================================== */
+  ::-webkit-scrollbar {
+    width: .4em;
+  }
 
+  ::-webkit-scrollbar-track {
+    background-color: rgba(218, 218, 218, 0.6);
+    transition: all .2s ease-out;
+  }
+  ::-webkit-scrollbar-track:hover {
+    transition: all .2s ease-out;
+    background-color: rgb(251, 251, 251);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #401585;
+    outline: 1px solid #eec8ed;
+  }
   .input-group__details:after {
     background-color: rgba(255, 255, 255, 0.32) !important;
   }

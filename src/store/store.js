@@ -38,6 +38,10 @@ export const store = new Vuex.Store({
     // Data
     totalInterceptions: 0,
     totalPurchases: [],
+    totalConversion: 0,
+    totalTasteTrial: 0,
+    totalSales: 0,
+    totalPreviousUserButter: 0,
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -88,6 +92,9 @@ export const store = new Vuex.Store({
     settotalBA (state, payload){
       state.totalBA = payload;
     },
+    setTotalConversion (state, payload) {
+      state.totalConversion = payload;
+    },
     setSelectedBa (state, payload){
       state.selectedBa = payload;
     },
@@ -99,6 +106,15 @@ export const store = new Vuex.Store({
     },
     setTotalStore (state, payload) {
       state.totalStore = payload;
+    },
+    setTotalTasteTrial (state, payload){
+      return state.totalTasteTrial = payload
+    },
+    setTotalSales (state, payload){
+      return state.totalSales = payload
+    },
+    setTotalPreviousUserButter (state, payload){
+      return state.totalPreviousUserButter = payload
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -452,15 +468,45 @@ export const store = new Vuex.Store({
       });
     },
     // Fetch Store Reports By Campaign
-    fetchStoreReports({commit}, payload){
+    fetchStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata').once('value', (report) => {
+      firebase.database().ref('storedata').on('value', (report) => {
         let reports = [];
         let currentKey = null;
+        let TotalSales =0;
+        let totalConversion = 0;
+        let totalTasteTrial = 0;
+        // Previous User
+        //   For More information i omported all of these text from Node
+        //   These are current Competitors of Emborg
+        //     competitorButterList: [
+        //         'Lurpak', 'Emborg', 'Blueband', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'
+        //     ],
+        //     competitorCheeseList: [
+        //     'Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'
+        // ],
+        //     competitorFrozenList: [
+        //     'Star', 'Fresh & Freeze', 'Other'
+        // ],
+        let totalPreviousUserButter = {
+            Lurpak: 0,
+            Emborg: 0,
+            Blueband: 0,
+            Nurpur: 0,
+            Aseel: 0,
+            Mumtaz: 0,
+            Other: 0
+        };
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
           currentKey = childReport.key;
+          // TotalSale
+          let Sales = 0;
+          // Conversion Variable
+          let conversion = 0;
+          let tasteTrial = 0
+          let pUserButter = '';
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -469,6 +515,13 @@ export const store = new Vuex.Store({
               // Customer Information
               customerName: obj[key].customerName,
               customerContact: obj[key].customerContact,
+              // Conversion
+              conversion: obj[key].conversion,
+              // Taste Trail
+              tasteTrial: obj[key].tasteTrial,
+              pUFrozen: obj[key].pUFrozen,
+              pUCheese: obj[key].pUCheese,
+              pUButter: obj[key].pUButter,
               // Store info
               storeName: obj[key].store.name,
               store: obj[key].store,
@@ -476,10 +529,73 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
+            // Getting the Number of Previous Butter Consumers
+            // By using Switch statement
+            //   Cleaning Non-Entered Data
+              if (obj[key].pUButter == '' || obj[key].pUButter == null ){
+                  pUserButter = 'other'
+              }else {
+                  pUserButter = obj[key].pUButter;
+              }
+              // After Cleaning We should put them in thier suitable slots
+              switch(pUserButter) {
+                  case 'Lurpak':
+                      totalPreviousUserButter.Lurpak++;
+                      break;
+                  case 'Emborg':
+                      totalPreviousUserButter.Emborg++;
+                      break;
+                  case 'Blueband':
+                      totalPreviousUserButter.Blueband++;
+                      break;
+                  case 'Nurpur':
+                      totalPreviousUserButter.Nurpur++;
+                      break;
+                  case 'Aseel':
+                      totalPreviousUserButter.Aseel++;
+                      break;
+                  case 'Mumtaz':
+                      totalPreviousUserButter.Mumtaz++;
+                      break;
+                  case 'Other':
+                      totalPreviousUserButter.Other++;
+                      break;
+                  default:
+                      totalPreviousUserButter.Other++;
+              }
+            // Calculating total number of unit sale
+              let currentSales = obj[key].purchased;
+              // Now i am iterating through a Object of Items
+              for (let key in currentSales) {
+                let toInteger;
+                  if (currentSales.hasOwnProperty(key)) {
+                      toInteger = parseInt(currentSales[key]);
+                      Sales = Sales + toInteger;
+                  }
+              }
+            // if Consumer Converted to Emborg
+            // Then we have to increment in state vriable to global access
+            // But first increment in local variable
+            if (obj[key].conversion === 'Yes'){
+                conversion = conversion + 1;
+            }
+            // We Also Take out other information such as TasteTrail & Gifts
+            // Now Applying Same Method for TasteTrial
+            if (obj[key].tasteTrial === 'Yes'){
+                tasteTrial = tasteTrial + 1;
+            }
           }
+          totalConversion = totalConversion + conversion;
+          totalTasteTrial = totalTasteTrial + tasteTrial;
+          TotalSales = TotalSales + Sales;
           currentKey = null;
         });
+        console.log(totalPreviousUserButter);
         // console.log(reports)
+        commit('setTotalPreviousUserButter', totalPreviousUserButter);
+        commit('setTotalTasteTrial', totalTasteTrial);
+        commit('setTotalConversion', totalConversion);
+        commit('setTotalSales', TotalSales);
         commit('SET_MAIN_LOADING', false);
         commit('setStoreReport', reports);
         });
@@ -765,6 +881,9 @@ export const store = new Vuex.Store({
     unAssignedStores (state){
       return state.unAssignedStores
     },
+
+    // Accumulative Figures
+
     totalInterceptions (state){
       return state.totalInterceptions
     },
@@ -774,14 +893,28 @@ export const store = new Vuex.Store({
     totalBA (state) {
       return state.totalBA
     },
+    totalStore (state) {
+        return state.totalStore
+    },
+    totalConversion (state) {
+      return state.totalConversion
+    },
+    totalTasteTrial (state) {
+      return state.totalTasteTrial
+    },
+    totalSales (state) {
+      return state.totalSales
+    },
+    totalPreviousUserButter (state){
+      return state.totalPreviousUserButter
+    },
+    // ==================
+
     availableBA (state){
       return state.baList
     },
     selectedBa (state){
       return state.selectedBa
-    },
-    totalStore (state) {
-      return state.totalStore
     },
     storeList (state){
       return state.stores

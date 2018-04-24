@@ -16,7 +16,9 @@ Vue.use(Vuetify);
 Vue.use(lodash);
 Vue.use(VueResource);
 Vue.use(VueRouter);
-Vue.use(VueParticles)
+Vue.use(VueParticles);
+
+
 // Setting HTTP
 // Vue.http.headers.common['Content-Type'] = 'application/json';
 // Vue.http.headers.common['Authorization'] = 'key=AIzaSyDOUy35eMYN7woRgGdiRw0ypeShbHMDxgM';

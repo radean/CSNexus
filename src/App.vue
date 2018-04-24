@@ -12,7 +12,7 @@
       v-model="drawer"
       app
       width="240"
-    >
+    >git
       <v-list class="transper">
         <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>

@@ -84,16 +84,22 @@
         <v-flex xs3 class="reportContainer elevation-20">
           <div class="header indigo">Cheese Previous User</div>
           <div class="barChart">
-            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+            <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
           </div>
         </v-flex>
         <v-flex xs2 class="reportContainer elevation-20">
           <div class="header indigo">Frozen Previous User</div>
           <div class="barChart">
-            <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+            <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
           </div>
         </v-flex>
       </v-layout>
+      <v-flex xs12 class="reportContainer elevation-20">
+        <div class="header indigo">Frozen Previous User</div>
+        <div class="reportContainer">
+          <BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>
+        </div>
+      </v-flex>
       <!--Soya Supreme Cooking Oil-->
       <!--<v-flex xs7 class="reportContainer elevation-21">-->
         <!--<div class="header light-green">Cooking Oil</div>-->
@@ -150,7 +156,10 @@
         ],
         conversionData: null,
         tasteTrialData: null,
+        productCategoryData: null,
         previousUserButterData: null,
+        previousUserCheeseData: null,
+        previousUserFrozenData: null,
         StoreDataCollection: null,
         CityDataCollection: null,
         soyaSupremeCookingOilChart: null,
@@ -335,12 +344,6 @@
           ],
 //          ============================
         stores: 20,
-        Purchases: {
-          sSCO: 32,
-          sCO: 48,
-          sSB: 8,
-          sSBO: 16
-        },
         optionsCity: {
           responsive: true,
           maintainAspectRatio: false,
@@ -452,6 +455,15 @@
       },
       totalPreviousUserButter() {
           return this.$store.getters.totalPreviousUserButter;
+      },
+      totalPreviousUserCheese() {
+          return this.$store.getters.totalPreviousUserCheese;
+      },
+      totalPreviousUserFrozen() {
+          return this.$store.getters.totalPreviousUserFrozen;
+      },
+      productCategory() {
+          return this.$store.getters.productCategory;
       },
 //      storelist(){
 //        return this.$store.getters.storeList.length;
@@ -570,91 +582,68 @@
 //            },
 //          ],
 //        };
-//        soyaSupremeCookingOil Progress
-//        this.soyaSupremeCookingOilChart = {
-//          labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//
-//          datasets: [
-//            {
-//              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              borderWidth: 1,
-//              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              data: [
-//                this.soyaSupremeSKU.sscbottle1ltr,
-//                this.soyaSupremeSKU.sscbottle3ltr,
-//                this.soyaSupremeSKU.sscbottle5ltr,
-//                this.soyaSupremeSKU.sscpoly1_5ltr,
-//                this.soyaSupremeSKU.ssctin2_5ltr,
-//                this.soyaSupremeSKU.ssctin5ltr,
-//                this.soyaSupremeSKU.ssctin10ltr,
-//                this.soyaSupremeSKU.sscpresspour3ltr,
-//                this.soyaSupremeSKU.sscpresspour5ltr,
-//                this.soyaSupremeSKU.sscjcan10ltr,
-//                this.soyaSupremeSKU.sscjcan16ltr
-//              ]
-//            },
-//          ],
-//        }
-//        soyaSupremeCanola Progress
-//        this.soyaSupremeCanolaOilChart = {
-//          labels: ['1 Ltr', '3 Ltr', '4.5 Ltr', '1x5 Poly', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//
-//          datasets: [
-//            {
-//              labels: ['1 Ltr', '3 Ltr', '5 Ltr', '1x5 Poly', '2.5 Ltr', '5 Tin', '10 Tin', 'PP 3 Ltr', 'PP 5 Ltr', 'JCan 10 Ltr', 'JCan 16 Ltr'],
-//              backgroundColor: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              borderWidth: 1,
-//              color: ['#FFEBEE', '#FFCDD2', '#EF9A9A','#E57373', '#EF5350', '#F44336', '#E53935', '#D32F2F', '#C62828', '#B71C1C', '#000'],
-//              data: [
-//                this.soyaSupremeSKU.scbottle1ltr,
-//                this.soyaSupremeSKU.scbottle3ltr,
-//                this.soyaSupremeSKU.scbottle4_5ltr,
-//                this.soyaSupremeSKU.scpoly1_5ltr,
-//                this.soyaSupremeSKU.scjcan10ltr,
-//                this.soyaSupremeSKU.scjcan16ltr
-//              ]
-//            },
-//          ],
-//        }
-//        soyaSupremeBanaspati Progress
-//        this.soyaSupremeBanaspatiChart = {
-//          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-//
-//          datasets: [
-//            {
-//              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-//              backgroundColor: ['#FF4944', '#D80600', '#990000'],
-//              borderWidth: 1,
-//              color: ['#FF4944', '#D80600', '#990000'],
-//              data: [
-//                this.soyaSupremeSKU.ssbpoly1_5ltr,
-//                this.soyaSupremeSKU.ssbtin25ltr,
-//                this.soyaSupremeSKU.ssbtin5ltr
-//              ]
-//            },
-//          ],
-//        }
-//        soyaSupremeBanaspatiOlive Progress
-//        this.soyaSupremeBanaspatiOliveChart = {
-//          labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-//          responsive: true,
-//          datasets: [
-//            {
-//              labels: ['1 Poly', '2.5 Tin', '5 Tin',],
-//              backgroundColor: ['#FF4944', '#D80600', '#990000'],
-//              borderWidth: 1,
-//              color: ['#FF4944', '#D80600', '#990000'],
-//              data: [
-//                this.soyaSupremeSKU.ssbopoly1_5ltr,
-//                this.soyaSupremeSKU.ssbotin25ltr,
-//                this.soyaSupremeSKU.ssbotin5ltr
-//              ]
-//            },
-//          ],
-//        }
+//      Category Wise Bar Chart
+//      first we have to Define how many Categories we have
+//        We have:
+//          BlockCheese
+//          Butter
+//          BlockCheeseCream
+//          CreamFoodService
+//          Milk
+//          ProcessCheese
+//          Shakes
+//          ShreddedCheese
+//          Fish
+//          FrenchFries
+//          Fruits
+//          Meat
+//          SeaFood
+//          Vegetable
+//          console.log(this.productCategory);/**/
+        this.productCategoryData = {
+            labels: [
+                'Block Cheese',
+                'Butter',
+                'Block Cheese Cream',
+                'Cream Food Service',
+                'Milk',
+                'Process Cheese',
+                'Shakes',
+                'Shredded Cheese',
+                'Fish',
+                'French Fries',
+                'Fruits',
+                'Meat',
+                'Sea Food',
+                'Vegetable'
+            ],
+            datasets: [
+                {
+                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    borderWidth: 0,
+                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    data: [
+                        this.productCategory.BlockCheese,
+                        this.productCategory.Butter,
+                        this.productCategory.BlockCheeseCream,
+                        this.productCategory.CreamFoodService,
+                        this.productCategory.Milk,
+                        this.productCategory.ProcessCheese,
+                        this.productCategory.Shakes,
+                        this.productCategory.ShreddedCheese,
+                        this.productCategory.Fish,
+                        this.productCategory.FrenchFries,
+                        this.productCategory.Fruits,
+                        this.productCategory.Meat,
+                        this.productCategory.SeaFood,
+                        this.productCategory.Vegetable,
+                    ]
+                },
+            ],
+        }
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
+//          For Butter
         this.previousUserButterData = {
             labels: ['Lurpak', 'Emborg', 'BlueBand', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'],
             datasets: [
@@ -670,6 +659,41 @@
                         this.totalPreviousUserButter.Aseel,
                         this.totalPreviousUserButter.Mumtaz,
                         this.totalPreviousUserButter.Other,
+                    ]
+                },
+            ],
+        }
+//      For Cheese
+        this.previousUserCheeseData = {
+            labels: ['Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'],
+            datasets: [
+                {
+                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a'],
+                    borderWidth: 0,
+                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a'],
+                    data: [
+                        this.totalPreviousUserCheese.Emborg,
+                        this.totalPreviousUserCheese.HappyCow,
+                        this.totalPreviousUserCheese.Adams,
+                        this.totalPreviousUserCheese.President,
+                        this.totalPreviousUserCheese.Lactima,
+                        this.totalPreviousUserCheese.Other,
+                    ]
+                },
+            ],
+        }
+//        For Frozen
+        this.previousUserFrozenData = {
+            labels: ['Star', 'Fresh & Frozen', 'Other'],
+            datasets: [
+                {
+                    backgroundColor: ['#d6a150', '#401585', '#3849d6'],
+                    borderWidth: 0,
+                    color: ['#d6a150', '#401585', '#3849d6'],
+                    data: [
+                        this.totalPreviousUserFrozen.Star,
+                        this.totalPreviousUserFrozen.FreshAndFreeze,
+                        this.totalPreviousUserFrozen.Other,
                     ]
                 },
             ],
@@ -706,19 +730,6 @@
               },
             ],
         }
-//          Store Progress
-//        this.StoreDataCollection = {
-//          labels: ['Cooking Oil', 'Canola Oil', 'Banaspati', 'Banaspati with Olive'],
-//
-//          datasets: [
-//            {
-//              backgroundColor: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
-//              borderWidth: 0,
-//              color: ['#8bc34a', '#673AB7', '#F44336', '#FFB300'],
-//              data: [this.Purchases.sSCO, this.Purchases.sCO,this.Purchases.sSB,this.Purchases.sSBO]
-//            },
-//          ],
-//        }
       }
     }
 
@@ -756,6 +767,21 @@
     line-height: 200%;
     font-size: 18px;
   }
+  .BigContainer {
+    min-width: 30%;
+    background-color: rgba(120,120,120,0.2);
+    margin: 10px;
+    height: 420px;
+    border: 1px solid #333;
+    border-radius: 2px;
+    z-index: 2;
+  }
+  .BigContainer .header {
+    height: 16%;
+    margin-bottom: 10px;
+    line-height: 200%;
+    font-size: 18px;
+  }
   .dashCards {
     max-width: 100%;
     background-color: rgba(50,50,50,0.2);
@@ -772,6 +798,15 @@
     z-index: 2;
   }
   .barChart div{
+    height: 180px;
+    z-index: 2;
+  }
+  .BigContainerChart{
+    width: 100%;
+    height: 180px;
+    z-index: 2;
+  }
+  .BigContainerChart div{
     height: 180px;
     z-index: 2;
   }

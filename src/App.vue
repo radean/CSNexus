@@ -293,7 +293,7 @@ export default {
       });
       this.setUpUser();
       console.log('done')
-    }, 6000)
+    }, 3000)
   },
   computed: {
       userInfo(){

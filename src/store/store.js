@@ -42,6 +42,9 @@ export const store = new Vuex.Store({
     totalTasteTrial: 0,
     totalSales: 0,
     totalPreviousUserButter: 0,
+    totalPreviousUserCheese: 0,
+    totalPreviousUserFrozen: 0,
+    productCategory: {},
     unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
@@ -115,6 +118,15 @@ export const store = new Vuex.Store({
     },
     setTotalPreviousUserButter (state, payload){
       return state.totalPreviousUserButter = payload
+    },
+    setTotalPreviousUserCheese (state, payload){
+        return state.totalPreviousUserCheese= payload
+    },
+    setTotalPreviousUserFrozen (state, payload){
+        return state.totalPreviousUserFrozen= payload
+    },
+    setProductCategory (state, payload){
+      return state.productCategory = payload;
     },
     setStoreReport (state, payload){
       state.storeReports = payload;
@@ -271,9 +283,6 @@ export const store = new Vuex.Store({
       })
     },
 //     ===================
-
-
-
     // USER UPDATES
     updateSelectedBa({commit, getters},payload){
       // initiate Loading
@@ -295,11 +304,8 @@ export const store = new Vuex.Store({
       })
     },
     //==============
-
-
     // DASHBOARD GUI DATA
     // ===================
-
     fetchTotalInterceptions({commit}){
       // Fetching List of Dates
       firebase.database().ref('storedata').on('value', (report) => {
@@ -316,9 +322,7 @@ export const store = new Vuex.Store({
         commit('setTotalInterceptions', totalInterceptions);
       })
     },
-
     // ==============
-
     // Fetching Data
     //   Fetching Total Number of Stores
     // Total Store list
@@ -505,6 +509,37 @@ export const store = new Vuex.Store({
             Mumtaz: 0,
             Other: 0
         };
+        // Total Consumer of Cheese
+        let totalPreviousUserCheese = {
+            Emborg: 0,
+            HappyCow: 0,
+            Adams: 0,
+            President: 0,
+            Lactima: 0,
+            Other: 0
+        };
+        // Total Consumer of Frozen
+        let totalPreviousUserFrozen = {
+            Star: 0,
+            FreshAndFreeze: 0,
+            Other: 0
+        };
+        let productCategories = {
+              BlockCheese: 0,
+              Butter: 0,
+              BlockCheeseCream: 0,
+              CreamFoodService: 0,
+              Milk: 0,
+              ProcessCheese: 0,
+              Shakes: 0,
+              ShreddedCheese: 0,
+              Fish: 0,
+              FrenchFries: 0,
+              Fruits: 0,
+              Meat: 0,
+              SeaFood: 0,
+              Vegetable: 0
+      };
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
@@ -515,6 +550,8 @@ export const store = new Vuex.Store({
           let conversion = 0;
           let tasteTrial = 0
           let pUserButter = '';
+          let pUserCheese = '';
+          let pUserFrozen = '';
           // reports[currentKey] = new Array;
           for (let key in obj){
             reports.push({
@@ -537,50 +574,163 @@ export const store = new Vuex.Store({
               // Stock Information
               purchased: obj[key].purchased
             });
-            // Getting the Number of Previous Butter Consumers
+            // Getting the Number of Previous Butter, Cheese, Frozen Consumers
             // By using Switch statement
             //   Cleaning Non-Entered Data
-              if (obj[key].pUButter == '' || obj[key].pUButter == null ){
-                  pUserButter = 'other'
-              }else {
-                  pUserButter = obj[key].pUButter;
-              }
-              // After Cleaning We should put them in thier suitable slots
-              switch(pUserButter) {
-                  case 'Lurpak':
-                      totalPreviousUserButter.Lurpak++;
+            if (obj[key].pUButter == '' || obj[key].pUButter == null ){
+                pUserButter = 'other'
+            }else {
+                pUserButter = obj[key].pUButter;
+            }
+            // Cheese
+            if (obj[key].pUCheese == '' || obj[key].pUCheese == null ){
+                pUserCheese = 'other'
+            }else {
+                pUserCheese = obj[key].pUCheese;
+            }
+            // Frozen
+            if (obj[key].pUFrozen == '' || obj[key].pUFrozen == null ){
+                pUserFrozen = 'other'
+            }else {
+                pUserFrozen = obj[key].pUFrozen;
+            }
+            // After Cleaning We should put them in their suitable slots
+            switch(pUserButter) {
+                case 'Lurpak':
+                    totalPreviousUserButter.Lurpak++;
+                    break;
+                case 'Emborg':
+                    totalPreviousUserButter.Emborg++;
+                    break;
+                case 'Blueband':
+                    totalPreviousUserButter.Blueband++;
+                    break;
+                case 'Nurpur':
+                    totalPreviousUserButter.Nurpur++;
+                    break;
+                case 'Aseel':
+                    totalPreviousUserButter.Aseel++;
+                    break;
+                case 'Mumtaz':
+                    totalPreviousUserButter.Mumtaz++;
+                    break;
+                case 'Other':
+                    totalPreviousUserButter.Other++;
+                    break;
+                default:
+                    totalPreviousUserButter.Other++;
+            }
+            switch(pUserCheese) {
+                case 'Emborg':
+                    totalPreviousUserCheese.Emborg++;
+                    break;
+                case 'Happy Cow':
+                    totalPreviousUserCheese.HappyCow++;
+                    break;
+                case 'Adams':
+                    totalPreviousUserCheese.Adams++;
+                    break;
+                case 'President':
+                    totalPreviousUserCheese.President++;
+                    break;
+                case 'Lactima':
+                    totalPreviousUserCheese.Lactima++;
+                    break;
+                case 'Other':
+                    totalPreviousUserCheese.Other++;
+                    break;
+                default:
+                    totalPreviousUserCheese.Other++;
+            }
+            switch(pUserFrozen) {
+                  case 'Star':
+                      totalPreviousUserFrozen.Star++;
                       break;
-                  case 'Emborg':
-                      totalPreviousUserButter.Emborg++;
-                      break;
-                  case 'Blueband':
-                      totalPreviousUserButter.Blueband++;
-                      break;
-                  case 'Nurpur':
-                      totalPreviousUserButter.Nurpur++;
-                      break;
-                  case 'Aseel':
-                      totalPreviousUserButter.Aseel++;
-                      break;
-                  case 'Mumtaz':
-                      totalPreviousUserButter.Mumtaz++;
+                  case 'Fresh & Freeze':
+                      totalPreviousUserFrozen.FreshAndFreeze++;
                       break;
                   case 'Other':
-                      totalPreviousUserButter.Other++;
+                      totalPreviousUserFrozen.Other++;
                       break;
                   default:
-                      totalPreviousUserButter.Other++;
-              }
+                      totalPreviousUserFrozen.Other++;
+            }
             // Calculating total number of unit sale
-              let currentSales = obj[key].purchased;
-              // Now i am iterating through a Object of Items
-              for (let key in currentSales) {
-                let toInteger;
-                  if (currentSales.hasOwnProperty(key)) {
-                      toInteger = parseInt(currentSales[key]);
-                      Sales = Sales + toInteger;
-                  }
+            let currentSales = obj[key].purchased;
+            // Now i am iterating through a Object of Items
+            for (let key in currentSales) {
+              let toInteger;
+                if (currentSales.hasOwnProperty(key)) {
+                    toInteger = parseInt(currentSales[key]);
+                    Sales = Sales + toInteger;
+                }
+            }
+            // Converting Purchase Data to categories
+            // console.log(currentSales);
+            let product = '';
+            for(let key in currentSales) {
+              // if Key lies among product Range
+                let Val = parseInt(key);
+                let amount = parseInt(currentSales[key]);
+              if(Val >= 1001 && Val <= 1012){
+                  product = 'BlockCheese';
+                  productCategories.BlockCheese = productCategories.BlockCheese + amount
+              } else
+              if(Val >= 1013 && Val <= 1020){
+                  product = 'Butter';
+                  productCategories.Butter = productCategories.Butter + amount
+              } else
+              if(Val >= 1021 && Val <= 1039){
+                  product = 'Cheese';
+                  productCategories.Cheese = productCategories.Cheese + amount
+              } else
+              if(Val >= 1040 && Val <= 1049){
+                  product = 'Cream';
+                  productCategories.Cream = productCategories.Cream + amount
+              } else
+              if(Val >= 1050 && Val <= 1052){
+                  product = 'Milk';
+                  productCategories.Milk = productCategories.Milk + amount
+              } else
+              if(Val >= 1053 && Val <= 1064){
+                  product = 'ProcessCheese';
+                  productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+              } else
+              if(Val >= 1064 && Val <= 1067){
+                  product = 'Shakes';
+                  productCategories.Shakes = productCategories.Shakes + amount
+              } else
+              if(Val >= 1068 && Val <= 1075){
+                  product = 'ShreddingCheese';
+                  productCategories.ShreddingCheese = productCategories.ShreddingCheese + amount
+              } else
+              if(Val >= 1076 && Val <= 1076){
+                  product = 'Fish';
+                  productCategories.Fish = productCategories.Fish + amount
+              } else
+              if(Val >= 1077 && Val <= 1080){
+                  product = 'FrenchFries';
+                  productCategories.FrenchFries = productCategories.FrenchFries + amount
+              } else
+              if(Val >= 1081 && Val <= 1083){
+                  product = 'Fruits';
+                  productCategories.Fruits = productCategories.Fruits + amount
+              } else
+              if(Val >= 1084 && Val <= 1094){
+                  product = 'Meat';
+                  productCategories.Meat = productCategories.Meat + amount
+              } else
+              if(Val >= 1095 && Val <= 1098){
+                  product = 'SeaFood';
+                  productCategories.SeaFood = productCategories.SeaFood + amount
+              } else
+              if(Val >= 1099 && Val <= 1131){
+                  product = 'Vegetable';
+                  productCategories.Vegetable = productCategories.Vegetable + amount
               }
+                console.log(currentSales)
+            }
+
             // if Consumer Converted to Emborg
             // Then we have to increment in state vriable to global access
             // But first increment in local variable
@@ -598,9 +748,11 @@ export const store = new Vuex.Store({
           TotalSales = TotalSales + Sales;
           currentKey = null;
         });
-        console.log(totalPreviousUserButter);
-        // console.log(reports)
+        // console.log(totalPreviousUserCheese)
+        commit('setProductCategory', productCategories)
         commit('setTotalPreviousUserButter', totalPreviousUserButter);
+        commit('setTotalPreviousUserCheese', totalPreviousUserCheese);
+        commit('setTotalPreviousUserFrozen', totalPreviousUserFrozen);
         commit('setTotalTasteTrial', totalTasteTrial);
         commit('setTotalConversion', totalConversion);
         commit('setTotalSales', TotalSales);
@@ -664,6 +816,30 @@ export const store = new Vuex.Store({
         });
         commit('SET_MAIN_LOADING', false);
         commit('setCompileReport', reports)
+      });
+    },
+    // Total Purchase Amount
+    fetchPurchaseReports({commit}){
+      firebase.database().ref('storedata').on('value', (report) => {
+        const reports = [];
+        // let purchased;
+        // let totals;
+        let totalPurchase = null;
+        let purchaseArray = [];
+        report.forEach((childReport) => {
+          const obj = childReport.val();
+          for (let key in obj) {
+            reports.push({
+                // Stock Information
+                purchased : obj[key].purchased
+            });
+            //  START HERE
+            purchaseArray.push(obj[key].purchased);
+          }
+        });
+        console.log(purchaseArray);
+        // console.log(reports);
+        commit('setTotalPurchases', reports)
       });
     },
     // Fetch Compile Reports By Campaign
@@ -891,6 +1067,15 @@ export const store = new Vuex.Store({
     },
     totalPreviousUserButter (state){
       return state.totalPreviousUserButter
+    },
+    totalPreviousUserCheese (state){
+        return state.totalPreviousUserCheese
+    },
+    totalPreviousUserFrozen (state){
+        return state.totalPreviousUserFrozen
+    },
+    productCategory (state) {
+      return state.productCategory
     },
     // ==================
 

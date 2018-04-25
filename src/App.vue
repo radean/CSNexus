@@ -33,9 +33,9 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="reports" ripple>
+        <v-list-tile ripple>
           <v-list-tile-action>
-            <v-icon>insert_chart</v-icon>
+            <v-icon>lock</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>

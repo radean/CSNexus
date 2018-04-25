@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : '0.27',
+      version : 'beta 0.062v.el',
       status : true,
       theme: 'purple accent-4',
       mode: '',
@@ -763,46 +763,60 @@ export const store = new Vuex.Store({
       // Fetch Store Reports By Campaign
     fetchStoreReportsByObject({commit}, payload){
           commit('SET_MAIN_LOADING', true);
-          firebase.database().ref('storedata' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
+          firebase.database().ref('storedata/4-25-2018').orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
               let reports = [];
               let currentKey = null;
               // console.log(reports.val)
+              console.log(payload)
               report.forEach((childReport) => {
                   const obj = childReport.val();
                   currentKey = childReport.key;
-                  // TotalSale
-                  let Sales = 0;
-                  // Conversion Variable
-                  let conversion = 0;
-                  let tasteTrial = 0
-                  let pUserButter = '';
-                  let pUserCheese = '';
-                  let pUserFrozen = '';
+                  console.log(obj)
+                  reports.push({
+                      // date: currentKey,
+                      // Customer Information
+                      customerName: obj.customerName,
+                      customerContact: obj.customerContact,
+                      customerRemarks: obj.customerRemarks,
+                      // Conversion
+                      conversion: obj.conversion,
+                      // Taste Trail
+                      tasteTrial: obj.tasteTrial,
+                      pUFrozen: obj.pUFrozen,
+                      pUCheese: obj.pUCheese,
+                      pUButter: obj.pUButter,
+                      // Store info
+                      store: obj.store,
+                      userName: obj.userName,
+                      // Stock Information
+                      purchased: obj.purchased
+                  });
                   // reports[currentKey] = new Array;
-                  for (let key in obj){
-                      reports.push({
-                          id: key,
-                          date: childReport.key,
-                          // Customer Information
-                          customerName: obj[key].customerName,
-                          customerContact: obj[key].customerContact,
-                          // Conversion
-                          conversion: obj[key].conversion,
-                          // Taste Trail
-                          tasteTrial: obj[key].tasteTrial,
-                          pUFrozen: obj[key].pUFrozen,
-                          pUCheese: obj[key].pUCheese,
-                          pUButter: obj[key].pUButter,
-                          // Store info
-                          storeName: obj[key].store.name,
-                          store: obj[key].store,
-                          userName: obj[key].userName,
-                          // Stock Information
-                          purchased: obj[key].purchased
-                      });
-                  }
+                  // for (let key in obj){
+                  //     reports.push({
+                  //         id: key,
+                  //         date: childReport.key,
+                  //         // Customer Information
+                  //         customerName: obj[key].customerName,
+                  //         customerContact: obj[key].customerContact,
+                  //         // Conversion
+                  //         conversion: obj[key].conversion,
+                  //         // Taste Trail
+                  //         tasteTrial: obj[key].tasteTrial,
+                  //         pUFrozen: obj[key].pUFrozen,
+                  //         pUCheese: obj[key].pUCheese,
+                  //         pUButter: obj[key].pUButter,
+                  //         // Store info
+                  //         store: obj[key].store,
+                  //         userName: obj[key].userName,
+                  //         // Stock Information
+                  //         purchased: obj[key].purchased
+                  //     });
+                  // }
                   currentKey = null;
               });
+              console.log('Store Report')
+              console.log(reports)
               commit('SET_MAIN_LOADING', false);
               commit('setStoreReport', reports);
           });

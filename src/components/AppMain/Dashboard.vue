@@ -567,9 +567,9 @@
             ],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
                     data: [
                         this.productCategory.BlockCheese,
                         this.productCategory.Butter,
@@ -596,9 +596,9 @@
             labels: ['Lurpak', 'Emborg', 'BlueBand', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#ffde45'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#ffde45'],
                     data: [
                         this.totalPreviousUserButter.Lurpak,
                         this.totalPreviousUserButter.Emborg,
@@ -616,9 +616,9 @@
             labels: ['Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a'],
+                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#ffde45'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a'],
+                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#ffde45'],
                     data: [
                         this.totalPreviousUserCheese.Emborg,
                         this.totalPreviousUserCheese.HappyCow,
@@ -635,9 +635,9 @@
             labels: ['Star', 'Fresh & Frozen', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#401585', '#3849d6'],
+                    backgroundColor: ['#d6a150', '#b78de5', '#0050ea'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#401585', '#3849d6'],
+                    color: ['#d6a150', '#b78de5', '#3849d6'],
                     data: [
                         this.totalPreviousUserFrozen.Star,
                         this.totalPreviousUserFrozen.FreshAndFreeze,

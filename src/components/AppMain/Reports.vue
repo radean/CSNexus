@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-toolbar color="cyan" dark>
+    <v-toolbar color="purple" dark tabs>
       <v-toolbar-title>REPORTS</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <!--<v-spacer></v-spacer>-->
       <v-tabs
               centered
-              color="cyan"
+              color="purple"
               slot="extension"
               slider-color="yellow"
               v-model="reportTabs"
@@ -48,8 +48,10 @@
             <v-card-text>
               <v-container grid-list-md text-xs-center>
                 <v-layout row wrap>
-                  <v-flex xs12 sm12><h6>STORE REPORT</h6></v-flex>
-                  <v-flex xs6 class="text-xs-left">Details</v-flex>
+                  <v-flex xs12 sm12>
+                    <h2 class="display-1">Store Report</h2>
+                  </v-flex>
+                  <v-flex xs6 class="text-xs-left">Sort Options</v-flex>
                   <v-flex xs12>
                     <v-divider></v-divider>
                     <v-flex xs4 offset-xs8 class="mt-3">
@@ -588,8 +590,12 @@
 //      STORE QUERY
       fetchStoreReport(storeinfo){
         this.selectLoading = true;
-//        let init = {date: this.storeDateQuery, store: storeinfo};
-        this.$store.dispatch('fetchStoreReportsByObject', storeinfo).then(() =>{
+        this.formatDate();
+//      let init = {date: this.storeDateQuery, store: storeinfo};
+        let selectedDate = this.selectedFormatedDate;
+        let data = storeinfo;
+        data['date'] = this.selectedFormatedDate;
+        this.$store.dispatch('fetchStoreReportsByObject',data).then(() =>{
           setTimeout(() => {
             this.selectLoading = false;
             this.storeReportDialog = true;

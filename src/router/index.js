@@ -51,11 +51,11 @@ export const routes = [
     //   name: 'Edit',
     //   component: Edit
     // },
-    {
-      path: '/reports',
-      name: 'Reports',
-      component: Reports
-    },
+    // {
+    //   path: '/reports',
+    //   name: 'Reports',
+    //   component: Reports
+    // },
     // {
     //   path: '/stockreports',
     //   name: 'StockReports',

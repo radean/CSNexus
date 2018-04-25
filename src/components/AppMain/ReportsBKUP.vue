@@ -37,6 +37,169 @@
         >
           <v-card flat>
             <v-card-text>
+              <!--<v-container grid-list-md text-xs-center>-->
+                <!--<v-layout row wrap>-->
+                  <!--<v-flex xs12 ><h6>CONSUMER REPORT</h6></v-flex>-->
+                  <!--<v-flex xs6 class="text-xs-left">SORTING OPTIONS</v-flex>-->
+                  <!--<v-flex xs12>-->
+                    <!--<v-divider></v-divider>-->
+                    <!--<v-flex xs4 offset-xs8 class="mt-3">-->
+                      <!--<v-menu-->
+                              <!--lazy-->
+                              <!--:close-on-content-click="true"-->
+                              <!--:close-on-click="false"-->
+                              <!--v-model="consumerMenu"-->
+                              <!--transition="scale-transition"-->
+                              <!--offset-y-->
+                              <!--full-width-->
+                              <!--:nudge-right="40"-->
+                              <!--max-width="290px"-->
+                              <!--min-width="290px"-->
+                      <!--&gt;-->
+                        <!--<v-text-field-->
+                                <!--slot="activator"-->
+                                <!--label="By Date"-->
+                                <!--v-model="consumerSelectedDate"-->
+                                <!--prepend-icon="event"-->
+                                <!--readonly-->
+                        <!--&gt;</v-text-field>-->
+                        <!--<v-date-picker v-model="consumerSelectedDate" no-title scrollable actions>-->
+                          <!--<template slot-scope="{ save, cancel }">-->
+                            <!--<v-card-actions>-->
+                              <!--<v-spacer></v-spacer>-->
+                              <!--<v-btn flat color="primary" @click="cancel">Cancel</v-btn>-->
+                              <!--<v-btn flat color="primary" @click="save">OK</v-btn>-->
+                            <!--</v-card-actions>-->
+                          <!--</template>-->
+                        <!--</v-date-picker>-->
+                      <!--</v-menu>-->
+                    <!--</v-flex>-->
+                  <!--</v-flex>-->
+                  <!--<v-flex xs12>-->
+                    <!--<v-divider></v-divider>-->
+                    <!--<v-container fluid style="min-height: 0;" grid-list-lg>-->
+                      <!--<v-layout row wrap >-->
+                        <!--<v-flex xs3 v-for="store in storeList" :key="store.id" v-on:click="fetchConsumerReport(store)">-->
+                          <!--<v-card color="grey lighten-2" class="black&#45;&#45;text elevation-12" ripple>-->
+                            <!--<v-card-title primary-title>-->
+                              <!--<div class="headline">{{ store.name }} Report </div>-->
+                              <!--<v-flex xs6 offset-xs3><v-icon x-large class="black&#45;&#45;text">store</v-icon></v-flex>-->
+                            <!--</v-card-title>-->
+                            <!--<v-card-actions >-->
+                              <!--<v-flex xs8 offset-xs2>-->
+                                <!--&lt;!&ndash;<v-btn flat class="black&#45;&#45;text">FETCH</v-btn>&ndash;&gt;-->
+                              <!--</v-flex>-->
+                            <!--</v-card-actions>-->
+                          <!--</v-card>-->
+                        <!--</v-flex>-->
+                      <!--</v-layout>-->
+                    <!--</v-container>-->
+                  <!--</v-flex>-->
+                  <!--<v-flex xs12 >-->
+                    <!--<v-dialog v-model="consumerReportDialog" maxWidth="1200px" >-->
+                      <!--<v-card>-->
+                        <!--<v-card-title>-->
+                          <!--<span class="headline">{{ selectedStore }} Report - Date : {{consumerSelectedDate}}</span>-->
+                        <!--</v-card-title>-->
+                        <!--<v-card-text>-->
+                          <!--<div class="table__overflow" id="consumerHeaderData" style="overflow-x: hidden" >-->
+                            <!--<table style="width: 1450px; overflow-y: scroll" >-->
+                              <!--<thead>-->
+                              <!--<th style="width: 240px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">BASIC INFORMATION</th>-->
+                              <!--<th style="width: 380px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SOYA SUPREME COOKING OIL</th>-->
+                              <!--<th style="width: 220px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">Smart Canola Oil</th>-->
+                              <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SS Banaspati</th>-->
+                              <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SSB Olive Oil</th>-->
+                              <!--</thead>-->
+                            <!--</table>-->
+                          <!--</div>-->
+                          <!--<v-data-table-->
+                                  <!--v-bind:headers="consumerReportListHeaders"-->
+                                  <!--v-bind:onscroll="syncConsumerScroll"-->
+                                  <!--id="consumerTableData"-->
+                                  <!--:items="consumerReport"-->
+                                  <!--hide-actions-->
+                                  <!--:loading="selectLoading"-->
+                          <!--&gt;-->
+                            <!--<template slot="items" slot-scope="props" >-->
+                              <!--<td class="text-xs-left">{{ consumerDateQuery }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.customerName }}</td>-->
+                              <!--<td class="text-xs-left">{{ props.item.customerContact }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.userName }}</td>-->
+                              <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle1ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle3ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour3ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin2_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin10ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan10ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan16ltr }}</td>-->
+                              <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle1ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle3ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle4_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scjcan10ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.scjcan16ltr }}</td>-->
+                              <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin25ltr }}</td>-->
+                              <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbopoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin5ltr }}</td>-->
+                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin25ltr }}</td>-->
+                            <!--</template>-->
+                            <!--&lt;!&ndash;Total Footer&ndash;&gt;-->
+                            <!--<template slot="footer">-->
+                              <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                              <!--<td class="text-xs-left grey darken-1" ></td>-->
+                              <!--<td class="text-xs-center grey darken-1"></td>-->
+                              <!--<td class="text-xs-left grey darken-1">Total</td>-->
+                              <!--<td class="text-xs-center grey darken-1"></td>-->
+                              <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle1ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle3ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscbottle5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscpresspour3ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscpresspour5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin2_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssctin10ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscjcan10ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.sscjcan16ltr }}</td>-->
+                              <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle1ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle3ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scbottle4_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scjcan10ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.scjcan16ltr }}</td>-->
+                              <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbpoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbtin5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbtin25ltr }}</td>-->
+                              <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbopoly1_5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbotin5ltr }}</td>-->
+                              <!--<td class="text-xs-center grey darken-1">{{ consumerTotal.ssbotin25ltr }}</td>-->
+                            <!--</template>-->
+                          <!--</v-data-table>-->
+                        <!--</v-card-text>-->
+                        <!--<v-card-actions>-->
+                          <!--<v-spacer></v-spacer>-->
+                          <!--<v-btn color="green darken-1" flat="flat" @click="consumerReportDialog = false">OK</v-btn>-->
+                        <!--</v-card-actions>-->
+                      <!--</v-card>-->
+                    <!--</v-dialog>-->
+                  <!--</v-flex>-->
+                <!--</v-layout>-->
+              <!--</v-container>-->
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -69,7 +232,7 @@
                                 prepend-icon="event"
                                 readonly
                         ></v-text-field>
-                        <v-date-picker v-model="selectedDate" scrollable @input="formatDate()">
+                        <v-date-picker v-model="selectedDate" scrollable>
                           <v-spacer></v-spacer>
                           <v-btn flat color="primary" @click="dateDialogue = false">Cancel</v-btn>
                           <v-btn flat color="primary" @click="$refs.dateDialogue.save(selectedDate)">OK</v-btn>
@@ -95,6 +258,7 @@
                               :headers="storeListHeaders"
                               :items="storeList"
                               :search="storeSearch"
+                              @input="formatDate()"
                       >
                         <template slot="items" slot-scope="props">
                           <td class="text-xs-center">{{ props.item.id }}</td>
@@ -242,11 +406,179 @@
                 key="3"
                 id="tab-c3"
         >
-          <v-card flat>
-            <v-card-text>
-
-            </v-card-text>
-          </v-card>
+          <!--<v-card flat>-->
+            <!--<v-card-text>-->
+              <!--<v-container grid-list-md text-xs-center>-->
+                <!--<v-btn large class="green" v-on:click="fetchCompileReports" :disabled="!compileDateValid" :loading="selectLoading">Prepare Compile</v-btn>-->
+                <!--<v-layout row wrap>-->
+                  <!--&lt;!&ndash;MONTH FROM&ndash;&gt;-->
+                  <!--<v-flex xs4>-->
+                    <!--<v-menu-->
+                            <!--lazy-->
+                            <!--:close-on-content-click="true"-->
+                            <!--:close-on-click="false"-->
+                            <!--v-model="compileMenu.from"-->
+                            <!--transition="scale-transition"-->
+                            <!--offset-y-->
+                            <!--full-width-->
+                            <!--:nudge-right="40"-->
+                            <!--max-width="290px"-->
+                            <!--min-width="290px"-->
+                    <!--&gt;-->
+                      <!--<v-text-field-->
+                              <!--slot="activator"-->
+                              <!--label="From"-->
+                              <!--v-model="compileMonth.from"-->
+                              <!--prepend-icon="event"-->
+                              <!--readonly-->
+                      <!--&gt;</v-text-field>-->
+                      <!--<v-date-picker  v-model="compileMonth.from" no-title scrollable actions>-->
+                        <!--<template slot-scope="{ save, cancel }">-->
+                          <!--<v-card-actions>-->
+                            <!--<v-spacer></v-spacer>-->
+                            <!--<v-btn flat color="primary" @click="save">OK</v-btn>-->
+                          <!--</v-card-actions>-->
+                        <!--</template>-->
+                      <!--</v-date-picker>-->
+                    <!--</v-menu>-->
+                  <!--</v-flex>-->
+                  <!--&lt;!&ndash;MONTH TO&ndash;&gt;-->
+                  <!--<v-flex xs4>-->
+                    <!--<v-menu-->
+                            <!--lazy-->
+                            <!--:close-on-content-click="true"-->
+                            <!--:close-on-click="false"-->
+                            <!--v-model="compileMenu.to"-->
+                            <!--transition="scale-transition"-->
+                            <!--offset-y-->
+                            <!--full-width-->
+                            <!--:nudge-right="40"-->
+                            <!--max-width="290px"-->
+                            <!--min-width="290px"-->
+                    <!--&gt;-->
+                      <!--<v-text-field-->
+                              <!--slot="activator"-->
+                              <!--label="To"-->
+                              <!--v-model="compileMonth.to"-->
+                              <!--prepend-icon="event"-->
+                              <!--readonly-->
+                      <!--&gt;</v-text-field>-->
+                      <!--<v-date-picker v-model="compileMonth.to" no-title scrollable actions>-->
+                        <!--<template slot-scope="{ save, cancel }">-->
+                          <!--<v-card-actions>-->
+                            <!--<v-spacer></v-spacer>-->
+                            <!--<v-btn flat color="primary" @click="save">OK</v-btn>-->
+                          <!--</v-card-actions>-->
+                        <!--</template>-->
+                      <!--</v-date-picker>-->
+                    <!--</v-menu>-->
+                  <!--</v-flex>-->
+                  <!--<v-flex xs12 class="ma-3"><v-divider></v-divider></v-flex>-->
+                  <!--<v-flex xs12 >-->
+                    <!--&lt;!&ndash;DataTable Compile&ndash;&gt;-->
+                    <!--<v-card>-->
+                      <!--<v-card-title>-->
+                        <!--<span class="headline">{{ compileSelectedStore }} Report</span>-->
+                      <!--</v-card-title>-->
+                      <!--<v-card-text>-->
+                        <!--<div class="table__overflow" id="compileHeaderData" style="overflow-x: hidden" >-->
+                          <!--<table style="width: 1450px; overflow-y: scroll" >-->
+                            <!--<thead>-->
+                            <!--<th style="width: 240px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center grey darken-1">BASIC INFORMATION</th>-->
+                            <!--<th style="width: 380px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center grey darken-1">SOYA SUPREME COOKING OIL</th>-->
+                            <!--<th style="width: 220px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center grey darken-1">Smart Canola Oil</th>-->
+                            <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center grey darken-1">SS Banaspati</th>-->
+                            <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center grey darken-1">SSB Olive Oil</th>-->
+                            <!--</thead>-->
+                          <!--</table>-->
+                        <!--</div>-->
+                        <!--<v-data-table-->
+                                <!--v-bind:headers="compileReportListHeaders"-->
+                                <!--v-bind:onscroll="syncCompileScroll"-->
+                                <!--id="compileTableData"-->
+                                <!--:items="compileReport"-->
+                                <!--hide-actions-->
+                                <!--:loading="selectLoading"-->
+                        <!--&gt;-->
+                          <!--<template slot="items" slot-scope="props" >-->
+                            <!--<td class="text-xs-left">{{ props.item.storeName }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.userName }}</td>-->
+                            <!--<td class="text-xs-left">{{ props.item.userName }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.interception }}</td>-->
+                            <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle1ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle3ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour3ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssctin2_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssctin5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssctin10ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan10ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan16ltr }}</td>-->
+                            <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scbottle1ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scbottle3ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scbottle4_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scjcan10ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.scjcan16ltr }}</td>-->
+                            <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin25ltr }}</td>-->
+                            <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbopoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin5ltr }}</td>-->
+                            <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin25ltr }}</td>-->
+                          <!--</template>-->
+                          <!--&lt;!&ndash;Total Footer&ndash;&gt;-->
+                          <!--<template slot="footer">-->
+                            <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                            <!--<td class="text-xs-left grey darken-1" ></td>-->
+                            <!--<td class="text-xs-center grey darken-1"></td>-->
+                            <!--<td class="text-xs-left grey darken-1">Total</td>-->
+                            <!--<td class="text-xs-center grey darken-1"></td>-->
+                            <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscbottle1ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscbottle3ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscbottle5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscpresspour3ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscpresspour5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssctin2_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssctin5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssctin10ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscjcan10ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.sscjcan16ltr }}</td>-->
+                            <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scbottle1ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scbottle3ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scbottle4_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scjcan10ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.scjcan16ltr }}</td>-->
+                            <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbpoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbtin5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbtin25ltr }}</td>-->
+                            <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbopoly1_5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbotin5ltr }}</td>-->
+                            <!--<td class="text-xs-center grey darken-1">{{ compileTotal.ssbotin25ltr }}</td>-->
+                          <!--</template>-->
+                        <!--</v-data-table>-->
+                      <!--</v-card-text>-->
+                      <!--<v-card-actions>-->
+                        <!--<v-spacer></v-spacer>-->
+                      <!--</v-card-actions>-->
+                    <!--</v-card>-->
+                  <!--</v-flex>-->
+                <!--</v-layout>-->
+              <!--</v-container>-->
+            <!--</v-card-text>-->
+          <!--</v-card>-->
         </v-tab-item>
       </v-tabs-items>
   </div>
@@ -562,15 +894,8 @@
         this.compileMonth.from = year + '-' + month + '-' + day;
         this.consumerSelectedDate = year + '-' + month + '-' + day;
       },
-//        Format Date According to our DB
       formatDate(){
-          let currentSelectedDate = this.selectedDate;
-          let date = new Date(currentSelectedDate);
-          let year = 1900 + date.getYear();
-          let day = ("0" + date.getDate()).slice(-2);
-          let month = date.getMonth() + 1;
-          let formatedDate =  month + '-' + day + '-' + year;
-          this.selectedFormatedDate = formatedDate;
+        console.log(this.selectedDate);
       },
 //      COMPILE
       fetchCompileReports(){
@@ -612,6 +937,19 @@
         });
         this.consumerMenu = false;
       },
+//      SCROLLS SYNCING
+//      syncConsumerScroll(e){
+//        let obj = e.srcElement.scrollLeft;
+//        document.getElementById('consumerHeaderData').scrollLeft = obj;
+//      },
+//      syncStoreScroll(e){
+//        let obj = e.srcElement.scrollLeft;
+//        document.getElementById('storeHeaderData').scrollLeft = obj;
+//      },
+//      syncCompileScroll(e){
+//        let obj = e.srcElement.scrollLeft;
+//        document.getElementById('compileHeaderData').scrollLeft = obj;
+//      },
     },
     created(){
 //        getting Random store Details
@@ -621,6 +959,16 @@
 //          Initiate Connection
 //        setting Time
         this.currentDate();
+//        After 1 Second
+        setTimeout(() => {
+//            Syncing Scrolls
+          document.getElementById('consumerTableData').onscroll = this.syncConsumerScroll;
+          document.getElementById('compileTableData').onscroll = this.syncCompileScroll;
+          document.getElementById('storeTableData').onscroll = this.syncStoreScroll;
+//          this.$store.dispatch('fetchCompileReportsByStores');
+//          Stop Loading
+          this.selectLoading = false;
+        }, 2000)
 //          Fetching Base Data Queries
         this.$store.dispatch('storeListUPD');
         console.log(this.stores);

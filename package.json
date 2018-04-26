@@ -12,6 +12,7 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "lodash": "^4.17.4",
+    "serve-dist": "^1.0.11",
     "v-odometer": "^2.0.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

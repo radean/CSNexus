@@ -42,14 +42,15 @@ new Vue({
   components: { App },
   created (){
     let config = {
-        databaseURL: "https://tasttrial.firebaseio.com",
+        // databaseURL: "https://tasttrial.firebaseio.com",
         // ================================================
-        apiKey: "AIzaSyA6fVrx-gOf2eFLqSVTPW4I7sNY34nlkIY",
-        authDomain: "tastetrialnexus.firebaseapp.com",
-        // databaseURL: "https://tastetrialnexus.firebaseio.com",
-        projectId: "tastetrialnexus",
-        storageBucket: "",
-        messagingSenderId: "101556171938"
+        apiKey: "AIzaSyD9xMA6OZnafkhfwmCP17VE-FtiDZ_KIGQ",
+        authDomain: "tasttrial.firebaseapp.com",
+        // authDomain: "tasttrial.firebaseapp.com",
+        databaseURL: "https://tasttrial.firebaseio.com",
+        projectId: "tasttrial",
+        storageBucket: "tasttrial.appspot.com",
+        messagingSenderId: "328928648457"
       // apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
       // authDomain: "bams-e190d.firebaseapp.com",
       // databaseURL: "https://bams-e190d.firebaseio.com",

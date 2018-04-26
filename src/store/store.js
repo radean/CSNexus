@@ -540,7 +540,7 @@ export const store = new Vuex.Store({
               Meat: 0,
               SeaFood: 0,
               Vegetable: 0
-      };
+        };
         // console.log(reports.val)
         report.forEach((childReport) => {
           const obj = childReport.val();
@@ -762,64 +762,61 @@ export const store = new Vuex.Store({
     },
       // Fetch Store Reports By Campaign
     fetchStoreReportsByObject({commit}, payload){
-          commit('SET_MAIN_LOADING', true);
-          firebase.database().ref('storedata/4-25-2018').orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
-              let reports = [];
-              let currentKey = null;
-              // console.log(reports.val)
-              console.log(payload)
-              report.forEach((childReport) => {
-                  const obj = childReport.val();
-                  currentKey = childReport.key;
-                  console.log(obj)
-                  reports.push({
-                      // date: currentKey,
-                      // Customer Information
-                      customerName: obj.customerName,
-                      customerContact: obj.customerContact,
-                      customerRemarks: obj.customerRemarks,
-                      // Conversion
-                      conversion: obj.conversion,
-                      // Taste Trail
-                      tasteTrial: obj.tasteTrial,
-                      pUFrozen: obj.pUFrozen,
-                      pUCheese: obj.pUCheese,
-                      pUButter: obj.pUButter,
-                      // Store info
-                      store: obj.store,
-                      userName: obj.userName,
-                      // Stock Information
-                      purchased: obj.purchased
-                  });
-                  // reports[currentKey] = new Array;
-                  // for (let key in obj){
-                  //     reports.push({
-                  //         id: key,
-                  //         date: childReport.key,
-                  //         // Customer Information
-                  //         customerName: obj[key].customerName,
-                  //         customerContact: obj[key].customerContact,
-                  //         // Conversion
-                  //         conversion: obj[key].conversion,
-                  //         // Taste Trail
-                  //         tasteTrial: obj[key].tasteTrial,
-                  //         pUFrozen: obj[key].pUFrozen,
-                  //         pUCheese: obj[key].pUCheese,
-                  //         pUButter: obj[key].pUButter,
-                  //         // Store info
-                  //         store: obj[key].store,
-                  //         userName: obj[key].userName,
-                  //         // Stock Information
-                  //         purchased: obj[key].purchased
-                  //     });
-                  // }
-                  currentKey = null;
-              });
-              console.log('Store Report')
-              console.log(reports)
-              commit('SET_MAIN_LOADING', false);
-              commit('setStoreReport', reports);
-          });
+        commit('SET_MAIN_LOADING', true);
+        firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
+            let reports = [];
+            let currentKey = null;
+            report.forEach((childReport) => {
+                const obj = childReport.val();
+                currentKey = childReport.key;
+                reports.push({
+                    // date: currentKey,
+                    // Customer Information
+                    customerName: obj.customerName,
+                    customerContact: obj.customerContact,
+                    customerRemarks: obj.customerRemarks,
+                    // Conversion
+                    conversion: obj.conversion,
+                    // Taste Trail
+                    tasteTrial: obj.tasteTrial,
+                    pUFrozen: obj.pUFrozen,
+                    pUCheese: obj.pUCheese,
+                    pUButter: obj.pUButter,
+                    // Store info
+                    store: obj.store,
+                    userName: obj.userName,
+                    // Stock Information
+                    purchased: obj.purchased
+                });
+                // reports[currentKey] = new Array;
+                // for (let key in obj){
+                //     reports.push({
+                //         id: key,
+                //         date: childReport.key,
+                //         // Customer Information
+                //         customerName: obj[key].customerName,
+                //         customerContact: obj[key].customerContact,
+                //         // Conversion
+                //         conversion: obj[key].conversion,
+                //         // Taste Trail
+                //         tasteTrial: obj[key].tasteTrial,
+                //         pUFrozen: obj[key].pUFrozen,
+                //         pUCheese: obj[key].pUCheese,
+                //         pUButter: obj[key].pUButter,
+                //         // Store info
+                //         store: obj[key].store,
+                //         userName: obj[key].userName,
+                //         // Stock Information
+                //         purchased: obj[key].purchased
+                //     });
+                // }
+                currentKey = null;
+            });
+            console.log('Store Report')
+            console.log(reports)
+            commit('SET_MAIN_LOADING', false);
+            commit('setStoreReport', reports);
+        });
   },
     // Fetch All Last Reports
     fetchAllStoreReports({commit}){
@@ -827,7 +824,7 @@ export const store = new Vuex.Store({
       firebase.database().ref('storedata').on('value', (report) => {
         let reports = [];
         let currentKey = null;
-        console.log(reports)
+        // console.log(reports)
         report.forEach((childReport) => {
           const obj = childReport.val();
           currentKey = childReport.key;

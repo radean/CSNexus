@@ -33,9 +33,9 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile ripple>
+        <v-list-tile ripple to="/reports">
           <v-list-tile-action>
-            <v-icon>lock</v-icon>
+            <v-icon>event_note</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -133,7 +133,9 @@
           ></vue-particles>
           <transition name="fade">
             <!--Content goes here-->
+            <v-layout>
             <router-view></router-view>
+            </v-layout>
           </transition>
         </v-container>
       </v-content>

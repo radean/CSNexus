@@ -324,6 +324,7 @@
         dateDialogue: false,
 //      Fetched Data
         consumerStockReport: [],
+        currentReport: null,
 //      Sent Data
         compileMonth: {
           to: null,
@@ -557,14 +558,15 @@
     methods: {
       currentDate(){
         let date = new Date();
+        let year = 1900 + date.getYear();
         let day = ("0" + date.getDate()).slice(-2);
         let month = date.getMonth() + 1;
-        let year = date.getFullYear();
         this.compileMonth.to = year + '-' + month + '-' + day;
         this.compileMonth.from = year + '-' + month + '-' + day;
         this.consumerSelectedDate = year + '-' + month + '-' + day;
+        this.selectedDate = year + '-' + month + '-' + day;
       },
-//        Format Date According to our DB
+//     Format Date According to our DB
       formatDate(){
           let currentSelectedDate = this.selectedDate;
           let date = new Date(currentSelectedDate);
@@ -573,6 +575,95 @@
           let month = date.getMonth() + 1;
           let formatedDate =  month + '-' + day + '-' + year;
           this.selectedFormatedDate = formatedDate;
+      },
+//      converting Data Category wise
+      toCategory(){
+//      To convert we first have to get Full Category List and purchase Object from DB
+//        Here is Category ListCache
+        let totalPurchase = this.$store.getters.storeReport;
+        let productCategories = {
+            BlockCheese: 0,
+            Butter: 0,
+            BlockCheeseCream: 0,
+            CreamFoodService: 0,
+            Milk: 0,
+            ProcessCheese: 0,
+            Shakes: 0,
+            ShreddedCheese: 0,
+            Fish: 0,
+            FrenchFries: 0,
+            Fruits: 0,
+            Meat: 0,
+            SeaFood: 0,
+            Vegetable: 0
+        };
+        let storeSales = [];
+//        now we require an Purchase object which must carry details about purchases and their ids
+        for(let key in totalPurchase) {
+            // if Key lies among product Range
+            let currentPurchase = {};
+            let product = '' ;
+            let Val = parseInt(key);
+            let amount = parseInt(totalPurchase[key]);
+            if(Val >= 1001 && Val <= 1012){
+                product = 'BlockCheese';
+                productCategories.BlockCheese = productCategories.BlockCheese + amount
+            } else
+            if(Val >= 1013 && Val <= 1020){
+                product = 'Butter';
+                productCategories.Butter = productCategories.Butter + amount
+            } else
+            if(Val >= 1021 && Val <= 1039){
+                product = 'Cheese';
+                productCategories.Cheese = productCategories.Cheese + amount
+            } else
+            if(Val >= 1040 && Val <= 1049){
+                product = 'Cream';
+                productCategories.Cream = productCategories.Cream + amount
+            } else
+            if(Val >= 1050 && Val <= 1052){
+                product = 'Milk';
+                productCategories.Milk = productCategories.Milk + amount
+            } else
+            if(Val >= 1053 && Val <= 1064){
+                product = 'ProcessCheese';
+                productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+            } else
+            if(Val >= 1064 && Val <= 1067){
+                product = 'Shakes';
+                productCategories.Shakes = productCategories.Shakes + amount
+            } else
+            if(Val >= 1068 && Val <= 1075){
+                product = 'ShreddingCheese';
+                productCategories.ShreddingCheese = productCategories.ShreddingCheese + amount
+            } else
+            if(Val >= 1076 && Val <= 1076){
+                product = 'Fish';
+                productCategories.Fish = productCategories.Fish + amount
+            } else
+            if(Val >= 1077 && Val <= 1080){
+                product = 'FrenchFries';
+                productCategories.FrenchFries = productCategories.FrenchFries + amount
+            } else
+            if(Val >= 1081 && Val <= 1083){
+                product = 'Fruits';
+                productCategories.Fruits = productCategories.Fruits + amount
+            } else
+            if(Val >= 1084 && Val <= 1094){
+                product = 'Meat';
+                productCategories.Meat = productCategories.Meat + amount
+            } else
+            if(Val >= 1095 && Val <= 1098){
+                product = 'SeaFood';
+                productCategories.SeaFood = productCategories.SeaFood + amount
+            } else
+            if(Val >= 1099 && Val <= 1131){
+                product = 'Vegetable';
+                productCategories.Vegetable = productCategories.Vegetable + amount
+            }
+        }
+        console.log("Selected Report");
+        console.log(productCategories);
       },
 //      COMPILE
       fetchCompileReports(){
@@ -604,6 +695,7 @@
         console.log(storeinfo);
         this.storeSelected = storeinfo;
         this.storeMenu = false;
+        this.toCategory();
       },
 //      CONSUMER FETCH REPORT
       fetchConsumerReport(storeinfo){
@@ -618,6 +710,7 @@
         });
         this.consumerMenu = false;
       },
+
     },
     created(){
 //        getting Random store Details

@@ -3,29 +3,17 @@
     <v-toolbar color="purple" dark tabs>
       <v-toolbar-title>REPORTS</v-toolbar-title>
       <!--<v-spacer></v-spacer>-->
-      <v-tabs
-              centered
-              color="purple"
-              slot="extension"
-              slider-color="yellow"
-              v-model="reportTabs"
-      >
+      <v-tabs centered color="purple" slot="extension" slider-color="yellow" v-model="reportTabs">
         <!--<v-tab-->
                 <!--key="1"-->
                 <!--href="#tab-$c1"-->
         <!--&gt;-->
           <!--Item 1-->
         <!--</v-tab>-->
-        <v-tab
-                key="2"
-                href="#tab-c2"
-        >
+        <v-tab key="2" href="#tab-c2" >
           Store Report
         </v-tab>
-        <v-tab
-                key="3"
-                href="#tab-c3"
-        >
+        <v-tab key="3" href="#tab-c3">
           Compile Report
         </v-tab>
       </v-tabs>
@@ -40,10 +28,7 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
-        <v-tab-item
-                key="2"
-                id="tab-c2"
-        >
+        <v-tab-item key="2" id="tab-c2">
           <v-card flat>
             <v-card-text>
               <v-container grid-list-md text-xs-center>
@@ -85,19 +70,9 @@
                       <v-card-title>
                         Stores List
                         <v-spacer></v-spacer>
-                        <v-text-field
-                                append-icon="search"
-                                label="Search Store"
-                                single-line
-                                hide-details
-                                v-model="storeSearch"
-                        ></v-text-field>
+                        <v-text-field append-icon="search" label="Search Store" single-line hide-details v-model="storeSearch"></v-text-field>
                       </v-card-title>
-                      <v-data-table
-                              :headers="storeListHeaders"
-                              :items="storeList"
-                              :search="storeSearch"
-                      >
+                      <v-data-table :headers="storeListHeaders" :items="storeList" :search="storeSearch">
                         <template slot="items" slot-scope="props">
                           <td class="text-xs-center">{{ props.item.id }}</td>
                           <td class="text-xs-left">{{ props.item.name }}</td>
@@ -139,17 +114,39 @@
                           <span class="headline">{{ storeSelected.name }} Report </span>
                         </v-card-title>
                         <v-card-text>
-                          <div class="table__overflow" id="storeHeaderData" style="overflow-x: hidden" >
-                            <table style="width: 1450px; overflow-y: scroll" >
-                              <thead>
-                              <th style="width: 240px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">BASIC INFORMATION</th>
-                              <th style="width: 380px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SOYA SUPREME COOKING OIL</th>
-                              <th style="width: 220px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">Smart Canola Oil</th>
-                              <th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SS Banaspati</th>
-                              <th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SSB Olive Oil</th>
-                              </thead>
-                            </table>
-                          </div>
+                          <v-data-table :headers="storeReportHeaders" :items="selectedStoreReport" hide-actions class="elevation-1">
+                            <template slot="items" slot-scope="props">
+                              <td>{{ props.item.userName }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.address }}</td>
+                              <td class="text-xs-right grey-2">{{ props.item.interception }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.BlockCheese }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.Butter }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.BlockCheeseCream }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.Cream }}</td>
+                              <td class="text-xs-right grey-2">{{ props.item.CreamFoodService }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.Milk }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.ProcessCheese }}</td>
+                              <td class="text-xs-right grey-2">{{ props.item.Shakes }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.ShreddedCheese }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.Fish }}</td>
+                              <td class="text-xs-right grey-2">{{ props.item.FrenchFries }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.Fruits }}</td>
+                              <td class="text-xs-right grey-1">{{ props.item.Meat }}</td>
+                              <td class="text-xs-right grey-2">{{ props.item.SeaFood }}</td>
+                              <td class="text-xs-right grey-3">{{ props.item.Vegetable }}</td>
+                            </template>
+                          </v-data-table>
+                          <!--<div class="table__overflow" id="storeHeaderData" style="overflow-x: hidden" >-->
+                            <!--<table style="width: 1450px; overflow-y: scroll" >-->
+                              <!--<thead>-->
+                              <!--<th style="width: 240px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">BASIC INFORMATION</th>-->
+                              <!--<th style="width: 380px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SOYA SUPREME COOKING OIL</th>-->
+                              <!--<th style="width: 220px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center">Smart Canola Oil</th>-->
+                              <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SS Banaspati</th>-->
+                              <!--<th style="width: 100px;" role="columnheader" scope="col"aria-sort="none"class="column sortable text-xs-center ">SSB Olive Oil</th>-->
+                              <!--</thead>-->
+                            <!--</table>-->
+                          <!--</div>-->
                           <!--<v-data-table-->
                                   <!--v-bind:headers="storeReportListHeaders"-->
                                   <!--v-bind:onscroll="syncStoreScroll"-->
@@ -164,69 +161,6 @@
                               <!--<td class="text-xs-left">{{ props.item.userName }}</td>-->
                               <!--<td class="text-xs-center">{{ props.item.interception }}</td>-->
                               <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle1ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle3ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscbottle5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour3ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscpresspour5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin2_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssctin10ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan10ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.sscjcan16ltr }}</td>-->
-                              <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle1ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle3ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scbottle4_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scjcan10ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.scjcan16ltr }}</td>-->
-                              <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbtin25ltr }}</td>-->
-                              <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbopoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin5ltr }}</td>-->
-                              <!--<td class="text-xs-center">{{ props.item.purchased.ssbotin25ltr }}</td>-->
-                            <!--</template>-->
-                            <!--&lt;!&ndash;Total Footer&ndash;&gt;-->
-                            <!--<template slot="footer">-->
-                              <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
-                              <!--<td class="text-xs-left grey darken-1" ></td>-->
-                              <!--<td class="text-xs-center grey darken-1"></td>-->
-                              <!--<td class="text-xs-left grey darken-1">Total</td>-->
-                              <!--<td class="text-xs-center grey darken-1"></td>-->
-                              <!--&lt;!&ndash;Soya Supreme Cooking Oil&ndash;&gt;-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscbottle1ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscbottle3ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscbottle5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscpresspour3ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscpresspour5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssctin2_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssctin5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssctin10ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscjcan10ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.sscjcan16ltr }}</td>-->
-                              <!--&lt;!&ndash;Smart Cooking OIl&ndash;&gt;-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scbottle1ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scbottle3ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scbottle4_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scjcan10ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.scjcan16ltr }}</td>-->
-                              <!--&lt;!&ndash;Soya Supreme Banaspati&ndash;&gt;-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbpoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbtin5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbtin25ltr }}</td>-->
-                              <!--&lt;!&ndash;Soya Supreme banaspati with olive oil&ndash;&gt;-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbopoly1_5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbotin5ltr }}</td>-->
-                              <!--<td class="text-xs-center grey darken-1">{{ storeTotal.ssbotin25ltr }}</td>-->
-                            <!--</template>-->
-                          <!--</v-data-table>-->
                         </v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
@@ -282,6 +216,7 @@
         compileReport: [],
         consumerTotal: [],
         storeReport: [],
+        selectedStoreReport: [],
         storeTotal: [],
 //      GUI HEADERS
 //          StoreReport Gui Data
@@ -318,6 +253,26 @@
                 value: 'action'
             },
         ],
+        storeReportHeaders: [
+            {text: 'B.A', align: 'center', sortable: false, value:'b.a' },
+            {text: 'Address', align: 'center', sortable: false, value:'Address' },
+            {text: 'Interceptions', color: 'blue', align: 'center', sortable: true, value:'Interceptions' },
+            {text: 'BlockCheese', align: 'center', sortable: true, value:'BlockCheese' },
+            {text: 'Butter', align: 'center', sortable: true, value:'Butter' },
+            {text: 'BlockCheeseCream', align: 'center', sortable: true, value:'BlockCheeseCream' },
+            {text: 'Cream', align: 'center', sortable: true, value:'Cream' },
+            {text: 'CreamFoodService', align: 'center', sortable: true, value:'CreamFoodService' },
+            {text: 'Milk', align: 'center', sortable: true, value:'Milk' },
+            {text: 'ProcessCheese', align: 'center', sortable: true, value:'ProcessCheese' },
+            {text: 'Shakes', align: 'center', sortable: true, value:'Shakes' },
+            {text: 'ShreddedCheese', align: 'center', sortable: true, value:'ShreddedCheese' },
+            {text: 'Fish', align: 'center', sortable: true, value:'Fish' },
+            {text: 'FrenchFries', align: 'center', sortable: true, value:'FrenchFries' },
+            {text: 'Fruits', align: 'center', sortable: true, value:'Fruits' },
+            {text: 'Meat', align: 'center', sortable: true, value:'Meat' },
+            {text: 'SeaFood', align: 'center', sortable: true, value:'SeaFood' },
+            {text: 'Vegetable', align: 'center', sortable: true, value:'Vegetable' }
+        ],
         selectedDate: '2018-04-04',
         selectedFormatedDate: null,
         reportTabs: null,
@@ -344,6 +299,9 @@
       },
       storeList(){
         return this.$store.getters.storeList
+      },
+      totalReport(){
+        return this.$store.getters.storeReport
       },
       storeReportDatewise(){
 //      Main Fetched Report
@@ -578,6 +536,8 @@
       },
 //      converting Data Category wise
       toCategory(){
+//          first we have to reset this.selectedStoreReport
+        this.selectedStoreReport = []
 //      To convert we first have to get Full Category List and purchase Object from DB
 //        Here is Category ListCache
         let totalPurchase = this.$store.getters.storeReport;
@@ -585,6 +545,7 @@
             BlockCheese: 0,
             Butter: 0,
             BlockCheeseCream: 0,
+            Cream: 0,
             CreamFoodService: 0,
             Milk: 0,
             ProcessCheese: 0,
@@ -597,73 +558,94 @@
             SeaFood: 0,
             Vegetable: 0
         };
-        let storeSales = [];
+
 //        now we require an Purchase object which must carry details about purchases and their ids
         for(let key in totalPurchase) {
             // if Key lies among product Range
-            let currentPurchase = {};
-            let product = '' ;
-            let Val = parseInt(key);
-            let amount = parseInt(totalPurchase[key]);
-            if(Val >= 1001 && Val <= 1012){
-                product = 'BlockCheese';
-                productCategories.BlockCheese = productCategories.BlockCheese + amount
-            } else
-            if(Val >= 1013 && Val <= 1020){
-                product = 'Butter';
-                productCategories.Butter = productCategories.Butter + amount
-            } else
-            if(Val >= 1021 && Val <= 1039){
-                product = 'Cheese';
-                productCategories.Cheese = productCategories.Cheese + amount
-            } else
-            if(Val >= 1040 && Val <= 1049){
-                product = 'Cream';
-                productCategories.Cream = productCategories.Cream + amount
-            } else
-            if(Val >= 1050 && Val <= 1052){
-                product = 'Milk';
-                productCategories.Milk = productCategories.Milk + amount
-            } else
-            if(Val >= 1053 && Val <= 1064){
-                product = 'ProcessCheese';
-                productCategories.ProcessCheese = productCategories.ProcessCheese + amount
-            } else
-            if(Val >= 1064 && Val <= 1067){
-                product = 'Shakes';
-                productCategories.Shakes = productCategories.Shakes + amount
-            } else
-            if(Val >= 1068 && Val <= 1075){
-                product = 'ShreddingCheese';
-                productCategories.ShreddingCheese = productCategories.ShreddingCheese + amount
-            } else
-            if(Val >= 1076 && Val <= 1076){
-                product = 'Fish';
-                productCategories.Fish = productCategories.Fish + amount
-            } else
-            if(Val >= 1077 && Val <= 1080){
-                product = 'FrenchFries';
-                productCategories.FrenchFries = productCategories.FrenchFries + amount
-            } else
-            if(Val >= 1081 && Val <= 1083){
-                product = 'Fruits';
-                productCategories.Fruits = productCategories.Fruits + amount
-            } else
-            if(Val >= 1084 && Val <= 1094){
-                product = 'Meat';
-                productCategories.Meat = productCategories.Meat + amount
-            } else
-            if(Val >= 1095 && Val <= 1098){
-                product = 'SeaFood';
-                productCategories.SeaFood = productCategories.SeaFood + amount
-            } else
-            if(Val >= 1099 && Val <= 1131){
-                product = 'Vegetable';
-                productCategories.Vegetable = productCategories.Vegetable + amount
+//            We have to dig more to get purchased values
+//            console.log(totalPurchase[key].purchased);
+            let totalItems = totalPurchase[key].purchased;
+            for (let key in totalItems){
+                let Val = parseInt(key);
+                let product = '';
+                let amount = parseInt(totalItems[key]);
+//                console.log(amount)
+                if(Val >= 1001 && Val <= 1012){
+                    product = 'BlockCheese';
+                    productCategories.BlockCheese = productCategories.BlockCheese + amount
+                } else
+                if(Val >= 1013 && Val <= 1020){
+                    product = 'Butter';
+                    productCategories.Butter = productCategories.Butter + amount
+                } else
+                if(Val >= 1021 && Val <= 1039){
+                    product = 'Cheese';
+                    productCategories.Cheese = productCategories.Cheese + amount
+                } else
+                if(Val >= 1040 && Val <= 1049){
+                    product = 'Cream';
+                    productCategories.Cream = productCategories.Cream + amount
+                } else
+                if(Val >= 1050 && Val <= 1052){
+                    product = 'Milk';
+                    productCategories.Milk = productCategories.Milk + amount
+                } else
+                if(Val >= 1053 && Val <= 1064){
+                    product = 'ProcessCheese';
+                    productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+                } else
+                if(Val >= 1064 && Val <= 1067){
+                    product = 'Shakes';
+                    productCategories.Shakes = productCategories.Shakes + amount
+                } else
+                if(Val >= 1068 && Val <= 1075){
+                    product = 'ShreddedCheese';
+                    productCategories.ShreddedCheese = productCategories.ShreddedCheese + amount
+                } else
+                if(Val >= 1076 && Val <= 1076){
+                    product = 'Fish';
+                    productCategories.Fish = productCategories.Fish + amount
+                } else
+                if(Val >= 1077 && Val <= 1080){
+                    product = 'FrenchFries';
+                    productCategories.FrenchFries = productCategories.FrenchFries + amount
+                } else
+                if(Val >= 1081 && Val <= 1083){
+                    product = 'Fruits';
+                    productCategories.Fruits = productCategories.Fruits + amount
+                } else
+                if(Val >= 1084 && Val <= 1094){
+                    product = 'Meat';
+                    productCategories.Meat = productCategories.Meat + amount
+                } else
+                if(Val >= 1095 && Val <= 1098){
+                    product = 'SeaFood';
+                    productCategories.SeaFood = productCategories.SeaFood + amount
+                } else
+                if(Val >= 1099 && Val <= 1131){
+                    product = 'Vegetable';
+                    productCategories.Vegetable = productCategories.Vegetable + amount
+                }
             }
         }
-        console.log("Selected Report");
-        console.log(productCategories);
+//        Counting Interceptions through Purchase Object
+        let currentReport = this.totalReport;
+        let totalInterceptions = 0;
+        let username = ''
+        for(let key in currentReport){
+            username = currentReport[key].userName;
+            totalInterceptions++
+        }
+//        console.log("Selected Report");
+//        Now i should add more information to purchased object
+        let report = productCategories;
+        let store = this.storeSelected;
+        report['interception'] = totalInterceptions;
+        report['address'] = store.address;
+        report['userName'] = username;
+        console.log(report)
+        this.selectedStoreReport.push(report);
+
       },
 //      COMPILE
       fetchCompileReports(){
@@ -733,6 +715,16 @@
   table.table tbody td:first-child, table.table tbody td:not(:first-child), table.table tbody th:first-child, table.table tbody th:not(:first-child), table.table thead td:first-child, table.table thead td:not(:first-child), table.table thead th:first-child, table.table thead th:not(:first-child) {
     padding: 0 3px !important;
   }
+  .grey1{
+    background-color: #545454;
+  }
+  .grey2{
+    background-color: #5f5f5f;
+  }
+  .grey3{
+    background-color: #787878;
+  }
+
 </style>
 
 

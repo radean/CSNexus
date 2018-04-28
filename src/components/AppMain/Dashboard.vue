@@ -596,9 +596,9 @@
             labels: ['Lurpak', 'Emborg', 'BlueBand', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#ffde45'],
+                    backgroundColor: ['#172c69', '#6a2686', '#3ac2ff', '#ffe684', '#ac0705', '#158d45', '#b8b8b8'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#ffde45'],
+                    color: ['#172c69', '#6a2686', '#3ac2ff', '#ffe684', '#ac0705', '#158d45', '#b8b8b8'],
                     data: [
                         this.totalPreviousUserButter.Lurpak,
                         this.totalPreviousUserButter.Emborg,
@@ -616,9 +616,9 @@
             labels: ['Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#ffde45'],
+                    backgroundColor: ['#6a2686', '#a53a1a', '#05081b', '#f64614', '#0074bf', '#b8b8b8'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#ffde45'],
+                    color: ['#6a2686', '#a53a1a', '#05081b', '#f64614', '#0074bf', '#b8b8b8'],
                     data: [
                         this.totalPreviousUserCheese.Emborg,
                         this.totalPreviousUserCheese.HappyCow,
@@ -635,9 +635,9 @@
             labels: ['Star', 'Fresh & Frozen', 'Other'],
             datasets: [
                 {
-                    backgroundColor: ['#d6a150', '#b78de5', '#0050ea'],
+                    backgroundColor: ['#467e25', '#41395e', '#b8b8b8'],
                     borderWidth: 0,
-                    color: ['#d6a150', '#b78de5', '#3849d6'],
+                    color: ['#467e25', '#41395e', '#b8b8b8'],
                     data: [
                         this.totalPreviousUserFrozen.Star,
                         this.totalPreviousUserFrozen.FreshAndFreeze,

@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : 'beta 0.062v.el',
+      version : 'beta 0.095mr',
       status : true,
       theme: 'purple accent-4',
       mode: '',
@@ -812,8 +812,8 @@ export const store = new Vuex.Store({
                 // }
                 currentKey = null;
             });
-            console.log('Store Report')
-            console.log(reports)
+            // console.log(reports)
+            // console.log(reports)
             commit('SET_MAIN_LOADING', false);
             commit('setStoreReport', reports);
         });

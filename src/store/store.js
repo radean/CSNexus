@@ -760,7 +760,7 @@ export const store = new Vuex.Store({
         commit('setStoreReport', reports);
         });
     },
-      // Fetch Store Reports By Campaign
+    // Fetch Store Reports By Campaign
     fetchStoreReportsByObject({commit}, payload){
         commit('SET_MAIN_LOADING', true);
         firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
@@ -818,6 +818,46 @@ export const store = new Vuex.Store({
             commit('setStoreReport', reports);
         });
   },
+    // Fetch All Store Related Reports
+    fetchStoreReportsByCampaign({commit}){
+        commit('SET_MAIN_LOADING', true);
+        firebase.database().ref('/4-24-2018').orderByValue('store/id').equalTo('1011').on('value', (report) => {
+            let reports = [];
+            let currentKey = null;
+            // console.log(reports)
+            report.forEach((childReport) => {
+                const obj = childReport.val();
+                currentKey = childReport.key;
+                console.log(obj);
+                // reports[currentKey] = new Array;
+                // for (let key in obj){
+                //     reports.push({
+                //         // date: currentKey,
+                //         // Customer Information
+                //         customerName: obj[key].customerName,
+                //         customerContact: obj[key].customerContact,
+                //         customerRemarks: obj[key].customerRemarks,
+                //         // Conversion
+                //         conversion: obj[key].conversion,
+                //         // Taste Trail
+                //         tasteTrial: obj[key].tasteTrial,
+                //         pUFrozen: obj[key].pUFrozen,
+                //         pUCheese: obj[key].pUCheese,
+                //         pUButter: obj[key].pUButter,
+                //         // Store info
+                //         store: obj[key].store,
+                //         userName: obj[key].userName,
+                //         // Stock Information
+                //         purchased: obj[key].purchased
+                //     });
+                // }
+                // currentKey = null;
+            });
+            // console.log(reports)
+            commit('SET_MAIN_LOADING', false);
+            // commit('setAllStoreReport', crypted);
+        });
+    },
     // Fetch All Last Reports
     fetchAllStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);

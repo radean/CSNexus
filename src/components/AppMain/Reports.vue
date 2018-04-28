@@ -117,23 +117,23 @@
                           <v-data-table :headers="storeReportHeaders" :items="selectedStoreReport" hide-actions class="elevation-1">
                             <template slot="items" slot-scope="props">
                               <td>{{ props.item.userName }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.address }}</td>
-                              <td class="text-xs-right grey-2">{{ props.item.interception }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.BlockCheese }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.Butter }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.BlockCheeseCream }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.Cream }}</td>
-                              <td class="text-xs-right grey-2">{{ props.item.CreamFoodService }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.Milk }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.ProcessCheese }}</td>
-                              <td class="text-xs-right grey-2">{{ props.item.Shakes }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.ShreddedCheese }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.Fish }}</td>
-                              <td class="text-xs-right grey-2">{{ props.item.FrenchFries }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.Fruits }}</td>
-                              <td class="text-xs-right grey-1">{{ props.item.Meat }}</td>
-                              <td class="text-xs-right grey-2">{{ props.item.SeaFood }}</td>
-                              <td class="text-xs-right grey-3">{{ props.item.Vegetable }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.address }}</td>
+                              <td class="text-xs-center grey-2">{{ props.item.interception }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.BlockCheese }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.Butter }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.BlockCheeseCream }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.Cream }}</td>
+                              <td class="text-xs-center grey-2">{{ props.item.CreamFoodService }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.Milk }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.ProcessCheese }}</td>
+                              <td class="text-xs-center grey-2">{{ props.item.Shakes }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.ShreddedCheese }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.Fish }}</td>
+                              <td class="text-xs-center grey-2">{{ props.item.FrenchFries }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.Fruits }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.Meat }}</td>
+                              <td class="text-xs-center grey-2">{{ props.item.SeaFood }}</td>
+                              <td class="text-xs-center grey-3">{{ props.item.Vegetable }}</td>
                             </template>
                           </v-data-table>
                           <!--<div class="table__overflow" id="storeHeaderData" style="overflow-x: hidden" >-->
@@ -254,10 +254,10 @@
             },
         ],
         storeReportHeaders: [
-            {text: 'B.A', align: 'center', sortable: false, value:'b.a' },
-            {text: 'Address', align: 'center', sortable: false, value:'Address' },
-            {text: 'Interceptions', color: 'blue', align: 'center', sortable: true, value:'Interceptions' },
-            {text: 'BlockCheese', align: 'center', sortable: true, value:'BlockCheese' },
+            {text: 'B.A', align: 'center', class: 'green', sortable: false, value:'b.a' },
+            {text: 'Address', align: 'center', class: 'green', sortable: false, value:'Address' },
+            {text: 'Interceptions',  class: 'green', align: 'center', sortable: true, value:'Interceptions' },
+            {text: 'BlockCheese', align: 'center', class: '', sortable: true, value:'BlockCheese' },
             {text: 'Butter', align: 'center', sortable: true, value:'Butter' },
             {text: 'BlockCheeseCream', align: 'center', sortable: true, value:'BlockCheeseCream' },
             {text: 'Cream', align: 'center', sortable: true, value:'Cream' },
@@ -704,6 +704,7 @@
         this.currentDate();
 //          Fetching Base Data Queries
         this.$store.dispatch('storeListUPD');
+        this.$store.dispatch('fetchStoreReportsByCampaign');
         console.log(this.stores);
       }
     },

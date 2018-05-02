@@ -556,9 +556,11 @@
         }
 //      Lets Add Same Day Purchases
         let CleanedReport = []
-        for (let key in CleanedReport) {
+        for (let key in storeFiltered) {
 //          make it even more Cleaner Version
+            if(storeFiltered[key]) {
 
+            }
         };
 //      Now we make this date wise
 //        console.log(storeFiltered);

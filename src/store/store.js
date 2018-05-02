@@ -55,6 +55,7 @@ export const store = new Vuex.Store({
     storeStockReports: [],
     consumerStoreReports: [],
     storeReports: [],
+    currentStoreReports: [],
     compileReports: [],
     // Workers List
     // B.A List
@@ -131,6 +132,9 @@ export const store = new Vuex.Store({
     setStoreReport (state, payload){
       state.storeReports = payload;
     },
+    setCurrentStoreReport (state, payload){
+      state.currentStoreReports = payload;
+    },
     setAllStoreReport (state, payload){
       state.recentReports = payload
     },
@@ -164,6 +168,10 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    // GUI
+    setMainLoading({commit}, payload){
+        commit('SET_MAIN_LOADING', payload);
+    },
     // USER AUTHENTICATION
     userSignUp({commit}, payload){
       // Converting Varialble
@@ -819,43 +827,47 @@ export const store = new Vuex.Store({
         });
   },
     // Fetch All Store Related Reports
-    fetchStoreReportsByCampaign({commit}){
+    fetchStoreReportsByName({commit}){
         commit('SET_MAIN_LOADING', true);
-        firebase.database().ref('/4-24-2018').orderByValue('store/id').equalTo('1011').on('value', (report) => {
+        // let define some variables for Dates
+        let date = new Date();
+        let dateStart = date.getDate();
+        console.log(dateStart);
+        firebase.database().ref('storedata').once('value', (report) => {
             let reports = [];
             let currentKey = null;
             // console.log(reports)
             report.forEach((childReport) => {
                 const obj = childReport.val();
                 currentKey = childReport.key;
-                console.log(obj);
+                // console.log(obj)
                 // reports[currentKey] = new Array;
-                // for (let key in obj){
-                //     reports.push({
-                //         // date: currentKey,
-                //         // Customer Information
-                //         customerName: obj[key].customerName,
-                //         customerContact: obj[key].customerContact,
-                //         customerRemarks: obj[key].customerRemarks,
-                //         // Conversion
-                //         conversion: obj[key].conversion,
-                //         // Taste Trail
-                //         tasteTrial: obj[key].tasteTrial,
-                //         pUFrozen: obj[key].pUFrozen,
-                //         pUCheese: obj[key].pUCheese,
-                //         pUButter: obj[key].pUButter,
-                //         // Store info
-                //         store: obj[key].store,
-                //         userName: obj[key].userName,
-                //         // Stock Information
-                //         purchased: obj[key].purchased
-                //     });
-                // }
+                for (let key in obj){
+                    reports.push({
+                        // date: currentKey,
+                        // Customer Information
+                        date:  obj[key],
+                        customerName: obj[key].customerName,
+                        customerContact: obj[key].customerContact,
+                        customerRemarks: obj[key].customerRemarks,
+                        // Conversion
+                        conversion: obj[key].conversion,
+                        // Taste Trail
+                        tasteTrial: obj[key].tasteTrial,
+                        pUFrozen: obj[key].pUFrozen,
+                        pUCheese: obj[key].pUCheese,
+                        pUButter: obj[key].pUButter,
+                        // Store info
+                        store: obj[key].store,
+                        userName: obj[key].userName,
+                        // Stock Information
+                        purchased: obj[key].purchased
+                    });
+                }
                 // currentKey = null;
             });
-            // console.log(reports)
             commit('SET_MAIN_LOADING', false);
-            // commit('setAllStoreReport', crypted);
+            // commit('setCurrentStoreReport', report);
         });
     },
     // Fetch All Last Reports

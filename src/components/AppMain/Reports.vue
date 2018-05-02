@@ -307,6 +307,7 @@
 //      Main Fetched Report
 //        Main fetched Report
         let report = this.$store.getters.storeReport;
+        console.log(report)
 //        Selected Store
         let selectedStore = this.storeSelected;
 //        Holders
@@ -536,7 +537,32 @@
       },
 //      converting Data Category wise
       toCategory(){
-//          first we have to reset this.selectedStoreReport
+//      first we Filter by Dates and Ids
+//          All reports
+        let allReports = this.$store.getters.storeReport;
+//        Filtered Store wise Reports
+        let storeFiltered = [];
+//        selected Store
+        let selectedStore = this.storeSelected.id;
+        console.log(selectedStore)
+        for(let key in allReports){
+//            if Command
+//            =============
+//            allReports[key].date == '4-24-2018' &&
+//            =============
+            if (allReports[key].store.id == selectedStore){
+                storeFiltered.push(allReports[key]);
+            }
+        }
+//      Lets Add Same Day Purchases
+        let CleanedReport = []
+        for (let key in CleanedReport) {
+//          make it even more Cleaner Version
+
+        };
+//      Now we make this date wise
+//        console.log(storeFiltered);
+//      first we have to reset this.selectedStoreReport
         this.selectedStoreReport = []
 //      To convert we first have to get Full Category List and purchase Object from DB
 //        Here is Category ListCache
@@ -668,7 +694,7 @@
         let selectedDate = this.selectedFormatedDate;
         let data = storeinfo;
         data['date'] = this.selectedFormatedDate;
-        this.$store.dispatch('fetchStoreReportsByObject',data).then(() =>{
+        this.$store.dispatch('fetchStoreReportsByName').then(() =>{
           setTimeout(() => {
             this.selectLoading = false;
             this.storeReportDialog = true;
@@ -696,15 +722,14 @@
     },
     created(){
 //        getting Random store Details
-      if (this.$store.getters.user === null) {
-        this.$router.push('/login')
-      }else{
+        if (this.$store.getters.user === null) {
+          this.$router.push('/login')
+        }else{
 //          Initiate Connection
 //        setting Time
         this.currentDate();
 //          Fetching Base Data Queries
         this.$store.dispatch('storeListUPD');
-        this.$store.dispatch('fetchStoreReportsByCampaign');
         console.log(this.stores);
       }
     },

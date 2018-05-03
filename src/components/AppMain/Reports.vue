@@ -294,6 +294,9 @@
       }
     },
     computed: {
+      appinfo(){
+        return this.$store.getters.appinfo
+      },
       compileDateValid(){
         return this.compileMonth.to !== null && this.compileMonth.from !== null
       },
@@ -545,6 +548,11 @@
 //        selected Store
         let selectedStore = this.storeSelected.id;
         console.log(selectedStore)
+//        Dates
+        let startDate = new Date(this.appinfo.startDate);
+        let endDate = this.appinfo.endDate;
+        let totalDays = startDate - 3;
+        console.log(totalDays.toLocaleDateString());
         for(let key in allReports){
 //            if Command
 //            =============
@@ -558,8 +566,10 @@
         let CleanedReport = []
         for (let key in storeFiltered) {
 //          make it even more Cleaner Version
-            if(storeFiltered[key]) {
+//            by collasping same dates
 
+            if(storeFiltered[key].date) {
+//              ============================= CONTINUE HERER =======================
             }
         };
 //      Now we make this date wise

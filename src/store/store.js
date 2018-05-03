@@ -31,6 +31,8 @@ export const store = new Vuex.Store({
       version : 'beta 0.095mr',
       status : true,
       theme: 'purple accent-4',
+      startDate: '4-24-2018',
+      endDate: '5-22-2018',
       mode: '',
       broadcast: true,
       subscription: true
@@ -60,7 +62,7 @@ export const store = new Vuex.Store({
     // Workers List
     // B.A List
     baList: {},
-    totalBA: null,
+    totalBA: 0,
     // Super visor List
     supervisorList: {},
     // usersession
@@ -873,7 +875,7 @@ export const store = new Vuex.Store({
     // Fetch All Last Reports
     fetchAllStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata').on('value', (report) => {
+      firebase.database().ref('storedata').limitToLast(1).on('value', (report) => {
         let reports = [];
         let currentKey = null;
         // console.log(reports)

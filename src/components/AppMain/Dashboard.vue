@@ -49,6 +49,25 @@
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>
           </v-flex>
+            <!--Recent Entries-->
+            <v-flex xs5 class="GraphsContainer elevation-20">
+                <!--Entries-->
+                <div class="header">Recent Entries</div>
+                <v-data-table
+                        :headers="recentEntriesHeader"
+                        :items="recentReport"
+                        hide-actions
+                        class="elevation-1"
+                        :loading = true
+                >
+                    <template slot="items" slot-scope="props">
+                        <td>{{ props.item.userName }}</td>
+                        <td>{{ props.item.store.name }}</td>
+                        <td>{{ props.item.store.address }}</td>
+                        <td>{{ props.item.customerName }}</td>
+                    </template>
+                </v-data-table>
+            </v-flex>
           <!--TOTAL TasteTrial-->
           <v-flex xs3 class="GraphsContainer elevation-20">
             <!--user chart-->
@@ -56,22 +75,22 @@
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>
           </v-flex>
-            <v-flex xs5 class="reportContainer elevation-20">
-                <div class="header indigo">Cheese Previous User</div>
-                <div class="barChart">
-                    <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
-                </div>
-            </v-flex>
         </v-layout>
-      <!--Previous Users of Butter-->
+      <!--Previous Users-->
       <v-layout row wrap class="mb-0 pb-0">
-          <v-flex xs6 class="reportContainer elevation-20">
+          <v-flex xs4 class="reportContainer elevation-20">
               <div class="header indigo">Butter Previous User</div>
               <div class="barChart">
                   <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
               </div>
           </v-flex>
-          <v-flex xs5 class="reportContainer elevation-20">
+          <v-flex xs3 class="reportContainer elevation-20">
+              <div class="header indigo">Cheese Previous User</div>
+              <div class="barChart">
+                  <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
+              </div>
+          </v-flex>
+          <v-flex xs2 class="reportContainer elevation-20">
               <div class="header indigo">Frozen Previous User</div>
               <div class="barChart">
                   <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
@@ -133,10 +152,13 @@
         lhr_Stores_visited: 15,
         isd_Stores_visited: 24,
 //      Charts Data
-        recentStore: [
-          {title: 'loading...'},
-          {title: 'loading...'},
-          {title: 'loading...git'},
+        recentReports: [
+        ],
+        recentEntriesHeader: [
+            { text: 'B.A Name', value: 'baName', sortable: false },
+            { text: 'Store Name', value: 'storeName', sortable: false },
+            { text: 'Address', value: 'storeAddress', sortable: false },
+            { text: 'Customer', value: 'customer', sortable: false }
         ],
         conversionData: null,
         tasteTrialData: null,
@@ -150,32 +172,6 @@
         soyaSupremeCanolaOilChart: null,
         soyaSupremeBanaspatiChart: null,
         soyaSupremeBanaspatiOliveChart: null,
-//        soyaSupremeSKU: {
-//          sscbottle1ltr: 1,
-//          sscbottle3ltr: 2,
-//          sscbottle5ltr: 3,
-//          sscpoly1_5ltr: 18,
-//          ssctin2_5ltr: 5,
-//          ssctin5ltr: 6,
-//          ssctin10ltr: 66,
-//          sscpresspour3ltr: 8,
-//          sscpresspour5ltr: 9,
-//          sscjcan10ltr: 10,
-//          sscjcan16ltr: 11,
-//          scbottle1ltr: 1,
-//          scbottle3ltr: 2,
-//          scbottle4_5ltr: 3,
-//          scpoly1_5ltr: 18,
-//          sctin2_5ltr: 5,
-//          scjcan10ltr: 6,
-//          scjcan16ltr: 66,
-//          ssbpoly1_5ltr: 1,
-//          ssbtin25ltr: 23,
-//          ssbtin5ltr: 3,
-//          ssbopoly1_5ltr: 33,
-//          ssbotin25ltr: 23,
-//          ssbotin5ltr: 3
-//        },
 //          ============================
         //      SKUS EMBORG
         skusEmborg:  [
@@ -405,10 +401,11 @@
 //      Fetching Interception Action
       this.$store.dispatch('fetchTotalInterceptions');
       this.$store.dispatch('fetchStoreReports');
-      this.$store.dispatch('fetchCampaignReports');
+//      this.$store.dispatch('fetchCampaignReports');
       this.$store.dispatch('fetchAllStoreReports');
       this.$store.dispatch('baListUPD');
       this.$store.dispatch('storeListUPD');
+//      let recentReports =
 //      setTimeout(() => {
 //        this.$store.dispatch('fetchCampaignReports');
 //      },4000)
@@ -424,6 +421,9 @@
     },
 
     computed:{
+      recentReport(){
+        return this.$store.getters.recentReport;
+      },
       totalBAs(){
         return this.$store.getters.totalBA;
       },
@@ -742,6 +742,9 @@
   .BigContainerChart div{
     height: 180px;
     z-index: 2;
+  }
+  table.table tbody td {
+      padding: 0px 0px 0px 0px;
   }
   soyaSupremeCookingOilbarChart{
     width: 100%;

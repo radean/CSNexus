@@ -66,6 +66,13 @@
                         <td>{{ props.item.store.address }}</td>
                         <td>{{ props.item.customerName }}</td>
                     </template>
+                    <template slot="footer">
+                        <td colspan="100%">
+                            <strong>
+                                <!--Footer Recent Entries-->
+                            </strong>
+                        </td>
+                    </template>
                 </v-data-table>
             </v-flex>
           <!--TOTAL TasteTrial-->

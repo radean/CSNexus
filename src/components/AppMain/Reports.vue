@@ -79,7 +79,7 @@
                           <td class="text-xs-left">{{ props.item.city }}</td>
                           <td class="text-xs-left">{{ props.item.address }}</td>
                           <td class="text-xs-center">
-                            <v-btn outline small fab color="purple" @click="fetchStoreReport(props.item)">
+                            <v-btn outline small fab color="purple" @click="fetchStoreReport(props.item, 2)">
                               <v-icon color="white">event_note</v-icon>
                             </v-btn>
                           </td>
@@ -123,6 +123,7 @@
                               <td class="text-xs-center grey-1">{{ props.item.Butter }}</td>
                               <td class="text-xs-center grey-3">{{ props.item.BlockCheeseCream }}</td>
                               <td class="text-xs-center grey-1">{{ props.item.Cream }}</td>
+                              <td class="text-xs-center grey-1">{{ props.item.Cheese }}</td>
                               <td class="text-xs-center grey-2">{{ props.item.CreamFoodService }}</td>
                               <td class="text-xs-center grey-3">{{ props.item.Milk }}</td>
                               <td class="text-xs-center grey-1">{{ props.item.ProcessCheese }}</td>
@@ -190,7 +191,9 @@
 
 <script>
 //  Setting Basic GUI
-  export default {
+  import {store} from "../../store/store";
+
+export default {
     data () {
       return {
 //      GUI DATA
@@ -541,43 +544,179 @@
 //      converting Data Category wise
       toCategory(){
 //      first we Filter by Dates and Ids
-//          All reports
+//        All reports
         let allReports = this.$store.getters.storeReport;
 //        Filtered Store wise Reports
         let storeFiltered = [];
+        let storeReports = {};
 //        selected Store
         let selectedStore = this.storeSelected.id;
-        console.log(selectedStore)
+//          console.log(selectedStore)
 //        Dates
         let startDate = new Date(this.appinfo.startDate);
-        let endDate = this.appinfo.endDate;
-        let totalDays = startDate - 3;
-        console.log(totalDays.toLocaleDateString());
+        let endDate = new Date(this.appinfo.endDate);
+        let totalDays = startDate;
+
+//        End Date Formated
+//        let endYear = 1900 + endDate.getYear();
+//        let endDay = ("0" + endDate.getDate()).slice(-2);
+//        let endMonth = endDate.getMonth() + 1;
+//          console.log(formatedStartDate);
+//        console.log('Start Date ' + startMonth + '-' + startDay + '-' + startYear);
+//        console.log('End Date ' + endMonth + '-' + endDay + '-' + endYear);
+//        Now Calculating Complete Duration of Activity\
+        totalDays = Math.abs(startDate.getTime() - endDate.getTime());
+        let diffDays = Math.ceil(totalDays / (1000 * 3600 * 24));
+//        console.log('Total Days ' + diffDays);
+//        Sorting Selected Store
         for(let key in allReports){
-//            if Command
-//            =============
-//            allReports[key].date == '4-24-2018' &&
-//            =============
-            if (allReports[key].store.id == selectedStore){
-                storeFiltered.push(allReports[key]);
+//        if Command on selected Store
+//        =============
+//        allReports[key].date == '4-24-2018' &&
+//        =============
+            if(allReports[key].store.id == selectedStore){
+                storeFiltered.push(allReports[key])
             }
         }
-//      Lets Add Same Day Purchases
+//        console.log(storeFiltered)
+//      Lets Add Same Day Purchas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              es
         let CleanedReport = []
-        for (let key in storeFiltered) {
-//          make it even more Cleaner Version
+        let initDate = new Date(startDate);
+        let initStartYear = 1900 + initDate.getYear();
+        let initStartDay = ("0" + initDate.getDate()).slice(-2);
+        let initStartMonth = initDate.getMonth() + 1;
+        let formatedStartDate = '';
+//      this loop will iterate through all Dates
+        let purchased = {
+              BlockCheese: 0,
+              Butter: 0,
+              BlockCheeseCream: 0,
+              Cream: 0,
+              Cheese: 0,
+              CreamFoodService: 0,
+              Milk: 0,
+              ProcessCheese: 0,
+              Shakes: 0,
+              ShreddedCheese: 0,
+              Fish: 0,
+              FrenchFries: 0,
+              Fruits: 0,
+              Meat: 0,
+              SeaFood: 0,
+              Vegetable: 0
+      };
+//      Loop According to Duration of Activity
+        for(let i = 0; i < diffDays; i++) {
+//        Setting Up Dates
+          initDate.setDate(initDate.getDate() + 1);
+          initStartYear = 1900 + initDate.getYear();
+          initStartDay = ("0" + initDate.getDate()).slice(-2);
+          initStartMonth = initDate.getMonth() + 1;
+          formatedStartDate = initStartMonth + '-' + initStartDay + '-' + initStartYear;
+//          console.log(formatedStartDate)
+//        Now we make sure we have enough Date
+          for (let key in storeFiltered) {
+//            make it even more Cleaner Version
 //            by collasping same dates
-
-            if(storeFiltered[key].date) {
-//              ============================= CONTINUE HERER =======================
+//            console.log(storeFiltered[key].date);
+            if(storeFiltered[key].date == formatedStartDate) {
+//            ================ CONTINUE HERE ====================
+//            console.log(storeFiltered[key])
+//            We have to dig more to get purchased values
+//            console.log(totalPurchase[key].purchased);
+              let totalItems = storeFiltered[key].purchased;
+              for (let key in totalItems){
+                  let Val = parseInt(key);
+                  let product = '';
+                  let amount = parseInt(totalItems[key]);
+                  if(Val >= 1001 && Val <= 1012){
+                      product = 'BlockCheese';
+                      purchased.BlockCheese = purchased.BlockCheese + amount
+                  } else
+                  if(Val >= 1013 && Val <= 1020){
+                      product = 'Butter';
+                      purchased.Butter = purchased.Butter + amount
+                  } else
+                  if(Val >= 1021 && Val <= 1039){
+                      product = 'Cheese';
+                      purchased.Cheese = purchased.Cheese + amount
+                  } else
+                  if(Val >= 1040 && Val <= 1049){
+                      product = 'Cream';
+                      purchased.Cream = purchased.Cream + amount
+                  } else
+                  if(Val >= 1050 && Val <= 1052){
+                      product = 'Milk';
+                      purchased.Milk = purchased.Milk + amount
+                  } else
+                  if(Val >= 1053 && Val <= 1064){
+                      product = 'ProcessCheese';
+                      purchased.ProcessCheese = purchased.ProcessCheese + amount
+                  } else
+                  if(Val >= 1064 && Val <= 1067){
+                      product = 'Shakes';
+                      purchased.Shakes = purchased.Shakes + amount
+                  } else
+                  if(Val >= 1068 && Val <= 1075){
+                      product = 'ShreddedCheese';
+                      purchased.ShreddedCheese = purchased.ShreddedCheese + amount
+                  } else
+                  if(Val >= 1076 && Val <= 1076){
+                      product = 'Fish';
+                      purchased.Fish = purchased.Fish + amount
+                  } else
+                  if(Val >= 1077 && Val <= 1080){
+                      product = 'FrenchFries';
+                      purchased.FrenchFries = purchased.FrenchFries + amount
+                  } else
+                  if(Val >= 1081 && Val <= 1083){
+                      product = 'Fruits';
+                      purchased.Fruits = purchased.Fruits + amount
+                  } else
+                  if(Val >= 1084 && Val <= 1094){
+                      product = 'Meat';
+                      purchased.Meat = purchased.Meat + amount
+                  } else
+                  if(Val >= 1095 && Val <= 1098){
+                      product = 'SeaFood';
+                      purchased.SeaFood = purchased.SeaFood + amount
+                  } else
+                  if(Val >= 1099 && Val <= 1131){
+                      product = 'Vegetable';
+                      purchased.Vegetable = purchased.Vegetable + amount
+                  }
+              }
+                CleanedReport[formatedStartDate] = storeFiltered[key];
+                CleanedReport[formatedStartDate].purchasedCategory = purchased;
             }
-        };
+          };
+            purchased = {
+                BlockCheese: 0,
+                Butter: 0,
+                BlockCheeseCream: 0,
+                Cream: 0,
+                Cheese: 0,
+                CreamFoodService: 0,
+                Milk: 0,
+                ProcessCheese: 0,
+                Shakes: 0,
+                ShreddedCheese: 0,
+                Fish: 0,
+                FrenchFries: 0,
+                Fruits: 0,
+                Meat: 0,
+                SeaFood: 0,
+                Vegetable: 0
+            };
+//        console.log(purchased)
+        }
+        console.log(CleanedReport);
 //      Now we make this date wise
-//        console.log(storeFiltered);
+//      console.log(storeFiltered);
 //      first we have to reset this.selectedStoreReport
         this.selectedStoreReport = []
 //      To convert we first have to get Full Category List and purchase Object from DB
-//        Here is Category ListCache
+//      Here is Category ListCache
         let totalPurchase = this.$store.getters.storeReport;
         let productCategories = {
             BlockCheese: 0,
@@ -596,8 +735,7 @@
             SeaFood: 0,
             Vegetable: 0
         };
-
-//        now we require an Purchase object which must carry details about purchases and their ids
+//      now we require an Purchase object which must carry details about purchases and their ids
         for(let key in totalPurchase) {
             // if Key lies among product Range
 //            We have to dig more to get purchased values
@@ -666,7 +804,7 @@
                 }
             }
         }
-//        Counting Interceptions through Purchase Object
+//      Counting Interceptions through Purchase Object
         let currentReport = this.totalReport;
         let totalInterceptions = 0;
         let username = ''
@@ -674,8 +812,8 @@
             username = currentReport[key].userName;
             totalInterceptions++
         }
-//        console.log("Selected Report");
-//        Now i should add more information to purchased object
+//      console.log("Selected Report");
+//      Now i should add more information to purchased object
         let report = productCategories;
         let store = this.storeSelected;
         report['interception'] = totalInterceptions;
@@ -685,6 +823,291 @@
         this.selectedStoreReport.push(report);
 
       },
+//      converting Data date wise
+      toDatewise(){
+//      first we Filter by Dates and Ids
+//        All reports
+      let allReports = this.$store.getters.storeReport;
+//        Filtered Store wise Reports
+      let storeFiltered = [];
+      let storeReports = {};
+//        selected Store
+    let selectedStore = this.storeSelected.id;
+//          console.log(selectedStore)
+//        Dates
+    let startDate = new Date(this.appinfo.startDate);
+    let endDate = new Date(this.appinfo.endDate);
+    let totalDays = startDate;
+
+//        End Date Formated
+//        let endYear = 1900 + endDate.getYear();
+//        let endDay = ("0" + endDate.getDate()).slice(-2);
+//        let endMonth = endDate.getMonth() + 1;
+//          console.log(formatedStartDate);
+//        console.log('Start Date ' + startMonth + '-' + startDay + '-' + startYear);
+//        console.log('End Date ' + endMonth + '-' + endDay + '-' + endYear);
+//        Now Calculating Complete Duration of Activity\
+    totalDays = Math.abs(startDate.getTime() - endDate.getTime());
+    let diffDays = Math.ceil(totalDays / (1000 * 3600 * 24));
+//        console.log('Total Days ' + diffDays);
+//        Sorting Selected Store
+    for(let key in allReports){
+//        if Command on selected Store
+//        =============
+//        allReports[key].date == '4-24-2018' &&
+//        =============
+        if(allReports[key].store.id == selectedStore){
+            storeFiltered.push(allReports[key])
+        }
+    }
+//        console.log(storeFiltered)
+//      Lets Add Same Day Purchas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              es
+    let CleanedReport = []
+    let initDate = new Date(startDate);
+    let initStartYear = 1900 + initDate.getYear();
+    let initStartDay = ("0" + initDate.getDate()).slice(-2);
+    let initStartMonth = initDate.getMonth() + 1;
+    let formatedStartDate = '';
+//      this loop will iterate through all Dates
+    let purchased = {
+        BlockCheese: 0,
+        Butter: 0,
+        BlockCheeseCream: 0,
+        Cream: 0,
+        Cheese: 0,
+        CreamFoodService: 0,
+        Milk: 0,
+        ProcessCheese: 0,
+        Shakes: 0,
+        ShreddedCheese: 0,
+        Fish: 0,
+        FrenchFries: 0,
+        Fruits: 0,
+        Meat: 0,
+        SeaFood: 0,
+        Vegetable: 0
+    };
+//      Loop According to Duration of Activity
+    for(let i = 0; i < diffDays; i++) {
+//        Setting Up Dates
+        initDate.setDate(initDate.getDate() + 1);
+        initStartYear = 1900 + initDate.getYear();
+        initStartDay = ("0" + initDate.getDate()).slice(-2);
+        initStartMonth = initDate.getMonth() + 1;
+        formatedStartDate = initStartMonth + '-' + initStartDay + '-' + initStartYear;
+//          console.log(formatedStartDate)
+//        Now we make sure we have enough Date
+        for (let key in storeFiltered) {
+//            make it even more Cleaner Version
+//            by collasping same dates
+//            console.log(storeFiltered[key].date);
+            if(storeFiltered[key].date == formatedStartDate) {
+//            ================ CONTINUE HERE ====================
+//            console.log(storeFiltered[key])
+//            We have to dig more to get purchased values
+//            console.log(totalPurchase[key].purchased);
+                let totalItems = storeFiltered[key].purchased;
+                for (let key in totalItems){
+                    let Val = parseInt(key);
+                    let product = '';
+                    let amount = parseInt(totalItems[key]);
+                    if(Val >= 1001 && Val <= 1012){
+                        product = 'BlockCheese';
+                        purchased.BlockCheese = purchased.BlockCheese + amount
+                    } else
+                    if(Val >= 1013 && Val <= 1020){
+                        product = 'Butter';
+                        purchased.Butter = purchased.Butter + amount
+                    } else
+                    if(Val >= 1021 && Val <= 1039){
+                        product = 'Cheese';
+                        purchased.Cheese = purchased.Cheese + amount
+                    } else
+                    if(Val >= 1040 && Val <= 1049){
+                        product = 'Cream';
+                        purchased.Cream = purchased.Cream + amount
+                    } else
+                    if(Val >= 1050 && Val <= 1052){
+                        product = 'Milk';
+                        purchased.Milk = purchased.Milk + amount
+                    } else
+                    if(Val >= 1053 && Val <= 1064){
+                        product = 'ProcessCheese';
+                        purchased.ProcessCheese = purchased.ProcessCheese + amount
+                    } else
+                    if(Val >= 1064 && Val <= 1067){
+                        product = 'Shakes';
+                        purchased.Shakes = purchased.Shakes + amount
+                    } else
+                    if(Val >= 1068 && Val <= 1075){
+                        product = 'ShreddedCheese';
+                        purchased.ShreddedCheese = purchased.ShreddedCheese + amount
+                    } else
+                    if(Val >= 1076 && Val <= 1076){
+                        product = 'Fish';
+                        purchased.Fish = purchased.Fish + amount
+                    } else
+                    if(Val >= 1077 && Val <= 1080){
+                        product = 'FrenchFries';
+                        purchased.FrenchFries = purchased.FrenchFries + amount
+                    } else
+                    if(Val >= 1081 && Val <= 1083){
+                        product = 'Fruits';
+                        purchased.Fruits = purchased.Fruits + amount
+                    } else
+                    if(Val >= 1084 && Val <= 1094){
+                        product = 'Meat';
+                        purchased.Meat = purchased.Meat + amount
+                    } else
+                    if(Val >= 1095 && Val <= 1098){
+                        product = 'SeaFood';
+                        purchased.SeaFood = purchased.SeaFood + amount
+                    } else
+                    if(Val >= 1099 && Val <= 1131){
+                        product = 'Vegetable';
+                        purchased.Vegetable = purchased.Vegetable + amount
+                    }
+                }
+                CleanedReport[formatedStartDate] = purchased;
+                CleanedReport[formatedStartDate].userName = storeFiltered[key].userName;
+                CleanedReport[formatedStartDate].interception = 23;
+                CleanedReport[formatedStartDate].address = this.storeSelected.address
+                CleanedReport[formatedStartDate].date = formatedStartDate;
+            }
+        };
+        purchased = {
+            BlockCheese: 0,
+            Butter: 0,
+            BlockCheeseCream: 0,
+            Cream: 0,
+            Cheese: 0,
+            CreamFoodService: 0,
+            Milk: 0,
+            ProcessCheese: 0,
+            Shakes: 0,
+            ShreddedCheese: 0,
+            Fish: 0,
+            FrenchFries: 0,
+            Fruits: 0,
+            Meat: 0,
+            SeaFood: 0,
+            Vegetable: 0
+        };
+//        console.log(purchased)
+    }
+    this.selectedStoreReport = CleanedReport;
+//      Now we make this date wise
+      console.log(CleanedReport);
+//      first we have to reset this.selectedStoreReport
+//    this.selectedStoreReport = []
+//      To convert we first have to get Full Category List and purchase Object from DB
+//      Here is Category ListCache
+//    let totalPurchase = this.$store.getters.storeReport;
+//    let productCategories = {
+//        BlockCheese: 0,
+//        Butter: 0,
+//        BlockCheeseCream: 0,
+//        Cream: 0,
+//        CreamFoodService: 0,
+//        Milk: 0,
+//        ProcessCheese: 0,
+//        Shakes: 0,
+//        ShreddedCheese: 0,
+//        Fish: 0,
+//        FrenchFries: 0,
+//        Fruits: 0,
+//        Meat: 0,
+//        SeaFood: 0,
+//        Vegetable: 0
+//    };
+//      now we require an Purchase object which must carry details about purchases and their ids
+//    for(let key in totalPurchase) {
+//        // if Key lies among product Range
+////            We have to dig more to get purchased values
+////            console.log(totalPurchase[key].purchased);
+//        let totalItems = totalPurchase[key].purchased;
+//        for (let key in totalItems){
+//            let Val = parseInt(key);
+//            let product = '';
+//            let amount = parseInt(totalItems[key]);
+////                console.log(amount)
+//            if(Val >= 1001 && Val <= 1012){
+//                product = 'BlockCheese';
+//                productCategories.BlockCheese = productCategories.BlockCheese + amount
+//            } else
+//            if(Val >= 1013 && Val <= 1020){
+//                product = 'Butter';
+//                productCategories.Butter = productCategories.Butter + amount
+//            } else
+//            if(Val >= 1021 && Val <= 1039){
+//                product = 'Cheese';
+//                productCategories.Cheese = productCategories.Cheese + amount
+//            } else
+//            if(Val >= 1040 && Val <= 1049){
+//                product = 'Cream';
+//                productCategories.Cream = productCategories.Cream + amount
+//            } else
+//            if(Val >= 1050 && Val <= 1052){
+//                product = 'Milk';
+//                productCategories.Milk = productCategories.Milk + amount
+//            } else
+//            if(Val >= 1053 && Val <= 1064){
+//                product = 'ProcessCheese';
+//                productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+//            } else
+//            if(Val >= 1064 && Val <= 1067){
+//                product = 'Shakes';
+//                productCategories.Shakes = productCategories.Shakes + amount
+//            } else
+//            if(Val >= 1068 && Val <= 1075){
+//                product = 'ShreddedCheese';
+//                productCategories.ShreddedCheese = productCategories.ShreddedCheese + amount
+//            } else
+//            if(Val >= 1076 && Val <= 1076){
+//                product = 'Fish';
+//                productCategories.Fish = productCategories.Fish + amount
+//            } else
+//            if(Val >= 1077 && Val <= 1080){
+//                product = 'FrenchFries';
+//                productCategories.FrenchFries = productCategories.FrenchFries + amount
+//            } else
+//            if(Val >= 1081 && Val <= 1083){
+//                product = 'Fruits';
+//                productCategories.Fruits = productCategories.Fruits + amount
+//            } else
+//            if(Val >= 1084 && Val <= 1094){
+//                product = 'Meat';
+//                productCategories.Meat = productCategories.Meat + amount
+//            } else
+//            if(Val >= 1095 && Val <= 1098){
+//                product = 'SeaFood';
+//                productCategories.SeaFood = productCategories.SeaFood + amount
+//            } else
+//            if(Val >= 1099 && Val <= 1131){
+//                product = 'Vegetable';
+//                productCategories.Vegetable = productCategories.Vegetable + amount
+//            }
+//        }
+//    }
+//      Counting Interceptions through Purchase Object
+//    let currentReport = this.totalReport;
+//    let totalInterceptions = 0;
+//    let username = ''
+//    for(let key in currentReport){
+//        username = currentReport[key].userName;
+//        totalInterceptions++
+//    }
+//      console.log("Selected Report");
+//      Now i should add more information to purchased object
+//    let report = productCategories;
+//    let store = this.storeSelected;
+//    report['interception'] = totalInterceptions;
+//    report['address'] = store.address;
+//    report['userName'] = username;
+//    console.log(report)
+//    this.selectedStoreReport.push(report);
+
+},
 //      COMPILE
       fetchCompileReports(){
         this.selectLoading = true;
@@ -699,7 +1122,7 @@
 //        this.storeMenu = false;
       },
 //      STORE QUERY
-      fetchStoreReport(storeinfo){
+      fetchStoreReport(storeinfo,parameter){
         this.selectLoading = true;
         this.formatDate();
 //      let init = {date: this.storeDateQuery, store: storeinfo};
@@ -715,7 +1138,14 @@
         console.log(storeinfo);
         this.storeSelected = storeinfo;
         this.storeMenu = false;
-        this.toCategory();
+        switch (parameter){
+            case 1:
+                this.toCategory();
+                break;
+            case 2:
+                this.toDatewise();
+                break;
+        }
       },
 //      CONSUMER FETCH REPORT
       fetchConsumerReport(storeinfo){

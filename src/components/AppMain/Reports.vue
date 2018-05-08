@@ -13,9 +13,9 @@
         <v-tab key="2" href="#tab-c2" >
           Store Report
         </v-tab>
-        <v-tab key="3" href="#tab-c3">
-          Compile Report
-        </v-tab>
+        <!--<v-tab key="3" href="#tab-c3">-->
+          <!--Compile Report-->
+        <!--</v-tab>-->
       </v-tabs>
       </v-toolbar>
       <v-tabs-items v-model="reportTabs">
@@ -72,7 +72,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search Store" single-line hide-details v-model="storeSearch"></v-text-field>
                       </v-card-title>
-                      <v-data-table :headers="storeListHeaders" :items="storeList" :search="storeSearch">
+                      <v-data-table :headers="storeListHeaders" :items="storeList" :search="storeSearch" :rows-per-page-items="[10,20,{text:'All',value:-1}]">
                         <template slot="items" slot-scope="props">
                           <td class="text-xs-center">{{ props.item.id }}</td>
                           <td class="text-xs-left">{{ props.item.name }}</td>
@@ -873,14 +873,9 @@ export default {
 //      first we Filter by Dates and Ids
 //        All reports
       let allReports = this.$store.getters.storeReport;
-      let StoreReportFooter = this.storeReportFooter
 //        Filtered Store wise Reports
-      let storeFiltered = [];
       let sortedReports = [];
-      let storeReports = {};
-//        selected Store
       let selectedStore = this.storeSelected.id;
-//          console.log(selectedStore)
 //        Dates
       let startDate = new Date(this.appinfo.startDate);
       let endDate = new Date(this.appinfo.endDate);
@@ -950,138 +945,132 @@ export default {
             sortedReports[keyIndex].date = allReports[key].date;
             sortedReports[keyIndex].interception = interceptions;
 //          Adding Purchase
-//            totalPurchase = allReports[key];
-//          console.log(totalPurchase)
 //          now we require an Purchase object which must carry details about purchases and their ids
-//            for(let key in allReports) {
 //          if Key lies among product Range
 //          We have to dig more to get purchased values
-//          console.log(totalPurchase[key].purchased);
-              let totalItems = allReports[key].purchased;
-//            console.log(totalItems)
-              for (let key in totalItems){
+            let totalItems = allReports[key].purchased;
+            for (let key in totalItems){
+              let Val = parseInt(key);
+              let product = '';
+              let amount = parseInt(totalItems[key]);
+              if(Val >= 1001 && Val <= 1012){
+                  product = 'BlockCheese';
+                  productCategories.BlockCheese = productCategories.BlockCheese + amount
+              } else
+              if(Val >= 1013 && Val <= 1020){
+                  product = 'Butter';
+                  productCategories.Butter = productCategories.Butter + amount
+              } else
+              if(Val >= 1021 && Val <= 1039){
+                  product = 'Cheese';
+                  productCategories.Cheese = productCategories.Cheese + amount
+              } else
+              if(Val >= 1040 && Val <= 1049){
+                  product = 'Cream';
+                  productCategories.Cream = productCategories.Cream + amount
+              } else
+              if(Val >= 1050 && Val <= 1052){
+                  product = 'Milk';
+                  productCategories.Milk = productCategories.Milk + amount
+              } else
+              if(Val >= 1053 && Val <= 1064){
+                  product = 'ProcessCheese';
+                  productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+              } else
+              if(Val >= 1064 && Val <= 1067){
+                  product = 'Shakes';
+                  productCategories.Shakes = productCategories.Shakes + amount
+              } else
+              if(Val >= 1068 && Val <= 1075){
+                  product = 'ShreddedCheese';
+                  productCategories.ShreddedCheese = productCategories.ShreddedCheese + amount
+              } else
+              if(Val >= 1076 && Val <= 1076){
+                  product = 'Fish';
+                  productCategories.Fish = productCategories.Fish + amount
+              } else
+              if(Val >= 1077 && Val <= 1080){
+                  product = 'FrenchFries';
+                  productCategories.FrenchFries = productCategories.FrenchFries + amount
+              } else
+              if(Val >= 1081 && Val <= 1083){
+                  product = 'Fruits';
+                  productCategories.Fruits = productCategories.Fruits + amount
+              } else
+              if(Val >= 1084 && Val <= 1094){
+                  product = 'Meat';
+                  productCategories.Meat = productCategories.Meat + amount
+              } else
+              if(Val >= 1095 && Val <= 1098){
+                  product = 'SeaFood';
+                  productCategories.SeaFood = productCategories.SeaFood + amount
+              } else
+              if(Val >= 1099 && Val <= 1131){
+                  product = 'Vegetable';
+                  productCategories.Vegetable = productCategories.Vegetable + amount
+              }
+            }
+            for (let key in totalItems){
                 let Val = parseInt(key);
                 let product = '';
                 let amount = parseInt(totalItems[key]);
                 if(Val >= 1001 && Val <= 1012){
                     product = 'BlockCheese';
-                    productCategories.BlockCheese = productCategories.BlockCheese + amount
+                    totalProductCategories.BlockCheese = totalProductCategories.BlockCheese + amount
                 } else
                 if(Val >= 1013 && Val <= 1020){
                     product = 'Butter';
-                    productCategories.Butter = productCategories.Butter + amount
+                    totalProductCategories.Butter = totalProductCategories.Butter + amount
                 } else
                 if(Val >= 1021 && Val <= 1039){
                     product = 'Cheese';
-                    productCategories.Cheese = productCategories.Cheese + amount
+                    totalProductCategories.Cheese = totalProductCategories.Cheese + amount
                 } else
                 if(Val >= 1040 && Val <= 1049){
                     product = 'Cream';
-                    productCategories.Cream = productCategories.Cream + amount
+                    totalProductCategories.Cream = totalProductCategories.Cream + amount
                 } else
                 if(Val >= 1050 && Val <= 1052){
                     product = 'Milk';
-                    productCategories.Milk = productCategories.Milk + amount
+                    totalProductCategories.Milk = totalProductCategories.Milk + amount
                 } else
                 if(Val >= 1053 && Val <= 1064){
                     product = 'ProcessCheese';
-                    productCategories.ProcessCheese = productCategories.ProcessCheese + amount
+                    totalProductCategories.ProcessCheese = totalProductCategories.ProcessCheese + amount
                 } else
                 if(Val >= 1064 && Val <= 1067){
                     product = 'Shakes';
-                    productCategories.Shakes = productCategories.Shakes + amount
+                    totalProductCategories.Shakes = totalProductCategories.Shakes + amount
                 } else
                 if(Val >= 1068 && Val <= 1075){
                     product = 'ShreddedCheese';
-                    productCategories.ShreddedCheese = productCategories.ShreddedCheese + amount
+                    totalProductCategories.ShreddedCheese = totalProductCategories.ShreddedCheese + amount
                 } else
                 if(Val >= 1076 && Val <= 1076){
                     product = 'Fish';
-                    productCategories.Fish = productCategories.Fish + amount
+                    totalProductCategories.Fish = totalProductCategories.Fish + amount
                 } else
                 if(Val >= 1077 && Val <= 1080){
                     product = 'FrenchFries';
-                    productCategories.FrenchFries = productCategories.FrenchFries + amount
+                    totalProductCategories.FrenchFries = totalProductCategories.FrenchFries + amount
                 } else
                 if(Val >= 1081 && Val <= 1083){
                     product = 'Fruits';
-                    productCategories.Fruits = productCategories.Fruits + amount
+                    totalProductCategories.Fruits = totalProductCategories.Fruits + amount
                 } else
                 if(Val >= 1084 && Val <= 1094){
                     product = 'Meat';
-                    productCategories.Meat = productCategories.Meat + amount
+                    totalProductCategories.Meat = totalProductCategories.Meat + amount
                 } else
                 if(Val >= 1095 && Val <= 1098){
                     product = 'SeaFood';
-                    productCategories.SeaFood = productCategories.SeaFood + amount
+                    totalProductCategories.SeaFood = totalProductCategories.SeaFood + amount
                 } else
                 if(Val >= 1099 && Val <= 1131){
                     product = 'Vegetable';
-                    productCategories.Vegetable = productCategories.Vegetable + amount
+                    totalProductCategories.Vegetable = totalProductCategories.Vegetable + amount
                 }
-              }
-              for (let key in totalItems){
-                  let Val = parseInt(key);
-                  let product = '';
-                  let amount = parseInt(totalItems[key]);
-                  if(Val >= 1001 && Val <= 1012){
-                      product = 'BlockCheese';
-                      totalProductCategories.BlockCheese = totalProductCategories.BlockCheese + amount
-                  } else
-                  if(Val >= 1013 && Val <= 1020){
-                      product = 'Butter';
-                      totalProductCategories.Butter = totalProductCategories.Butter + amount
-                  } else
-                  if(Val >= 1021 && Val <= 1039){
-                      product = 'Cheese';
-                      totalProductCategories.Cheese = totalProductCategories.Cheese + amount
-                  } else
-                  if(Val >= 1040 && Val <= 1049){
-                      product = 'Cream';
-                      totalProductCategories.Cream = totalProductCategories.Cream + amount
-                  } else
-                  if(Val >= 1050 && Val <= 1052){
-                      product = 'Milk';
-                      totalProductCategories.Milk = totalProductCategories.Milk + amount
-                  } else
-                  if(Val >= 1053 && Val <= 1064){
-                      product = 'ProcessCheese';
-                      totalProductCategories.ProcessCheese = totalProductCategories.ProcessCheese + amount
-                  } else
-                  if(Val >= 1064 && Val <= 1067){
-                      product = 'Shakes';
-                      totalProductCategories.Shakes = totalProductCategories.Shakes + amount
-                  } else
-                  if(Val >= 1068 && Val <= 1075){
-                      product = 'ShreddedCheese';
-                      totalProductCategories.ShreddedCheese = totalProductCategories.ShreddedCheese + amount
-                  } else
-                  if(Val >= 1076 && Val <= 1076){
-                      product = 'Fish';
-                      totalProductCategories.Fish = totalProductCategories.Fish + amount
-                  } else
-                  if(Val >= 1077 && Val <= 1080){
-                      product = 'FrenchFries';
-                      totalProductCategories.FrenchFries = totalProductCategories.FrenchFries + amount
-                  } else
-                  if(Val >= 1081 && Val <= 1083){
-                      product = 'Fruits';
-                      totalProductCategories.Fruits = totalProductCategories.Fruits + amount
-                  } else
-                  if(Val >= 1084 && Val <= 1094){
-                      product = 'Meat';
-                      totalProductCategories.Meat = totalProductCategories.Meat + amount
-                  } else
-                  if(Val >= 1095 && Val <= 1098){
-                      product = 'SeaFood';
-                      totalProductCategories.SeaFood = totalProductCategories.SeaFood + amount
-                  } else
-                  if(Val >= 1099 && Val <= 1131){
-                      product = 'Vegetable';
-                      totalProductCategories.Vegetable = totalProductCategories.Vegetable + amount
-                  }
-              }
-//            }
+            }
           }
           else {
 //         Follow these parameter when date changes occur
@@ -1104,29 +1093,21 @@ export default {
                   SeaFood: 0,
                   Vegetable: 0
             };
-//         Object Resetter
-//          for(let key in productCategories){
-//              productCategories[key] = 0
-//          }
             dateholder = allReports[key].date;
             keyIndex++
           }
-          console.log(dateholder);
         }
-
       }
       totalProductCategories['interceptions'] = totalInterceptions;
 //      interceptions = 0;
 //    fetch total Dates
-      console.log(' Sorted Report From Sorter ',sortedReports);
-      console.log(' Total Purchases ',totalProductCategories);
+//      console.log(' Sorted Report From Sorter ',sortedReports);
+//      console.log(' Total Purchases ',totalProductCategories);
 
 //    Object Resetter
 //      for(let key in StoreReportFooter){
 //          StoreReportFooter[key] = 0
 //      }
-
-
 
 //      Finally Set Global Variable
       this.selectedStoreReport = sortedReports;

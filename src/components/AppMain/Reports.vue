@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <v-toolbar color="purple" dark tabs>
       <v-toolbar-title>REPORTS</v-toolbar-title>
       <!--<v-spacer></v-spacer>-->
-      <v-tabs centered color="purple" slot="extension" slider-color="yellow" v-model="reportTabs">
+      <v-tabs centered color="purple" fixed-tabs slot="extension" slider-color="yellow" v-model="reportTabs">
         <!--<v-tab-->
                 <!--key="1"-->
                 <!--href="#tab-$c1"-->
@@ -29,43 +29,43 @@
           </v-card>
         </v-tab-item>
         <v-tab-item key="2" id="tab-c2">
-          <v-card flat>
+          <v-card flat width="100%">
             <v-card-text>
-              <v-container grid-list-md text-xs-center>
+              <v-container fluid text-xs-center>
                 <v-layout row wrap>
-                  <v-flex xs12 sm12>
+                  <v-flex xs12 lg12 mb-3 >
                     <h2 class="display-1">Store Report</h2>
                   </v-flex>
-                  <v-flex xs6 class="text-xs-left">Sort Options</v-flex>
-                  <v-flex xs12>
+                  <!--<v-flex xs6 class="text-xs-left">Sort Options</v-flex>-->
+                  <v-flex lg12 >
                     <v-divider></v-divider>
-                    <v-flex xs4 offset-xs8 class="mt-3">
-                      <v-dialog
-                              ref="dateDialogue"
-                              persistent
-                              v-model="dateDialogue"
-                              lazy
-                              full-width
-                              width="290px"
-                              :return-value.sync="selectedDate"
-                      >
-                        <v-text-field
-                                slot="activator"
-                                label="Date"
-                                v-model="selectedDate"
-                                prepend-icon="event"
-                                readonly
-                        ></v-text-field>
-                        <v-date-picker v-model="selectedDate" scrollable @input="formatDate()">
-                          <v-spacer></v-spacer>
-                          <v-btn flat color="primary" @click="dateDialogue = false">Cancel</v-btn>
-                          <v-btn flat color="primary" @click="$refs.dateDialogue.save(selectedDate)">OK</v-btn>
-                        </v-date-picker>
-                      </v-dialog>
-                    </v-flex>
+                    <!--<v-flex lh4 offset-xs8 class="mt-3">-->
+                      <!--<v-dialog-->
+                              <!--ref="dateDialogue"-->
+                              <!--persistent-->
+                              <!--v-model="dateDialogue"-->
+                              <!--lazy-->
+                              <!--full-width-->
+                              <!--width="290px"-->
+                              <!--:return-value.sync="selectedDate"-->
+                      <!--&gt;-->
+                        <!--<v-text-field-->
+                                <!--slot="activator"-->
+                                <!--label="Date"-->
+                                <!--v-model="selectedDate"-->
+                                <!--prepend-icon="event"-->
+                                <!--readonly-->
+                        <!--&gt;</v-text-field>-->
+                        <!--<v-date-picker v-model="selectedDate" scrollable @input="formatDate()">-->
+                          <!--<v-spacer></v-spacer>-->
+                          <!--<v-btn flat color="primary" @click="dateDialogue = false">Cancel</v-btn>-->
+                          <!--<v-btn flat color="primary" @click="$refs.dateDialogue.save(selectedDate)">OK</v-btn>-->
+                        <!--</v-date-picker>-->
+                      <!--</v-dialog>-->
+                    <!--</v-flex>-->
                   </v-flex>
-                  <v-flex xs12>
-                    <v-divider></v-divider>
+                  <v-flex lg12>
+                    <!--<v-divider></v-divider>-->
                     <v-card>
                       <v-card-title>
                         Stores List
@@ -117,6 +117,7 @@
                           <v-data-table :headers="storeReportHeaders" :items="selectedStoreReport" hide-actions class="elevation-1">
                             <template slot="items" slot-scope="props">
                               <td>{{ props.item.userName }}</td>
+                              <td>{{ props.item.date }}</td>
                               <td class="text-xs-center grey-1">{{ props.item.address }}</td>
                               <td class="text-xs-center grey-2">{{ props.item.interception }}</td>
                               <td class="text-xs-center grey-3">{{ props.item.BlockCheese }}</td>
@@ -135,6 +136,29 @@
                               <td class="text-xs-center grey-1">{{ props.item.Meat }}</td>
                               <td class="text-xs-center grey-2">{{ props.item.SeaFood }}</td>
                               <td class="text-xs-center grey-3">{{ props.item.Vegetable }}</td>
+                            </template>
+                            <!--Footer For Total Values-->
+                            <template slot="footer">
+                              <td>Total</td>
+                              <td class="text-xs-center grey-4"></td>
+                              <td class="text-xs-center grey-4"></td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.interceptions  }}</td>
+                              <td class="text-xs-center grey-4">{{ storeReportFooter.BlockCheese  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Butter  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.BlockCheeseCream  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Cream  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Cheese  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.CreamFoodService  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Milk  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.ProcessCheese  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Shakes  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.ShreddedCheese  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Fish  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.FrenchFries  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Fruits  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Meat  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.SeaFood  }}</td>
+                              <td class="text-xs-center grey-1">{{ storeReportFooter.Vegetable  }}</td>
                             </template>
                           </v-data-table>
                           <!--<div class="table__overflow" id="storeHeaderData" style="overflow-x: hidden" >-->
@@ -258,6 +282,7 @@ export default {
         ],
         storeReportHeaders: [
             {text: 'B.A', align: 'center', class: 'green', sortable: false, value:'b.a' },
+            {text: 'Date', align: 'center', class: 'green', sortable: false, value:'date' },
             {text: 'Address', align: 'center', class: 'green', sortable: false, value:'Address' },
             {text: 'Interceptions',  class: 'green', align: 'center', sortable: true, value:'Interceptions' },
             {text: 'BlockCheese', align: 'center', class: '', sortable: true, value:'BlockCheese' },
@@ -277,6 +302,25 @@ export default {
             {text: 'SeaFood', align: 'center', sortable: true, value:'SeaFood' },
             {text: 'Vegetable', align: 'center', sortable: true, value:'Vegetable' }
         ],
+        storeReportFooter: {
+            totalInterceptions: 0,
+            BlockCheese: 0,
+            Butter: 0,
+            BlockCheeseCream: 0,
+            Cream: 0,
+            Cheese: 0,
+            CreamFoodService: 0,
+            Milk: 0,
+            ProcessCheese: 0,
+            Shakes: 0,
+            ShreddedCheese: 0,
+            Fish: 0,
+            FrenchFries: 0,
+            Fruits: 0,
+            Meat: 0,
+            SeaFood: 0,
+            Vegetable: 0
+        },
         selectedDate: '2018-04-04',
         selectedFormatedDate: null,
         reportTabs: null,
@@ -829,6 +873,7 @@ export default {
 //      first we Filter by Dates and Ids
 //        All reports
       let allReports = this.$store.getters.storeReport;
+      let StoreReportFooter = this.storeReportFooter
 //        Filtered Store wise Reports
       let storeFiltered = [];
       let sortedReports = [];
@@ -847,6 +892,7 @@ export default {
 //        Sorting Selected Store
 //          Main date
       let interceptions = 0;
+      let totalInterceptions = 0;
       let productCategories = {
           BlockCheese: 0,
           Butter: 0,
@@ -865,6 +911,24 @@ export default {
           SeaFood: 0,
           Vegetable: 0
       };
+      let totalProductCategories = {
+          BlockCheese: 0,
+          Butter: 0,
+          BlockCheeseCream: 0,
+          Cream: 0,
+          Cheese: 0,
+          CreamFoodService: 0,
+          Milk: 0,
+          ProcessCheese: 0,
+          Shakes: 0,
+          ShreddedCheese: 0,
+          Fish: 0,
+          FrenchFries: 0,
+          Fruits: 0,
+          Meat: 0,
+          SeaFood: 0,
+          Vegetable: 0
+    };
       let keyIndex = -1;
       let dateholder = null;
 //      console.log(allReports);
@@ -875,9 +939,10 @@ export default {
         if(allReports[key].store.id === selectedStore){
 //        store Date in dateholder for matching in future
           if (allReports[key].date === dateholder){
-              console.log(allReports[key]);
+//            console.log(allReports[key]);
 //              Inreasing interceptions
             interceptions = interceptions +1;
+            totalInterceptions += 1
 //              Adding General Informations
             sortedReports[keyIndex] = productCategories;
             sortedReports[keyIndex].userName = allReports[key].userName;
@@ -888,7 +953,7 @@ export default {
 //            totalPurchase = allReports[key];
 //          console.log(totalPurchase)
 //          now we require an Purchase object which must carry details about purchases and their ids
-            for(let key in allReports) {
+//            for(let key in allReports) {
 //          if Key lies among product Range
 //          We have to dig more to get purchased values
 //          console.log(totalPurchase[key].purchased);
@@ -955,11 +1020,72 @@ export default {
                     productCategories.Vegetable = productCategories.Vegetable + amount
                 }
               }
-            }
+              for (let key in totalItems){
+                  let Val = parseInt(key);
+                  let product = '';
+                  let amount = parseInt(totalItems[key]);
+                  if(Val >= 1001 && Val <= 1012){
+                      product = 'BlockCheese';
+                      totalProductCategories.BlockCheese = totalProductCategories.BlockCheese + amount
+                  } else
+                  if(Val >= 1013 && Val <= 1020){
+                      product = 'Butter';
+                      totalProductCategories.Butter = totalProductCategories.Butter + amount
+                  } else
+                  if(Val >= 1021 && Val <= 1039){
+                      product = 'Cheese';
+                      totalProductCategories.Cheese = totalProductCategories.Cheese + amount
+                  } else
+                  if(Val >= 1040 && Val <= 1049){
+                      product = 'Cream';
+                      totalProductCategories.Cream = totalProductCategories.Cream + amount
+                  } else
+                  if(Val >= 1050 && Val <= 1052){
+                      product = 'Milk';
+                      totalProductCategories.Milk = totalProductCategories.Milk + amount
+                  } else
+                  if(Val >= 1053 && Val <= 1064){
+                      product = 'ProcessCheese';
+                      totalProductCategories.ProcessCheese = totalProductCategories.ProcessCheese + amount
+                  } else
+                  if(Val >= 1064 && Val <= 1067){
+                      product = 'Shakes';
+                      totalProductCategories.Shakes = totalProductCategories.Shakes + amount
+                  } else
+                  if(Val >= 1068 && Val <= 1075){
+                      product = 'ShreddedCheese';
+                      totalProductCategories.ShreddedCheese = totalProductCategories.ShreddedCheese + amount
+                  } else
+                  if(Val >= 1076 && Val <= 1076){
+                      product = 'Fish';
+                      totalProductCategories.Fish = totalProductCategories.Fish + amount
+                  } else
+                  if(Val >= 1077 && Val <= 1080){
+                      product = 'FrenchFries';
+                      totalProductCategories.FrenchFries = totalProductCategories.FrenchFries + amount
+                  } else
+                  if(Val >= 1081 && Val <= 1083){
+                      product = 'Fruits';
+                      totalProductCategories.Fruits = totalProductCategories.Fruits + amount
+                  } else
+                  if(Val >= 1084 && Val <= 1094){
+                      product = 'Meat';
+                      totalProductCategories.Meat = totalProductCategories.Meat + amount
+                  } else
+                  if(Val >= 1095 && Val <= 1098){
+                      product = 'SeaFood';
+                      totalProductCategories.SeaFood = totalProductCategories.SeaFood + amount
+                  } else
+                  if(Val >= 1099 && Val <= 1131){
+                      product = 'Vegetable';
+                      totalProductCategories.Vegetable = totalProductCategories.Vegetable + amount
+                  }
+              }
+//            }
           }
           else {
 //         Follow these parameter when date changes occur
-            dateholder = allReports[key].date;
+            interceptions = 0;
             productCategories = {
                   BlockCheese: 0,
                   Butter: 0,
@@ -978,280 +1104,33 @@ export default {
                   SeaFood: 0,
                   Vegetable: 0
             };
+//         Object Resetter
+//          for(let key in productCategories){
+//              productCategories[key] = 0
+//          }
+            dateholder = allReports[key].date;
             keyIndex++
           }
-          productCategories = {
-                BlockCheese: 0,
-                Butter: 0,
-                BlockCheeseCream: 0,
-                Cream: 0,
-                Cheese: 0,
-                CreamFoodService: 0,
-                Milk: 0,
-                ProcessCheese: 0,
-                Shakes: 0,
-                ShreddedCheese: 0,
-                Fish: 0,
-                FrenchFries: 0,
-                Fruits: 0,
-                Meat: 0,
-                SeaFood: 0,
-                Vegetable: 0
-          };
           console.log(dateholder);
         }
-      }
-      interceptions = 0
 
+      }
+      totalProductCategories['interceptions'] = totalInterceptions;
+//      interceptions = 0;
 //    fetch total Dates
       console.log(' Sorted Report From Sorter ',sortedReports);
-      this.selectedStoreReport = sortedReports;
-//    Lets Add Same Day Purchas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              es
-      let CleanedReport = [];
-      let initDate = new Date(startDate);
-      let initStartYear = 1900 + initDate.getYear();
-      let initStartDay = ("0" + initDate.getDate()).slice(-2);
-      let initStartMonth = initDate.getMonth() + 1;
-      let formatedStartDate = '';
-//      this loop will iterate through all Dates
-      let purchased = {
-        BlockCheese: 0,
-        Butter: 0,
-        BlockCheeseCream: 0,
-        Cream: 0,
-        Cheese: 0,
-        CreamFoodService: 0,
-        Milk: 0,
-        ProcessCheese: 0,
-        Shakes: 0,
-        ShreddedCheese: 0,
-        Fish: 0,
-        FrenchFries: 0,
-        Fruits: 0,
-        Meat: 0,
-        SeaFood: 0,
-        Vegetable: 0
-    };
-//      Loop According to Duration of Activity
-      for(let i = 0; i < diffDays; i++) {
-//        Setting Up Dates
-        initDate.setDate(initDate.getDate() + 1);
-        initStartYear = 1900 + initDate.getYear();
-        initStartDay = ("0" + initDate.getDate()).slice(-2);
-        initStartMonth = initDate.getMonth() + 1;
-        formatedStartDate = initStartMonth + '-' + initStartDay + '-' + initStartYear;
-//          console.log(formatedStartDate)
-//        Now we make sure we have enough Date
-        for (let key in storeFiltered) {
-//            make it even more Cleaner Version
-//            by collasping same dates
-//            console.log(storeFiltered[key].date);
-            if(storeFiltered[key].date == formatedStartDate) {
-//            ================ CONTINUE HERE ====================
-//            console.log(storeFiltered[key])
-//            We have to dig more to get purchased values
-//            console.log(totalPurchase[key].purchased);
-                let totalItems = storeFiltered[key].purchased;
-                for (let key in totalItems){
-                    let Val = parseInt(key);
-                    let product = '';
-                    let amount = parseInt(totalItems[key]);
-                    if(Val >= 1001 && Val <= 1012){
-                        product = 'BlockCheese';
-                        purchased.BlockCheese = purchased.BlockCheese + amount
-                    } else
-                    if(Val >= 1013 && Val <= 1020){
-                        product = 'Butter';
-                        purchased.Butter = purchased.Butter + amount
-                    } else
-                    if(Val >= 1021 && Val <= 1039){
-                        product = 'Cheese';
-                        purchased.Cheese = purchased.Cheese + amount
-                    } else
-                    if(Val >= 1040 && Val <= 1049){
-                        product = 'Cream';
-                        purchased.Cream = purchased.Cream + amount
-                    } else
-                    if(Val >= 1050 && Val <= 1052){
-                        product = 'Milk';
-                        purchased.Milk = purchased.Milk + amount
-                    } else
-                    if(Val >= 1053 && Val <= 1064){
-                        product = 'ProcessCheese';
-                        purchased.ProcessCheese = purchased.ProcessCheese + amount
-                    } else
-                    if(Val >= 1064 && Val <= 1067){
-                        product = 'Shakes';
-                        purchased.Shakes = purchased.Shakes + amount
-                    } else
-                    if(Val >= 1068 && Val <= 1075){
-                        product = 'ShreddedCheese';
-                        purchased.ShreddedCheese = purchased.ShreddedCheese + amount
-                    } else
-                    if(Val >= 1076 && Val <= 1076){
-                        product = 'Fish';
-                        purchased.Fish = purchased.Fish + amount
-                    } else
-                    if(Val >= 1077 && Val <= 1080){
-                        product = 'FrenchFries';
-                        purchased.FrenchFries = purchased.FrenchFries + amount
-                    } else
-                    if(Val >= 1081 && Val <= 1083){
-                        product = 'Fruits';
-                        purchased.Fruits = purchased.Fruits + amount
-                    } else
-                    if(Val >= 1084 && Val <= 1094){
-                        product = 'Meat';
-                        purchased.Meat = purchased.Meat + amount
-                    } else
-                    if(Val >= 1095 && Val <= 1098){
-                        product = 'SeaFood';
-                        purchased.SeaFood = purchased.SeaFood + amount
-                    } else
-                    if(Val >= 1099 && Val <= 1131){
-                        product = 'Vegetable';
-                        purchased.Vegetable = purchased.Vegetable + amount
-                    }
-                }
-                CleanedReport[i] = purchased;
-                CleanedReport[i].userName = storeFiltered[key].userName;
-                CleanedReport[i].interception = 23;
-                CleanedReport[i].address = this.storeSelected.address
-                CleanedReport[i].date = formatedStartDate;
-            }
-      };
-//        purchased = {
-//            BlockCheese: 0,
-//            Butter: 0,
-//            BlockCheeseCream: 0,
-//            Cream: 0,
-//            Cheese: 0,
-//            CreamFoodService: 0,
-//            Milk: 0,
-//            ProcessCheese: 0,
-//            Shakes: 0,
-//            ShreddedCheese: 0,
-//            Fish: 0,
-//            FrenchFries: 0,
-//            Fruits: 0,
-//            Meat: 0,
-//            SeaFood: 0,
-//            Vegetable: 0
-//        };
-//        console.log(purchased)
-      }
-//      this.selectedStoreReport = CleanedReport;
-//      Now we make this date wise
-       console.log(CleanedReport);
-//      first we have to reset this.selectedStoreReport
-//    this.selectedStoreReport = []
-//      To convert we first have to get Full Category List and purchase Object from DB
-//      Here is Category ListCache
-//    let totalPurchase = this.$store.getters.storeReport;
-//    let productCategories = {
-//        BlockCheese: 0,
-//        Butter: 0,
-//        BlockCheeseCream: 0,
-//        Cream: 0,
-//        CreamFoodService: 0,
-//        Milk: 0,
-//        ProcessCheese: 0,
-//        Shakes: 0,
-//        ShreddedCheese: 0,
-//        Fish: 0,
-//        FrenchFries: 0,
-//        Fruits: 0,
-//        Meat: 0,
-//        SeaFood: 0,
-//        Vegetable: 0
-//    };
-//      now we require an Purchase object which must carry details about purchases and their ids
-//    for(let key in totalPurchase) {
-//        // if Key lies among product Range
-////            We have to dig more to get purchased values
-////            console.log(totalPurchase[key].purchased);
-//        let totalItems = totalPurchase[key].purchased;
-//        for (let key in totalItems){
-//            let Val = parseInt(key);
-//            let product = '';
-//            let amount = parseInt(totalItems[key]);
-////                console.log(amount)
-//            if(Val >= 1001 && Val <= 1012){
-//                product = 'BlockCheese';
-//                productCategories.BlockCheese = productCategories.BlockCheese + amount
-//            } else
-//            if(Val >= 1013 && Val <= 1020){
-//                product = 'Butter';
-//                productCategories.Butter = productCategories.Butter + amount
-//            } else
-//            if(Val >= 1021 && Val <= 1039){
-//                product = 'Cheese';
-//                productCategories.Cheese = productCategories.Cheese + amount
-//            } else
-//            if(Val >= 1040 && Val <= 1049){
-//                product = 'Cream';
-//                productCategories.Cream = productCategories.Cream + amount
-//            } else
-//            if(Val >= 1050 && Val <= 1052){
-//                product = 'Milk';
-//                productCategories.Milk = productCategories.Milk + amount
-//            } else
-//            if(Val >= 1053 && Val <= 1064){
-//                product = 'ProcessCheese';
-//                productCategories.ProcessCheese = productCategories.ProcessCheese + amount
-//            } else
-//            if(Val >= 1064 && Val <= 1067){
-//                product = 'Shakes';
-//                productCategories.Shakes = productCategories.Shakes + amount
-//            } else
-//            if(Val >= 1068 && Val <= 1075){
-//                product = 'ShreddedCheese';
-//                productCategories.ShreddedCheese = productCategories.ShreddedCheese + amount
-//            } else
-//            if(Val >= 1076 && Val <= 1076){
-//                product = 'Fish';
-//                productCategories.Fish = productCategories.Fish + amount
-//            } else
-//            if(Val >= 1077 && Val <= 1080){
-//                product = 'FrenchFries';
-//                productCategories.FrenchFries = productCategories.FrenchFries + amount
-//            } else
-//            if(Val >= 1081 && Val <= 1083){
-//                product = 'Fruits';
-//                productCategories.Fruits = productCategories.Fruits + amount
-//            } else
-//            if(Val >= 1084 && Val <= 1094){
-//                product = 'Meat';
-//                productCategories.Meat = productCategories.Meat + amount
-//            } else
-//            if(Val >= 1095 && Val <= 1098){
-//                product = 'SeaFood';
-//                productCategories.SeaFood = productCategories.SeaFood + amount
-//            } else
-//            if(Val >= 1099 && Val <= 1131){
-//                product = 'Vegetable';
-//                productCategories.Vegetable = productCategories.Vegetable + amount
-//            }
-//        }
-//    }
-//      Counting Interceptions through Purchase Object
-//    let currentReport = this.totalReport;
-//    let totalInterceptions = 0;
-//    let username = ''
-//    for(let key in currentReport){
-//        username = currentReport[key].userName;
-//        totalInterceptions++
-//    }
-//      console.log("Selected Report");
-//      Now i should add more information to purchased object
-//    let report = productCategories;
-//    let store = this.storeSelected;
-//    report['interception'] = totalInterceptions;
-//    report['address'] = store.address;
-//    report['userName'] = username;
-//    console.log(report)
-//    this.selectedStoreReport.push(report);
+      console.log(' Total Purchases ',totalProductCategories);
 
+//    Object Resetter
+//      for(let key in StoreReportFooter){
+//          StoreReportFooter[key] = 0
+//      }
+
+
+
+//      Finally Set Global Variable
+      this.selectedStoreReport = sortedReports;
+      this.storeReportFooter = totalProductCategories;
 },
 //      COMPILE
       fetchCompileReports(){

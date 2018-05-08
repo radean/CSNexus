@@ -36,6 +36,7 @@
         <v-list-tile ripple to="/reports">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>
+            <!--<v-icon>lock</v-icon>-->
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>

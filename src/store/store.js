@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : 'beta 0.095mr',
+      version : 'beta 0.12zX',
       status : true,
       theme: 'purple accent-4',
       startDate: '4-24-2018',
@@ -782,6 +782,7 @@ export const store = new Vuex.Store({
                 reports.push({
                     // date: currentKey,
                     // Customer Information
+                    date: obj[key],
                     customerName: obj.customerName,
                     customerContact: obj.customerContact,
                     customerRemarks: obj.customerRemarks,
@@ -848,7 +849,7 @@ export const store = new Vuex.Store({
                     reports.push({
                         // date: currentKey,
                         // Customer Information
-                        date:  obj[key],
+                        date: obj[key],
                         customerName: obj[key].customerName,
                         customerContact: obj[key].customerContact,
                         customerRemarks: obj[key].customerRemarks,

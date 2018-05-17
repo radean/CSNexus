@@ -1177,7 +1177,6 @@ export default {
         this.currentDate();
 //          Fetching Base Data Queries
         this.$store.dispatch('storeListUPD');
-        console.log(this.stores);
       }
     },
   }

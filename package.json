@@ -1,7 +1,7 @@
 {
-  "name": "mcshead",
+  "name": "bamshead",
   "version": "1.0.0",
-  "description": "MSC Node monitor for Admins.",
+  "description": "BAMS Brand Ambassador Management System.",
   "author": "radean",
   "private": true,
   "scripts": {

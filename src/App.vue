@@ -1,7 +1,6 @@
 <template>
   <v-app
     id="inspire"
-    dark
   >
     <v-navigation-drawer
       v-if="notLogin"
@@ -14,7 +13,7 @@
       width="240"
     >
       <v-list class="transper">
-        <img align-center src="./assets/BAMSlogo.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
+        <img align-center src="./assets/BAMSLogob.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>
         <v-subheader class="mt-3 mb-3 grey--text text--lighten-3">
           <v-avatar size="48px" class="mr-3">
@@ -79,7 +78,7 @@
         </v-list-tile>
         <v-subheader class="mt-3 grey--text text--darken-1">Date</v-subheader>
         <v-divider></v-divider>
-        <v-flex xs8 offset-xs2 class="pt-3 pb-3"><h4 class="display-1" style="font-weight: 100">{{ currentDate }}</h4> </v-flex>
+        <v-flex xs7 offset-xs3 class="pt-4 pb-4"><h4 class="headline" style="font-weight: 200">{{ currentDate }}</h4> </v-flex>
         <v-divider></v-divider>
         <v-list-tile @click="" >
           <v-list-tile-action>
@@ -98,7 +97,7 @@
     </v-navigation-drawer>
 
 
-    <v-toolbar class="transper" dense fixed clipped-left app dark>
+    <v-toolbar class="transper" dense fixed clipped-left app>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon v-if="notLogin" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         {{ appinfo.name }}
@@ -107,8 +106,8 @@
       <v-toolbar-items v-if="notLogin">
         <v-btn icon pulse><v-icon>notifications</v-icon></v-btn>
         <v-btn icon pulse><v-icon>message</v-icon></v-btn>
-        <v-btn pulse flat v-on:click="helpDialog = !helpDialog">help</v-btn>
-        <v-btn pulse flat v-on:click="onSignOut" >LOGOUT</v-btn>
+        <v-btn pulse flat v-on:click="helpDialog = !helpDialog">NEED HELP</v-btn>
+        <v-btn pulse flat v-on:click="onSignOut" >Sign out</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!--<main>-->
@@ -116,12 +115,12 @@
         <v-container>
           <vue-particles
              class="flying"
-             color="#FFF"
+             color="#000"
              :particleOpacity="0.1"
              :particlesNumber="70"
              shapeType="circle"
              :particleSize="6"
-             linesColor="#FFF"
+             linesColor="#000"
              :linesWidth="1"
              :lineLinked="true"
              :lineOpacity="0.2"
@@ -210,7 +209,7 @@
       </v-card>
     </v-dialog>
     <!--Footer-->
-    <v-footer class="pa-3 transper" fixed dark>
+    <v-footer class="pa-3 transper" fixed>
       <div>{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
       <v-spacer></v-spacer>
       <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.company }}</div>
@@ -349,10 +348,10 @@ export default {
   }
   #inspire{
     font-family: 'Open Sans', sans-serif;
-    background: #24C6DC;  /* fallback for old browsers */
+    background: #000000;  /* fallback for old browsers */
     /*background-image: url("assets/bg.jpg");*/
-    background: url('assets/bg.jpg'), -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
-    background: url('assets/bg.jpg'), linear-gradient(to left, #360f93, #b73fff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background:  -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
+    background:  linear-gradient(to left, #fafafa, #e0e0e0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-repeat: repeat;
   }
   .gradientHead{
@@ -362,12 +361,12 @@ export default {
   }
   .gradientDialog{
     background: #000428;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #fafafa, #787878);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fafafa, #787878); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .transper {
-    background-color: rgba(60,60,60,0.9) !important;
-    color: white;
+    background-color: rgba(240,240,240,0.4) !important;
+    color: #222;
   }
   .flying {
     position: absolute;
@@ -399,8 +398,8 @@ export default {
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #401585;
-    outline: 1px solid #eec8ed;
+    background-color: #262526;
+    outline: 1px solid #272726;
   }
   .input-group__details:after {
     background-color: rgba(255, 255, 255, 0.32) !important;

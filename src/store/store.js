@@ -2,9 +2,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 // importing Firebase
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 // Storage
 export const store = new Vuex.Store({
   state: {
@@ -22,15 +22,15 @@ export const store = new Vuex.Store({
     },
     // Application meta Information
     appinfo : {
-      name : 'BAMS™ Emborg Nexus',
-      fullname: 'Brand Ambassador Management System Dashboard',
+      name : 'BAMS™ Global',
+      fullname: 'B.A Management System Control System',
       author : 'radean',
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : 'beta 0.2XS',
+      version : 'beta 0.01FD',
       status : true,
-      theme: 'purple accent-4',
+      theme: 'red accent-4',
       startDate: '4-24-2018',
       endDate: '5-22-2018',
       mode: '',
@@ -71,7 +71,7 @@ export const store = new Vuex.Store({
   },
   mutations: {
     setAppConnection (state, payload) {
-      state.app.connection = payload;
+      state.app.connection = payload
     },
     setTheme(state, payload){
       state.app.theme = payload;
@@ -1120,7 +1120,7 @@ export const store = new Vuex.Store({
       };
       firebase.database().ref('stores').push(storeDetails).then(() => {
         // End Loading
-        commit('SET_MAIN_LOADING', false);
+        commit('SET_MAIN_LOADING', false)
         // Sending Success Message
         commit('SET_SUCCESS_MSG', 'Store Successfully Added');
         setTimeout(() => {
@@ -1227,4 +1227,4 @@ export const store = new Vuex.Store({
       return state.successFlag
     }
   }
-});
+})

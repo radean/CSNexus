@@ -29,14 +29,14 @@
       </v-flex>
       <!--submission-->
       <v-flex xs12>
-        <v-btn color="green" :disabled="!formIsValid" type="submit"> SUBMIT <v-icon right>send</v-icon></v-btn>
+        <v-btn color="white" :disabled="!formIsValid" type="submit"> SUBMIT <v-icon right>send</v-icon></v-btn>
       </v-flex>
       <!--Registration -->
       <v-flex xs12>
         <v-btn small color="blue" to="Registration">Registration</v-btn>
       </v-flex>
         <div class="smallFont pt-3">{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
-        <div class="smallFont pt-1">{{ appinfo.company }}</div>
+        <div class="smallFont pt-1">{{ appinfo.company }} - Author - {{ appinfo.author }}</div>
     </form>
     </v-layout>
   </v-container>
@@ -79,6 +79,6 @@
   .smallFont {
     font-weight: 100;
     font-size: 10px;
-    color: #aeb2b4;
+    color: #777;
   }
 </style>

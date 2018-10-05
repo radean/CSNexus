@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
       authorEmail : 'radeanf@gmail.com',
       developer : 'radean',
       company : 'Vision Direct Marketing',
-      version : 'beta 0.12zX',
+      version : 'beta 0.2XS',
       status : true,
       theme: 'purple accent-4',
       startDate: '4-24-2018',

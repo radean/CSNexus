@@ -15,12 +15,12 @@
       <v-list class="transper">
         <img align-center src="./assets/BAMSLogob.png" style="padding-left: 25%; padding-top: 10%; padding-bottom: 10%;" />
         <v-divider></v-divider>
-        <v-subheader class="mt-3 mb-3 grey--text text--lighten-3">
+        <v-subheader class="mt-3 mb-3">
           <v-avatar size="48px" class="mr-3">
           <img :src="userDetail.picture" alt="">
           </v-avatar>
           {{ userDetail.name }}
-          <!--[ {{ userDetail.title }} ]-->
+          [ {{ userDetail.title }} ]
         </v-subheader>
         <v-list-tile to="/" ripple>
           <v-list-tile-action >
@@ -348,16 +348,16 @@ export default {
   }
   #inspire{
     font-family: 'Open Sans', sans-serif;
-    background: #000000;  /* fallback for old browsers */
+    background: #3aa0ff;  /* fallback for old browsers */
     /*background-image: url("assets/bg.jpg");*/
     background:  -webkit-linear-gradient(to left, #514A9D, #24C6DC);  /* Chrome 10-25, Safari 5.1-6 */
     background:  linear-gradient(to left, #fafafa, #e0e0e0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-repeat: repeat;
   }
   .gradientHead{
-    background: #673AB7;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #512DA8, #673AB7);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #3aa0ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #fafafa, #787878);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fafafa, #787878); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .gradientDialog{
     background: #000428;  /* fallback for old browsers */
@@ -365,7 +365,8 @@ export default {
     background: linear-gradient(to right, #fafafa, #787878); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .transper {
-    background-color: rgba(240,240,240,0.4) !important;
+    background-color: rgba(240,240,240,0.8) !important;
+    box-shadow: 0px 0px 32px 0px rgba(0,0,0,0.2);
     color: #222;
   }
   .flying {

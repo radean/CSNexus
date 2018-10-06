@@ -1,9 +1,9 @@
 <template>
   <div style="width: 100%">
-    <v-toolbar color="purple" dark tabs>
+    <v-toolbar color="blue accent-3" dark tabs>
       <v-toolbar-title>REPORTS</v-toolbar-title>
       <!--<v-spacer></v-spacer>-->
-      <v-tabs centered color="purple" fixed-tabs slot="extension" slider-color="yellow" v-model="reportTabs">
+      <v-tabs centered color="blue accent-3" fixed-tabs slot="extension" slider-color="yellow" v-model="reportTabs">
         <!--<v-tab-->
                 <!--key="1"-->
                 <!--href="#tab-$c1"-->

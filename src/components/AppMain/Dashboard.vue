@@ -86,51 +86,30 @@
       <!--Previous Users-->
       <v-layout row wrap class="mb-0 pb-0">
           <v-flex xs4 class="reportContainer elevation-20">
-              <div class="header indigo">Butter Previous User</div>
+              <div class="header">Butter Previous User</div>
               <div class="barChart">
                   <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
               </div>
           </v-flex>
           <v-flex xs3 class="reportContainer elevation-20">
-              <div class="header indigo">Cheese Previous User</div>
+              <div class="header">Cheese Previous User</div>
               <div class="barChart">
                   <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
               </div>
           </v-flex>
           <v-flex xs2 class="reportContainer elevation-20">
-              <div class="header indigo">Frozen Previous User</div>
+              <div class="header">Frozen Previous User</div>
               <div class="barChart">
                   <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
               </div>
           </v-flex>
       </v-layout>
       <v-flex xs12 class="reportContainer elevation-20">
-        <div class="header indigo">Sales By Category</div>
+        <div class="header">Sales By Category</div>
         <div class="barChart">
           <BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>
         </div>
       </v-flex>
-      <!--Soya Supreme Cooking Oil-->
-      <!--<v-flex xs7 class="reportContainer elevation-21">-->
-        <!--<div class="header light-green">Cooking Oil</div>-->
-        <!--<div class="barChart">-->
-          <!--<ssCookingOil :chart-data="soyaSupremeCookingOilChart" :options="optionsCity"></ssCookingOil>-->
-        <!--</div>-->
-      <!--</v-flex>-->
-      <!--Soya Supreme Banaspati-->
-      <!--<v-flex xs2 class="reportContainer elevation-20">-->
-        <!--<div class="header red">Banaspati</div>-->
-        <!--<div class="barChart">-->
-          <!--<ssBanaspatiOil :chart-data="soyaSupremeBanaspatiChart" :options="optionsCity"></ssBanaspatiOil>-->
-        <!--</div>-->
-      <!--</v-flex>-->
-      <!--Soya Supreme Banaspati with Olive Oil-->
-      <!--<v-flex xs2 class="reportContainer elevation-20">-->
-        <!--<div class="header orange">Banaspati with Olive Oil</div>-->
-        <!--<div class="barChart">-->
-          <!--<ssBanaspatiWOlive :chart-data="soyaSupremeBanaspatiOliveChart" :options="optionsCity"></ssBanaspatiWOlive>-->
-        <!--</div>-->
-      <!--</v-flex>-->
     </v-layout>
   </v-container>
 </template>
@@ -338,7 +317,7 @@
             display: false,
             labels: {
               // This more specific font property overrides the global property
-              fontColor: '#FFFFFF',
+              fontColor: '#000000',
               padding: 1,
               boxWidth: 1,
               usePointStyle: true
@@ -347,7 +326,7 @@
           scales: {
             xAxes: [{
               ticks: {
-                fontColor: "white",
+                fontColor: "black",
                 autoSkip: false
               },
               barPercentage: 1,
@@ -358,7 +337,7 @@
             yAxes: [{
               ticks: {
                 beginAtZero:true,
-                fontColor: "white",
+                fontColor: "black",
 
               },
               gridLines: {
@@ -373,7 +352,7 @@
           legend: {
             labels: {
               // This more specific font property overrides the global property
-              fontColor: 'white',
+              fontColor: 'black',
             }
           }
         },
@@ -383,7 +362,7 @@
             legend: {
                 labels: {
                     // This more specific font property overrides the global property
-                    fontColor: 'white',
+                    fontColor: 'black',
                 }
             }
         }
@@ -695,24 +674,24 @@
 <style scoped>
   .GraphsContainer {
     /*max-width: 50%;*/
-    background-color: rgba(120,120,120,0.2);
+    background-color: rgba(240,240,240,0.2);
     margin: 10px;
     text-align: center;
     padding-bottom: 0px;
-    border: 1px solid #333;
+    border: 1px solid #999;
     border-radius: 2px;
     z-index: 2;
   }
   .GraphsContainer .header {
-    background-color: rgba(30,30,30,0.3);
+    background-color: rgba(0,0,0,0.1);
     font-size:18px;
   }
   .reportContainer {
     min-width: 30%;
-    background-color: rgba(120,120,120,0.2);
+    background-color: rgba(240,240,240,0.2);
     margin: 10px;
     height: 240px;
-    border: 1px solid #333;
+    border: 1px solid #999;
     border-radius: 2px;
     z-index: 2;
   }
@@ -724,12 +703,12 @@
   }
   .dashCards {
     max-width: 100%;
-    background-color: rgba(50,50,50,0.2);
+    background-color: rgba(240,240,240,0.2);
     margin: 10px;
     text-align: center;
     padding-bottom: 5px;
-    border: 1px solid #333;
-    border-radius: 2px;
+    border: 1px solid #999;
+    border-radius: 6px;
     z-index: 2;
   }
   .barChart {

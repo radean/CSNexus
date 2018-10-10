@@ -67,12 +67,12 @@
         </v-list-tile>
         <v-list-tile ripple>
           <v-list-tile-action>
-            <!--<v-icon>map</v-icon>-->
-            <v-icon>lock</v-icon>
+            <v-icon>map</v-icon>
+            <!--<v-icon>lock</v-icon>-->
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              Monitor
+              Monitor / Broadcast
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -95,10 +95,8 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-
-
-    <v-toolbar class="transper" dense fixed clipped-left app>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+    <v-toolbar class="transper" fixed clipped-left app>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-0">
         <v-toolbar-side-icon v-if="notLogin" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         {{ appinfo.name }}
       </v-toolbar-title>
@@ -386,7 +384,7 @@ export default {
     W  I  N  D  O  W     S  T  Y  L  E
    ========================================================================== */
   ::-webkit-scrollbar {
-    width: .4em;
+    width: .2em;
   }
 
   ::-webkit-scrollbar-track {
@@ -399,8 +397,8 @@ export default {
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #262526;
-    outline: 1px solid #272726;
+    background-color: #3aa0ff;
+    outline: 1px solid #3aa0ff;
   }
   .input-group__details:after {
     background-color: rgba(255, 255, 255, 0.32) !important;

@@ -19,6 +19,7 @@ Vue.use(VueRouter);
 Vue.use(VueParticles);
 
 
+
 // Setting HTTP
 // Vue.http.headers.common['Content-Type'] = 'application/json';
 // Vue.http.headers.common['Authorization'] = 'key=AIzaSyDOUy35eMYN7woRgGdiRw0ypeShbHMDxgM';
@@ -44,20 +45,25 @@ new Vue({
     let config = {
         // databaseURL: "https://tasttrial.firebaseio.com",
         // ================================================
-        apiKey: "AIzaSyD9xMA6OZnafkhfwmCP17VE-FtiDZ_KIGQ",
-        authDomain: "tasttrial.firebaseapp.com",
+        apiKey: "AIzaSyCKJGwsH2vCHTbBYAIa0kSdG3A_JjYdUzU",
+        authDomain: "bams-vanilla.firebaseapp.com",
+        databaseURL: "https://bams-vanilla.firebaseio.com",
+        projectId: "bams-vanilla",
+        storageBucket: "bams-vanilla.appspot.com",
+        messagingSenderId: "572602321357",
+        timestampsInSnapshots: true
+        // apiKey: "AIzaSyD9xMA6OZnafkhfwmCP17VE-FtiDZ_KIGQ",
         // authDomain: "tasttrial.firebaseapp.com",
-        databaseURL: "https://tasttrial.firebaseio.com",
-        projectId: "tasttrial",
-        storageBucket: "tasttrial.appspot.com",
-        messagingSenderId: "328928648457"
-      // apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
-      // authDomain: "bams-e190d.firebaseapp.com",
-      // databaseURL: "https://bams-e190d.firebaseio.com",
-      // projectId: "bams-e190d",
-      // storageBucket: "bams-e190d.appspot.com",
-      // messagingSenderId: "110309011275"
+        // databaseURL: "https://tasttrial.firebaseio.com",
+        // projectId: "tasttrial",
+        // storageBucket: "tasttrial.appspot.com",
+        // messagingSenderId: "328928648457"
     };
+      // Predefinitions
+      // const db = firebase.firestore();
+      // db.settings({
+      //     timestampsInSnapshots: true
+      // });
     firebase.initializeApp(config);
   }
 });

@@ -3,6 +3,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 // importing Firebase
 import * as firebase from 'firebase';
+import 'firebase/firestore';
+
+
 
 Vue.use(Vuex)
 // Storage
@@ -265,8 +268,9 @@ export const store = new Vuex.Store({
     subUserInfo({commit, getters, dispatch}){
       // Setting Loading
       commit('SET_MAIN_LOADING', true);
-      // setting user information
-      firebase.database().ref('administrator').orderByChild('uniqueId').equalTo(getters.user.uid).once('value', (user) => {
+      // Setting informatino Via Firestore
+        firebase.firestore().collection('administrator').where('uniqueId', '==', getters.user.id).get('value', (user) => {
+        console.log(user);
         let userinfo = {};
         const obj = user.val();
         for (let key in obj) {
@@ -291,6 +295,32 @@ export const store = new Vuex.Store({
         commit('setUserInfo', userinfo);
         commit('SET_MAIN_LOADING', false);
       })
+      // setting user information
+      // firebase.database().ref('administrator').orderByChild('uniqueId').equalTo(getters.user.uid).once('value', (user) => {
+      //   let userinfo = {};
+      //   const obj = user.val();
+      //   for (let key in obj) {
+      //     userinfo = {
+      //       uid: obj[key].uniqueId,
+      //       name: obj[key].name,
+      //       email: obj[key].email,
+      //       address: obj[key].address,
+      //       role: obj[key].role
+      //     };
+      //   }
+      //   console.log('inside sub user',userinfo)
+      //   if(userinfo === _.isEmpty({})) {
+      //     console.log('No User Exist');
+      //     commit('SET_USER_ERROR', true);
+      //     setTimeout(() => {
+      //       commit('SET_USER_ERROR', false);
+      //       window.location.reload();
+      //     }, 4000)
+      //     dispatch('userSignOut');
+      //   }
+      //   commit('setUserInfo', userinfo);
+      //   commit('SET_MAIN_LOADING', false);
+      // })
     },
 //     ===================
     // USER UPDATES

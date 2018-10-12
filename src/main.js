@@ -50,8 +50,7 @@ new Vue({
         databaseURL: "https://bams-vanilla.firebaseio.com",
         projectId: "bams-vanilla",
         storageBucket: "bams-vanilla.appspot.com",
-        messagingSenderId: "572602321357",
-        timestampsInSnapshots: true
+        messagingSenderId: "572602321357"
         // apiKey: "AIzaSyD9xMA6OZnafkhfwmCP17VE-FtiDZ_KIGQ",
         // authDomain: "tasttrial.firebaseapp.com",
         // databaseURL: "https://tasttrial.firebaseio.com",
@@ -59,11 +58,9 @@ new Vue({
         // storageBucket: "tasttrial.appspot.com",
         // messagingSenderId: "328928648457"
     };
-      // Predefinitions
-      // const db = firebase.firestore();
-      // db.settings({
-      //     timestampsInSnapshots: true
-      // });
     firebase.initializeApp(config);
+      const firestore = firebase.firestore();
+      const settings = {timestampsInSnapshots: true};
+      firestore.settings(settings);
   }
 });

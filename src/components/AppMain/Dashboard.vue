@@ -9,7 +9,7 @@
           <v-card-text>
 
             <h2 class="display-3 green--text ma-0 pa-0">
-                {{ totalSales }}
+                <!--{{ totalSales }}-->
             </h2>
           </v-card-text>
         </v-card>
@@ -19,7 +19,7 @@
         <v-card class="dashCards elevation-10" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Interceptions</h6></v-card-title>
           <v-card-text>
-            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalInterceptions }}</h2>
+            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalInterceptions }}</h2>-->
           </v-card-text>
         </v-card>
       </v-flex>
@@ -28,7 +28,7 @@
         <v-card class="dashCards elevation-15" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Brand Ambassador</h6></v-card-title>
           <v-card-text>
-            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalBAs }}</h2>
+            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalBAs }}</h2>-->
           </v-card-text>
         </v-card>
       </v-flex>
@@ -37,7 +37,7 @@
         <v-card class="dashCards elevation-20" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Stores</h6></v-card-title>
           <v-card-text>
-            <h2 class="display-3 green--text ma-0 pa-0" >{{ totalStores }}</h2>
+            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalStores }}</h2>-->
           </v-card-text>
         </v-card>
       </v-flex>
@@ -47,40 +47,40 @@
             <!--user chart-->
             <div class="header">Total Conversion</div>
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>
+            <!--<DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>-->
           </v-flex>
             <!--Recent Entries-->
             <v-flex xs5 class="GraphsContainer elevation-20">
                 <!--Entries-->
                 <div class="header">Recent Entries</div>
-                <v-data-table
-                        :headers="recentEntriesHeader"
-                        :items="recentReport"
-                        hide-actions
-                        class="elevation-1"
-                        :loading = true
-                >
-                    <template slot="items" slot-scope="props">
-                        <td>{{ props.item.userName }}</td>
-                        <td>{{ props.item.store.name }}</td>
-                        <td>{{ props.item.store.address }}</td>
-                        <td>{{ props.item.customerName }}</td>
-                    </template>
-                    <template slot="footer">
-                        <td colspan="100%">
-                            <strong>
-                                <!--Footer Recent Entries-->
-                            </strong>
-                        </td>
-                    </template>
-                </v-data-table>
+                <!--<v-data-table-->
+                        <!--:headers="recentEntriesHeader"-->
+                        <!--:items="recentReport"-->
+                        <!--hide-actions-->
+                        <!--class="elevation-1"-->
+                        <!--:loading = true-->
+                <!--&gt;-->
+                    <!--<template slot="items" slot-scope="props">-->
+                        <!--<td>{{ props.item.userName }}</td>-->
+                        <!--<td>{{ props.item.store.name }}</td>-->
+                        <!--<td>{{ props.item.store.address }}</td>-->
+                        <!--<td>{{ props.item.customerName }}</td>-->
+                    <!--</template>-->
+                    <!--<template slot="footer">-->
+                        <!--<td colspan="100%">-->
+                            <!--<strong>-->
+                                <!--&lt;!&ndash;Footer Recent Entries&ndash;&gt;-->
+                            <!--</strong>-->
+                        <!--</td>-->
+                    <!--</template>-->
+                <!--</v-data-table>-->
             </v-flex>
           <!--TOTAL TasteTrial-->
           <v-flex xs3 class="GraphsContainer elevation-20">
             <!--user chart-->
             <div class="header">Total Consumer Tasted</div>
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>
+            <!--<DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>-->
           </v-flex>
         </v-layout>
       <!--Previous Users-->
@@ -88,26 +88,26 @@
           <v-flex xs4 class="reportContainer elevation-20">
               <div class="header">Butter Previous User</div>
               <div class="barChart">
-                  <BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>
+                  <!--<BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>-->
               </div>
           </v-flex>
           <v-flex xs3 class="reportContainer elevation-20">
               <div class="header">Cheese Previous User</div>
               <div class="barChart">
-                  <BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>
+                  <!--<BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>-->
               </div>
           </v-flex>
           <v-flex xs2 class="reportContainer elevation-20">
               <div class="header">Frozen Previous User</div>
               <div class="barChart">
-                  <BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>
+                  <!--<BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>-->
               </div>
           </v-flex>
       </v-layout>
       <v-flex xs12 class="reportContainer elevation-20">
         <div class="header">Sales By Category</div>
         <div class="barChart">
-          <BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>
+          <!--<BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>-->
         </div>
       </v-flex>
     </v-layout>

@@ -255,11 +255,13 @@ export default {
 
           case "Administrator":
             this.notLogin = true;
+            console.log('Role =  Administrator')
             this.$router.push('/');
             break;
 
           case "Client":
             this.notLogin = true;
+            console.log('Role =  Client')
             this.$router.push('/merc');
             break;
         }
@@ -271,6 +273,9 @@ export default {
     }
   },
   created(){
+//      Fetching Information
+    this.$store.dispatch('fetchAppInformation');
+//      Making User Session
     this.$store.dispatch('userSession');
     let user = this.$store.getters.user;
     if (user === null) {

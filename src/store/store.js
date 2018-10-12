@@ -83,6 +83,9 @@ export const store = new Vuex.Store({
       state.app.header.name = payload.name;
       state.app.header.location = payload.location;
     },
+    setAppinformation(state, payload) {
+      state.appinfo = payload
+    },
     setMode(state, payload){
       state.app.mode = payload;
     },
@@ -173,9 +176,35 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    // GUI
+    // GUI Defaults
     setMainLoading({commit}, payload){
         commit('SET_MAIN_LOADING', payload);
+    },
+    fetchAppInformation({commit}){
+      // Getting information from Server
+      console.log('Information Parsed');
+      // Fetching from FireStore Server
+      firebase.firestore().collection('app-init').get().then((appInfo) => {
+        let appinfo = {};
+        appInfo.forEach((app) => {
+            appinfo = {
+                name : app.data().name,
+                fullname: app.data().fullname,
+                company : app.data().company,
+                version : app.data().version,
+                status : app.data().status,
+                theme: app.data().theme,
+                startDate: app.data().startDate,
+                endDate: app.data().endDate,
+                mode: app.data().mode,
+                broadcast: app.data().company,
+                subscription: app.data().subscription
+            };
+        })
+        console.log(appinfo);
+        commit('setAppinformation', appinfo);
+      })
+
     },
     // USER AUTHENTICATION
     userSignUp({commit}, payload){
@@ -269,20 +298,17 @@ export const store = new Vuex.Store({
       // Setting Loading
       commit('SET_MAIN_LOADING', true);
       // Setting informatino Via Firestore
-        firebase.firestore().collection('administrator').where('uniqueId', '==', getters.user.id).get('value', (user) => {
-        console.log(user);
+        firebase.firestore().collection('administrator').where('uniqueId', '==', getters.user.uid).get().then((querySnapshot) => {
         let userinfo = {};
-        const obj = user.val();
-        for (let key in obj) {
-          userinfo = {
-            uid: obj[key].uniqueId,
-            name: obj[key].name,
-            email: obj[key].email,
-            address: obj[key].address,
-            role: obj[key].role
-          };
-        }
-        console.log('inside sub user',userinfo)
+        querySnapshot.forEach((user) => {
+            userinfo = {
+              uid: user.data().uniqueId,
+              name: user.data().name,
+              email: user.data().email,
+              address: user.data().address,
+              role: user.data().role
+            };
+        });
         if(userinfo === _.isEmpty({})) {
           console.log('No User Exist');
           commit('SET_USER_ERROR', true);

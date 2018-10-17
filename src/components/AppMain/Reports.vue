@@ -1176,7 +1176,11 @@ export default {
 //        setting Time
         this.currentDate();
 //          Fetching Base Data Queries
-        this.$store.dispatch('storeListUPD');
+
+//            Please Look in it!
+//        ===========================================================
+//        this.$store.dispatch('storeListUPD');
+//        ===========================================================
       }
     },
   }

@@ -385,12 +385,14 @@
         this.$router.push('/login')
       }
 //      Fetching Interception Action
-      this.$store.dispatch('fetchTotalInterceptions');
-      this.$store.dispatch('fetchStoreReports');
-//      this.$store.dispatch('fetchCampaignReports');
-      this.$store.dispatch('fetchAllStoreReports');
-      this.$store.dispatch('baListUPD');
-      this.$store.dispatch('storeListUPD');
+//            Please Look in it!
+//        ===========================================================
+//      this.$store.dispatch('fetchTotalInterceptions');
+//      this.$store.dispatch('fetchStoreReports');
+//      this.$store.dispatch('fetchAllStoreReports');
+//      this.$store.dispatch('baListUPD');
+//      this.$store.dispatch('storeListUPD');
+//        ===========================================================
 //      let recentReports =
 //      setTimeout(() => {
 //        this.$store.dispatch('fetchCampaignReports');

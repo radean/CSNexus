@@ -239,9 +239,9 @@ export default {
   },
   watch: {
     user(value){
-      if (value){
+      if (value !== null && value !== undefined){
         this.notLogin = true;
-      }else if(!value){
+      }else if(value === null && value === undefined){
         this.notLogin = false;
       }
     },

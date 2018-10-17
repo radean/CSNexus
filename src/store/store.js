@@ -180,6 +180,7 @@ export const store = new Vuex.Store({
     setMainLoading({commit}, payload){
         commit('SET_MAIN_LOADING', payload);
     },
+    // Application Basic Information
     fetchAppInformation({commit}){
       // Getting information from Server
       console.log('Information Parsed');
@@ -197,12 +198,23 @@ export const store = new Vuex.Store({
                 startDate: app.data().startDate,
                 endDate: app.data().endDate,
                 mode: app.data().mode,
-                broadcast: app.data().company,
                 subscription: app.data().subscription
             };
-        })
-        console.log(appinfo);
+        });
+        console.log('App information' ,appinfo);
         commit('setAppinformation', appinfo);
+      })
+
+      // Fetching Skus
+      firebase.firestore().collection('app-init').doc('initial').collection('products').get().then((products) => {
+        let skusData = {};
+        let skusDataObject = {};
+          products.forEach((skus) => {
+            skusData = {
+              name: skus.data(),
+            }
+          });
+        console.log(skusData);
       })
 
     },
@@ -321,6 +333,7 @@ export const store = new Vuex.Store({
         commit('setUserInfo', userinfo);
         commit('SET_MAIN_LOADING', false);
       })
+
       // setting user information
       // firebase.database().ref('administrator').orderByChild('uniqueId').equalTo(getters.user.uid).once('value', (user) => {
       //   let userinfo = {};

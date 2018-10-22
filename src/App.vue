@@ -140,7 +140,7 @@
     <!--</main>-->
     <!--DIALOGS-->
     <!--Bug Report Dialog-->
-    <v-dialog v-model="bugReportDialog" persistent>
+    <v-dialog v-model="bugReportDialog" width="500" persistent>
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card>
         <v-card-title class="headline">BUG REPORTING</v-card-title>
@@ -156,7 +156,7 @@
       </v-card>
     </v-dialog>
     <!--HELP DIALOG-->
-    <v-dialog v-model="helpDialog" persistent>
+    <v-dialog v-model="helpDialog" width="500" persistent>
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card>
         <v-card-title class="headline">Help & Contact</v-card-title>
@@ -167,8 +167,23 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--Percentage Loading Dialog-->
+    <v-dialog v-model="appPercentageLoadingStats.isLoading" width="600" persistent >
+      <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
+      <v-card>
+        <v-card-title class="headline">Fetching Please Wait...  </v-card-title>
+        <v-card-text>BAMS™ is fetching Meta Information, If something went wrong please notify us.</v-card-text>
+        <v-container>
+          <v-layout row wrap center>
+            <v-flex >
+              <v-progress-linear v-model="appPercentageLoadingStats.percentage"></v-progress-linear>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-dialog>
     <!--Loading Dialog-->
-    <v-dialog v-model="appLoadingStats.mainLoading" persistent >
+    <v-dialog v-model="appLoadingStats.mainLoading" width="400" persistent >
       <!--<v-btn color="primary" dark slot="activator">Open Dialog</v-btn>-->
       <v-card dark>
         <v-card-title class="headline">Please Wait </v-card-title>
@@ -210,7 +225,7 @@
     <v-footer class="pa-3 transper" fixed>
       <div>{{ appinfo.fullname }} - version - {{ appinfo.version }}</div>
       <v-spacer></v-spacer>
-      <div class="transperr"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.company }}</div>
+      <div class="transperr blue--text"> VDM™ {{ new Date().getFullYear() }} | {{ appinfo.company }}</div>
     </v-footer>
   </v-app>
 </template>
@@ -321,6 +336,9 @@ export default {
       appLoadingStats(){
         return this.$store.getters.mainLoading
       },
+      appPercentageLoadingStats(){
+        return this.$store.getters.percentageLoading
+      },
       successMsg(){
         return this.$store.getters.successMsg
       },
@@ -389,7 +407,7 @@ export default {
     W  I  N  D  O  W     S  T  Y  L  E
    ========================================================================== */
   ::-webkit-scrollbar {
-    width: .2em;
+    width: .4em;
   }
 
   ::-webkit-scrollbar-track {
@@ -403,7 +421,7 @@ export default {
 
   ::-webkit-scrollbar-thumb {
     background-color: #3aa0ff;
-    outline: 1px solid #3aa0ff;
+    outline: 3px solid #3aa0ff;
   }
   .input-group__details:after {
     background-color: rgba(255, 255, 255, 0.32) !important;

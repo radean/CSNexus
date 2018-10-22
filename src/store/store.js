@@ -17,6 +17,11 @@ export const store = new Vuex.Store({
       mainLoading: false,
       compressorLoadingStats: false,
     },
+    percentageLoadingState:{
+        isLoading: false,
+        percentage: 0,
+        compressorLoadingStats: false,
+    },
     successFlag: false,
     successMsg: 'Operation Successful',
     // Services Status
@@ -167,6 +172,9 @@ export const store = new Vuex.Store({
     'SET_MAIN_LOADING'(state, payload){
       state.loadingState.mainLoading = payload;
     },
+    'SET_PERCENTAGE_LOADING'(state, payload){
+        state.percentageLoadingState = payload;
+    },
     'SET_USER_ERROR'(state, payload){
       state.userError = payload;
     },
@@ -181,9 +189,11 @@ export const store = new Vuex.Store({
         commit('SET_MAIN_LOADING', payload);
     },
     // Application Basic Information
-    fetchAppInformation({commit}){
+    fetchAppInformation({commit, getters}){
       // Getting information from Server
       console.log('Information Parsed');
+      // commit('SET_MAIN_LOADING', true);
+
       // Fetching from FireStore Server
       firebase.firestore().collection('app-init').get().then((appInfo) => {
         let appinfo = {};
@@ -201,8 +211,8 @@ export const store = new Vuex.Store({
                 subscription: app.data().subscription
             };
         });
-        console.log('App information' ,appinfo);
         commit('setAppinformation', appinfo);
+        commit('SET_PERCENTAGE_LOADING',{isLoading: true,  percentage: 25});
       })
 
       // Fetching Skus
@@ -215,7 +225,27 @@ export const store = new Vuex.Store({
             }
           });
         console.log(skusData);
+        // Setting Progress Bar
+        commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 50});
       })
+
+      // Fetching Dashboard Information
+      firebase.firestore().collection('app-init').doc('initial').collection('app-guis').get().then((dashboardGui) => {
+            let dashboardData = {};
+            dashboardGui.forEach((gui) => {
+                dashboardData = gui.data()
+            });
+
+            let appInfo = getters.appinfo;
+            Object.assign( appInfo, dashboardData);
+            commit('setAppinformation', appInfo);
+          // Setting Progress Bar
+          commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 75});
+          setTimeout(function () {
+              commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
+          },2000)
+      })
+
 
     },
     // USER AUTHENTICATION
@@ -407,24 +437,58 @@ export const store = new Vuex.Store({
     // Total Store list
     storeListUPD({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('stores').on('value', (storelist) => {
-        const stores = [];
-        const obj = storelist.val();
-        let totalStores = 0;
-        for (let key in obj) {
-          stores.push({
-            id: key,
-            name: obj[key].name,
-            address: obj[key].address,
-            city: obj[key].city,
-          })
-          totalStores = totalStores + 1;
-        }
-        commit('setTotalStore', totalStores)
-        commit('SET_MAIN_LOADING', false);
-        // console.log(stores);
-        commit('SET_STORES', stores);
+      let cities = {};
+      firebase.firestore().collection('stores').get().then((storelist) => {
+          const stores = [];
+          let entries = {};
+          let totalStores = 0;
+          // grabing Cities
+          storelist.forEach((doc) => {
+              cities[doc.id] = doc.data();
+          });
+          // Filtering and joining Objects
+          for (let key in cities){
+            Object.assign(entries, cities[key])
+          }
+          // Adding in an Object
+          for(let key in entries){
+              stores.push({
+              name: entries[key].name,
+              category: entries[key].category,
+              description: entries[key].description,
+              id: entries[key].id,
+              address: entries[key].address,
+              city: entries[key].city
+            })
+            totalStores = totalStores + 1;
+          }
+          commit('setTotalStore', totalStores)
+          commit('SET_MAIN_LOADING', false);
+          // console.log('stores Amount', totalStores);
+          // console.log('stores', stores);
+          // console.log('Total Cities', cities);
+          // console.log('Results', entries);
+          // console.log('Store Data', storeData);
+          commit('SET_STORES', stores);
       });
+      // firebase.database().ref('stores').on('value', (storelist) => {
+      //   const stores = [];
+      //   const obj = storelist.val();
+      //   let totalStores = 0;
+      //   for (let key in obj) {
+      //     stores.push({
+      //       id: key,
+      //       name: obj[key].name,
+      //       address: obj[key].address,
+      //       city: obj[key].city,
+      //     })
+      //     totalStores = totalStores + 1;
+      //   }
+      //   commit('setTotalStore', totalStores)
+      //   commit('SET_MAIN_LOADING', false);
+      //   // console.log(stores);
+      //   commit('SET_STORES', stores);
+      // });
     },
     // Unassigned Stores
     unAssignedStoresListUPD({commit}){
@@ -446,27 +510,50 @@ export const store = new Vuex.Store({
     //   Feching Total NUmbers of BA
     baListUPD({commit}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('users').once('value', (balist) => {
-        const ba = [];
-        const obj = balist.val();
-        let totalBA = 0;
-        for (let key in obj) {
-          ba.push({
-            id: key,
-            name: obj[key].name,
-            // storeName: obj[key].store.name,
-            store: obj[key].store,
-            address: obj[key].address,
-            email: obj[key].email,
-            uniqueId: obj[key].uniqueId,
-          })
-            // Adding BA
-          totalBA = totalBA + 1;
-        }
-        commit('SET_MAIN_LOADING', false);
-        commit('settotalBA', totalBA);
-        commit('setBaList', ba);
+      firebase.firestore().collection('app-users').doc('active').get().then( (balist) => {
+          const ba = [];
+          const obj = balist.data();
+          let totalBA = 0;
+          for (let key in obj) {
+              ba.push({
+                  id: key,
+                  name: obj[key].name,
+                  // storeName: obj[key].store.name,
+                  store: obj[key].store,
+                  address: obj[key].address,
+                  email: obj[key].email,
+                  uniqueId: obj[key].uid,
+              })
+              // Adding BA
+              totalBA = totalBA + 1;
+          }
+          commit('SET_MAIN_LOADING', false);
+          commit('settotalBA', totalBA);
+          console.log(totalBA);
+          commit('setBaList', ba);
+          console.log(ba);
       });
+      // firebase.database().ref('users').once('value', (balist) => {
+      //   const ba = [];
+      //   const obj = balist.val();
+      //   let totalBA = 0;
+      //   for (let key in obj) {
+      //     ba.push({
+      //       id: key,
+      //       name: obj[key].name,
+      //       // storeName: obj[key].store.name,
+      //       store: obj[key].store,
+      //       address: obj[key].address,
+      //       email: obj[key].email,
+      //       uniqueId: obj[key].uniqueId,
+      //     })
+      //       // Adding BA
+      //     totalBA = totalBA + 1;
+      //   }
+      //   commit('SET_MAIN_LOADING', false);
+      //   commit('settotalBA', totalBA);
+      //   commit('setBaList', ba);
+      // });
     },
     // All B.A list
     fetchSelectedBa({commit}, payload){
@@ -1288,6 +1375,9 @@ export const store = new Vuex.Store({
     },
     mainLoading (state){
       return state.loadingState
+    },
+    percentageLoading(state){
+      return state.percentageLoadingState
     },
     successMsg (state){
       return state.successMsg

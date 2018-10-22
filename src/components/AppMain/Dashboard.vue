@@ -4,31 +4,35 @@
       <!--NUMBER WIDGETS-->
       <!--TOTAL PURCHASE-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-5">
+        <v-card class="dashCards elevation-20">
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
 
-            <h2 class="display-3 green--text ma-0 pa-0">
-                <!--{{ totalSales }}-->
+            <h2 class="display-3 blue--text ma-0 pa-0">
+                <!--{{ totalSales }}--> 0
             </h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--TOTAL INTERCEPTION-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-10" >
+        <v-card class="dashCards elevation-20" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Interceptions</h6></v-card-title>
           <v-card-text>
-            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalInterceptions }}</h2>-->
+            <h2 class="display-3 blue--text ma-0 pa-0" >
+            <!--{{ totalInterceptions }} --> 156
+            </h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--TOTAL Brand Ambassador-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-15" >
+        <v-card class="dashCards elevation-20" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Brand Ambassador</h6></v-card-title>
           <v-card-text>
-            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalBAs }}</h2>-->
+            <h2 class="display-3 blue--text ma-0 pa-0" >
+            {{ totalBAs }}
+            </h2>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -37,20 +41,23 @@
         <v-card class="dashCards elevation-20" >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Stores</h6></v-card-title>
           <v-card-text>
-            <!--<h2 class="display-3 green&#45;&#45;text ma-0 pa-0" >{{ totalStores }}</h2>-->
+            <h2 class="display-3 blue--text ma-0 pa-0" >
+            {{ totalStores }}
+            </h2>
           </v-card-text>
         </v-card>
       </v-flex>
       <!--TOTAL Conversion-->
-        <v-layout row wrap >
-          <v-flex xs3 class="GraphsContainer elevation-20">
+        <v-flex xs12>
+            <v-layout row wrap >
+          <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart-->
-            <div class="header">Total Conversion</div>
+            <div class="header">{{ appInfo.widget01.title }}</div>
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <!--<DoughNutChart :chart-data="conversionData" :options="optionsDoughnut"></DoughNutChart>-->
           </v-flex>
             <!--Recent Entries-->
-            <v-flex xs5 class="GraphsContainer elevation-20">
+            <v-flex md5 class="GraphsContainer elevation-20">
                 <!--Entries-->
                 <div class="header">Recent Entries</div>
                 <!--<v-data-table-->
@@ -76,36 +83,40 @@
                 <!--</v-data-table>-->
             </v-flex>
           <!--TOTAL TasteTrial-->
-          <v-flex xs3 class="GraphsContainer elevation-20">
+          <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart-->
-            <div class="header">Total Consumer Tasted</div>
+            <div class="header">Totalized </div>
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <!--<DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>-->
           </v-flex>
         </v-layout>
+        </v-flex>
       <!--Previous Users-->
-      <v-layout row wrap class="mb-0 pb-0">
-          <v-flex xs4 class="reportContainer elevation-20">
-              <div class="header">Butter Previous User</div>
-              <div class="barChart">
+        <v-flex xs12>
+            <v-layout row wrap class="mb-0 pb-0">
+          <v-flex md4 class="reportContainer elevation-20">
+              <div class="header"> &nbsp; {{ appInfo.widget03.title }} &nbsp; </div>
+              <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>-->
-              </div>
+              <!--</div>-->
           </v-flex>
-          <v-flex xs3 class="reportContainer elevation-20">
-              <div class="header">Cheese Previous User</div>
-              <div class="barChart">
+          <v-flex md3 class="reportContainer elevation-20">
+              <div class="header">&nbsp; {{ appInfo.widget04.title }} &nbsp;</div>
+              <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>-->
-              </div>
+              <!--</div>-->
           </v-flex>
-          <v-flex xs2 class="reportContainer elevation-20">
-              <div class="header">Frozen Previous User</div>
-              <div class="barChart">
+          <v-flex md2 class="reportContainer elevation-20">
+              <div class="header">&nbsp; {{ appInfo.widget05.title }} &nbsp;</div>
+              <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>-->
-              </div>
+              <!--</div>-->
           </v-flex>
       </v-layout>
+        </v-flex>
+
       <v-flex xs12 class="reportContainer elevation-20">
-        <div class="header">Sales By Category</div>
+        <div class="header">&nbsp; {{ appInfo.widget06.title }} &nbsp;</div>
         <div class="barChart">
           <!--<BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>-->
         </div>
@@ -390,8 +401,8 @@
 //      this.$store.dispatch('fetchTotalInterceptions');
 //      this.$store.dispatch('fetchStoreReports');
 //      this.$store.dispatch('fetchAllStoreReports');
-//      this.$store.dispatch('baListUPD');
-//      this.$store.dispatch('storeListUPD');
+      this.$store.dispatch('baListUPD');
+      this.$store.dispatch('storeListUPD');
 //        ===========================================================
 //      let recentReports =
 //      setTimeout(() => {
@@ -411,6 +422,9 @@
     computed:{
       recentReport(){
         return this.$store.getters.recentReport;
+      },
+        appInfo(){
+        return this.$store.getters.appinfo;
       },
       totalBAs(){
         return this.$store.getters.totalBA;
@@ -680,12 +694,13 @@
     margin: 10px;
     text-align: center;
     padding-bottom: 0px;
-    border: 1px solid #999;
-    border-radius: 2px;
+    border: 1px solid #d8d8d8;
+    border-radius: 14px;
     z-index: 2;
   }
   .GraphsContainer .header {
     background-color: rgba(0,0,0,0.1);
+    border-radius: 14px;
     font-size:18px;
   }
   .reportContainer {
@@ -693,8 +708,8 @@
     background-color: rgba(240,240,240,0.2);
     margin: 10px;
     height: 240px;
-    border: 1px solid #999;
-    border-radius: 2px;
+    border: 1px solid #d8d8d8;
+    border-radius: 14px;
     z-index: 2;
   }
   .reportContainer .header {
@@ -705,12 +720,12 @@
   }
   .dashCards {
     max-width: 100%;
-    background-color: rgba(240,240,240,0.2);
+    background-color: rgba(240,240,240,0.6);
     margin: 10px;
     text-align: center;
     padding-bottom: 5px;
-    border: 1px solid #999;
-    border-radius: 6px;
+    border: 1px solid #d8d8d8;
+    border-radius: 14px;
     z-index: 2;
   }
   .barChart {

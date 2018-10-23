@@ -43,14 +43,14 @@
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile ripple>
+        <v-list-tile ripple ripple to="/metaedit">
           <v-list-tile-action>
-            <!--<v-icon>people</v-icon>-->
-            <v-icon>lock</v-icon>
+            <v-icon>chrome_reader_mode</v-icon>
+            <!--<v-icon>lock</v-icon>-->
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>
-              Create New Objects
+              Meta Edit
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -377,13 +377,13 @@ export default {
   }
   .gradientHead{
     background: #3aa0ff;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fafafa, #787878);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fafafa, #787878); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #fafafa, #f5f5f5);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fafafa, #f5f5f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .gradientDialog{
     background: #000428;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fafafa, #787878);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fafafa, #787878); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #fafafa, #f5f5f5);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #fafafa, #f5f5f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
   .transper {
     background-color: rgba(240,240,240,0.8) !important;

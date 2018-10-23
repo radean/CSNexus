@@ -4,7 +4,8 @@ import Router from 'vue-router'
 import Welcome from '../components/AppMain/Welcome.vue'
 import AddBrandAmbassador from '../components/AppMain/AddBrandAmbassador.vue'
 import Dashboard from '../components/AppMain/Dashboard.vue'
-import Create from '../components/AppMain/Create.vue'
+import MetaEdit from '../components/AppMain/MetaEdit.vue'
+// import Create from '../components/AppMain/Create.vue'
 import Edit from '../components/AppMain/Edit.vue'
 import Registration from '../components/Auth/Registration.vue'
 import Login from '../components/Auth/Login.vue'
@@ -41,10 +42,15 @@ export const routes = [
       name: 'DashBoard',
       component: Dashboard
     },
+    {
+      path: '/metaedit',
+      name: 'MetaEdit',
+      component: MetaEdit
+    },
     // {
-    //   path: '/create',
-    //   name: 'Create',
-    //   component: Create
+    //     path: '/create',
+    //     name: 'Create',
+    //     component: Create
     // },
     // {
     //   path: '/edit',

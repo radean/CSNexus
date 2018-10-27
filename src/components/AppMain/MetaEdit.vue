@@ -35,6 +35,7 @@
         </v-toolbar>
 
         <v-tabs-items v-model="tab">
+
           <v-tab-item id="c1">
             <v-card flat class="gradientHead">
               <v-card-text>
@@ -48,13 +49,11 @@
                         <br>
                       Misuse of this section can take a minimum duration of <strong>six working days</strong>  to fix.
                     </v-flex>
-
-                    <form @submit.prevent="onBAReg" class="mb-5">
-
-                      <v-container grid-list-md text-xs-center>
+                      <v-container>
                         <v-layout row wrap>
                           <!--Section halfA-->
-                          <v-flex xs6 >
+                          <v-flex xs6>
+                            <form @submit.prevent="onMetaReg">
                             <!--title-->
                             <v-flex xs12 class="title"> BAMS™ Initial Data </v-flex>
                             <v-flex xs12> All basic application information can be edited by below </v-flex>
@@ -70,178 +69,383 @@
                                       :clearable="true"
                               ></v-text-field>
                             </v-flex>
-                            <!--Company Name -->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="Company name that appear (default is VDM)"
-                                      persistent-hint
-                                      name="company"
-                                      label="Company"
-                                      v-model="editMetaData.company"
-                              ></v-text-field>
-                            </v-flex>
+
                             <!--Full Name -->
                             <v-flex xs10 offset-xs1>
                               <v-text-field
                                       required
-                                      hint="Full Name of Brand"
+                                      hint="Full Name of Brand should not exceed 40 letters"
                                       persistent-hint
                                       name="name"
                                       label="Full Name"
+                                      max="40"
+                                      :counter="true"
                                       v-model="editMetaData.fullAppName"
                               ></v-text-field>
                             </v-flex>
-                            <!--Activation Start Date-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="From which data collection started"
-                                      persistent-hint
-                                      name="address"
-                                      label="Activation Start Date"
-                                      v-model="editMetaData.address"
-                              ></v-text-field>
+
+                            <!--Company & Version-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+
+                                <!--Company Name -->
+                                <v-flex xs5 sm5 md5 offset-md1>
+                                  <v-text-field
+                                          required
+                                          hint="Company name that appear (default is VDM)"
+                                          persistent-hint
+                                          name="company"
+                                          label="Company"
+                                          v-model="editMetaData.companyName"
+                                  ></v-text-field>
+                                </v-flex>
+
+                                <!--Version-->
+                                <v-flex xs5 sm5 md5>
+                                  <v-text-field
+                                          required
+                                          hint="Should be 1.0.0 [Any three digit according to build Number]"
+                                          persistent-hint
+                                          name="appVersion"
+                                          label="Version"
+                                          v-model="editMetaData.version"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+
+                            <!--Modes & Subscription-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!--Application Mode-->
+                                <v-flex xs5 sm5 md5 offset-md1>
+                                  <v-select
+                                          :items="['Licensed', 'Non-Licensed']"
+                                          v-model="editMetaData.status"
+                                          hint="Application Licensed status must be either Licensed or Non-Licensed"
+                                          persistent-hint
+                                          name="appStatus"
+                                          label="Application status"
+                                  ></v-select>
+                                </v-flex>
+                                <!--Subscription-->
+                                <v-flex xs5 sm5 md5>
+                                  <v-select
+                                          :items="['Spark', 'Kindle', 'Blaze']"
+                                          v-model="editMetaData.subscription"
+                                          hint="Spark, Kindle or Blaze, Please add your Subscriptions"
+                                          persistent-hint
+                                          name="appMode"
+                                          label="Application Subscription"
+                                  ></v-select>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+
+                            <!--Themes & Misc-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!--Theme-->
+                                <v-flex xs5 sm5 md5 offset-md1>
+                                  <v-select
+                                          :items="['Light', 'Dark']"
+                                          v-model="editMetaData.colorTheme"
+                                          hint="Select basic Theme"
+                                          persistent-hint
+                                          name="appMode"
+                                          label="Application Color Theme"
+                                  ></v-select>
+                                </v-flex>
+                                <!--Version -->
+                                <v-flex xs5 sm5 md5>
+                                  More Options Will come by
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+
+                            <!--Activation Dates-->
+                            <v-flex xs12 class="title mt-4">Start/End Dates</v-flex>
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!--Activation Start Date-->
+                                <v-flex xs5 sm5 md5 offset-md1>
+                                  <v-menu
+                                          ref="selectedDateTriggerStart"
+                                          :close-on-content-click="true"
+                                          v-model="selectedDateTriggerStart"
+                                          :nudge-right="40"
+                                          lazy
+                                          transition="scale-transition"
+                                          offset-y
+                                          full-width
+                                          max-width="290px"
+                                          min-width="290px"
+                                  >
+                                    <v-text-field
+                                            slot="activator"
+                                            v-model="editMetaData.startDate"
+                                            label="Activation Start Date"
+                                            hint="Please add date precisely"
+                                            persistent-hint
+                                            prepend-icon="event"
+                                            :clearable="true"
+                                    ></v-text-field>
+                                    <v-date-picker v-model="editMetaData.startDate" no-title @input="selectedDateTriggerStart = false"></v-date-picker>
+                                  </v-menu>
+                                </v-flex>
+                                <!--Activation End Date-->
+                                <v-flex xs5 sm5 md5>
+                                  <v-menu
+                                          ref="selectedDateTriggerEnd"
+                                          :close-on-content-click="true"
+                                          v-model="selectedDateTriggerEnd"
+                                          :nudge-right="40"
+                                          lazy
+                                          transition="scale-transition"
+                                          offset-y
+                                          full-width
+                                          max-width="290px"
+                                          min-width="290px"
+                                  >
+                                    <v-text-field
+                                            slot="activator"
+                                            v-model="editMetaData.endDate"
+                                            label="Activation End Date"
+                                            hint="Please add date precisely"
+                                            persistent-hint
+                                            prepend-icon="event"
+                                            :clearable="true"
+                                    ></v-text-field>
+                                    <v-date-picker v-model="editMetaData.endDate" no-title @input="selectedDateTriggerEnd = false"></v-date-picker>
+                                  </v-menu>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+
+                            <!--submission-->
+                            <v-flex xs12>
+                              <v-btn large :disabled="!metaFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
                             </v-flex>
-                            <!--Activation End Date-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="To the date when data collection end"
-                                      persistent-hint
-                                      name="Password"
-                                      label="Activation End Date"
-                                      min="6"
-                                      v-model="editMetaData.password"
-                                      :type="'password'"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Version-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="Should be 1.0.0 [Any three digit according to build Number]"
-                                      persistent-hint
-                                      name="appVersion"
-                                      label="Version"
-                                      v-model="editMetaData.version"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Application Mode-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="Application Licensed Mode must be either Licensed or Non-Licensed"
-                                      persistent-hint
-                                      name="appMode"
-                                      label="Application Mode"
-                                      v-model="editMetaData.appMode"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Subscription-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="Application Subscription Package either Spark[1], Flame[2] or Blaze[3]"
-                                      persistent-hint
-                                      name="subscription"
-                                      label="Subscription Status"
-                                      v-model="editMetaData.subscription"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Theme-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      hint="Change between 3 Different Color Theme"
-                                      persistent-hint
-                                      name="Password"
-                                      label="Application Color Theme"
-                                      v-model="editMetaData.colorTheme"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Version -->
-                            <v-flex xs10 offset-xs1>
-                              <v-select
-                                      v-bind:items="unAssignedStores"
-                                      v-model="editMetaData.store"
-                                      label="ASSIGN STORE"
-                                      single-line
-                                      item-text="name"
-                                      item-value="id,name"
-                                      :loading="selectLoading"
-                                      bottom
-                              ></v-select>
-                            </v-flex>
+                            </form>
                           </v-flex>
+
                           <!--Section halfA-->
+
                           <v-flex xs6 >
-                            <!--EMAIL-->
+
+                            <!--title-->
+                            <v-flex xs12 class="title"> Dashboard Widget Edit </v-flex>
+                            <v-flex xs12> All dashboard parameters are controlled by here. </v-flex>
+
+                            <!--Dashboard edit Dialogue Button-->
                             <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      name="email"
-                                      label="E-MAIL"
-                                      v-model="addBA.email"
-                                      max="5"
-                                      :counter="true"
-                                      :clearable="true"
-                              ></v-text-field>
+
+                              <v-dialog v-model="dashboardEditDialog" width="900">
+                                <v-btn slot="activator" color="blue" dark>
+                                  Widget Controller
+                                </v-btn>
+                                <v-card>
+                                  <v-card-title class="headline gradientDialog text--white" primary-title>
+                                    Widget Control Area
+                                  </v-card-title>
+
+                                  <v-card-text>
+
+                                    <form @submit.prevent="onMetaReg">
+
+                                    <!--Widget 01 , Widget 02 , Widget 03-->
+                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                      <v-layout row wrap>
+
+                                        <!--Section A -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 01 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+
+                                        <!--Section B -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 02 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+
+                                        <!--Section C -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 03 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+                                      </v-layout>
+                                    </v-container>
+
+                                    <!--Widget 04 , Widget 05 , Widget 06-->
+                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                      <v-layout row wrap>
+
+                                        <!--Section D -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 04 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+
+                                        <!--Section E -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 05 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+
+                                        <!--Section F -->
+                                        <v-flex xs4 sm4 md4>
+
+                                          <!--Widget-1 Pie Chart-->
+                                          <v-flex xs10 offset-xs1>
+                                            <v-flex xs12 class="text-lg-left subheading"> Widget 06 </v-flex>
+                                            <v-text-field
+                                                    name="widget01Title"
+                                                    label="Title"
+                                                    v-model="editDashboard.widget01.title"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                    name="widget01Description"
+                                                    label="Description"
+                                                    v-model="editDashboard.widget01.description"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+
+                                        </v-flex>
+
+                                      </v-layout>
+                                    </v-container>
+
+                                    <!--submission-->
+                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                      <v-layout row wrap>
+                                        <!--Password-->
+                                        <v-flex xs3 class="ma-5">
+                                          <v-flex xs12 class="title"> Key Passcode Required </v-flex>
+                                          <v-text-field
+                                                  name="widgetDashboardPass"
+                                                  label="Passcode"
+                                                  v-model="editDashboardPass"
+                                                  type="password"
+                                                   :clearable="true"
+                                          ></v-text-field>
+                                          <v-btn large :disabled="!metaFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
+                                        </v-flex>
+                                        <!--Buttons-->
+                                        <v-flex xs7 class="mt-5 ml-4">
+                                          <v-flex xs12 class="title"> Important Note! </v-flex>
+                                          <v-flex xs12> Widget are supposed to manage by Authorized personnel only. </v-flex>
+                                          <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
+                                          <v-btn type="button" class="green" dark> Support <v-icon right>add_alert</v-icon></v-btn>
+                                        </v-flex>
+                                      </v-layout>
+                                    </v-container>
+
+                                    </form>
+
+                                  </v-card-text>
+
+                                  <v-divider></v-divider>
+
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="primary" flat @click="dashboardEditDialog = false">
+                                      Done
+                                    </v-btn>
+                                  </v-card-actions>
+
+                                </v-card>
+
+                              </v-dialog>
+
                             </v-flex>
-                            <!--username-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      name="name"
-                                      label="NAME"
-                                      v-model="addBA.name"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Address-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      name="address"
-                                      label="ADDRESS"
-                                      v-model="addBA.address"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--password-->
-                            <v-flex xs10 offset-xs1>
-                              <v-text-field
-                                      required
-                                      name="Password"
-                                      label="PASSCODE"
-                                      min="6"
-                                      v-model="addBA.password"
-                                      :type="'password'"
-                              ></v-text-field>
-                            </v-flex>
-                            <!--Assign Store -->
-                            <v-flex xs10 offset-xs1>
-                              <v-select
-                                      v-bind:items="unAssignedStores"
-                                      v-model="addBA.store"
-                                      label="ASSIGN STORE"
-                                      single-line
-                                      item-text="name"
-                                      item-value="id,name"
-                                      :loading="selectLoading"
-                                      bottom
-                              ></v-select>
-                            </v-flex>
+
+
                           </v-flex>
                         </v-layout>
                       </v-container>
-
-
-                      <!--submission-->
-                      <v-flex xs12>
-                        <v-btn large :disabled="!baFormValid" type="submit" class="green" > EDIT/CREATE <v-icon right>send</v-icon></v-btn>
-                      </v-flex>
-
-                    </form>
-
                   </v-layout>
                 </v-container>
               </v-card-text>
@@ -297,7 +501,7 @@
                       </v-flex>
                       <!--submission-->
                       <v-flex xs12>
-                        <v-btn large :disabled="!supervisorFormValid" type="submit" class="green" > SUBMIT <v-icon right>send</v-icon></v-btn>
+                        <v-btn large :disabled="!metaFormValid" type="submit" class="green" > SUBMIT <v-icon right>send</v-icon></v-btn>
                       </v-flex>
 
                     </form>
@@ -358,17 +562,6 @@
             </v-card>
           </v-tab-item>
         </v-tabs-items>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item
-                  v-for="item in items"
-                  :key="item"
-          >
-            <v-card flat>
-              <v-card-text>{{ text }}</v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs-items>
       </div>
     </v-layout>
   </v-container>
@@ -401,6 +594,7 @@
             password: '',
             role: 'Supervisor',
         },
+//          Application basic information editing
         editMetaData: {
           appName: '',
           fullAppName: '',
@@ -408,17 +602,29 @@
           startDate: '',
           endDate: '',
           version: '',
-          mode: '',
           status: '',
           subscription: '',
           colorTheme: ''
         },
+//          Editing Dashboard
+        editDashboard: {
+            widget01: {title: '', description: ''},
+            widget02: {title: '', description: ''},
+            widget03: {title: '', description: ''},
+            widget04: {title: '', description: ''},
+            widget05: {title: '', description: ''},
+            widget06: {title: '', description: ''},
+        },
 //        GUI DATA
         selectLoading: true,
         tab: '',
+        dashboardEditDialog: false,
+        editDashboardPass: 1000000,
         unAssignedStores: [
 
         ],
+        selectedDateTriggerStart: '',
+        selectedDateTriggerEnd: '',
         cities: [
           'KHI',
           'LHR',
@@ -434,8 +640,37 @@
             },6000)
         })
       },
-      onSupervisorReg() {
-        this.$store.dispatch('supervisorReg', {email: this.addSupervisor.email, password: this.addSupervisor.password, supervisor: this.addSupervisor})
+      onMetaReg() {
+        let StartDate = this.editMetaData.startDate;
+        let EndDate = this.editMetaData.endDate;
+        let timestampStartDate = 0;
+        let timestampEndDate = 0;
+
+        //Converting Date to Timestamp
+        function toTimeStamp(payload){
+          let time = payload;
+          time = time.split('-');
+          let sortedDate = time[1]+','+time[2]+','+time[0]
+          sortedDate = new Date(sortedDate).getTime();
+          return sortedDate
+        }
+
+//        Conversion Date To Time
+        timestampStartDate = toTimeStamp(StartDate);
+        timestampEndDate = toTimeStamp(EndDate);
+
+        // Pushing Data to State
+        this.$store.dispatch('metaReg', {
+            name: this.editMetaData.appName,
+            fullname: this.editMetaData.fullAppName,
+            company: this.editMetaData.companyName,
+            startDate: timestampStartDate,
+            endDate: timestampEndDate,
+            version: this.editMetaData.version,
+            status: this.editMetaData.status,
+            subscription: this.editMetaData.subscription,
+            theme: this.editMetaData.colorTheme,
+        })
       },
       onStoreReg() {
         this.$store.dispatch('storeReg', this.addStore)
@@ -462,11 +697,15 @@
       },
 
 //      Validating Fields
-      supervisorFormValid(){
-        return this.addSupervisor.name !== ''
-          && this.addSupervisor.address !== ''
-          && this.addSupervisor.email !== ''
-          && this.addSupervisor.password !== ''
+      metaFormValid(){
+        return this.editMetaData.appName !== ''
+          && this.editMetaData.fullAppName !== ''
+          && this.editMetaData.companyName !== ''
+          && this.editMetaData.startDate !== ''
+          && this.editMetaData.endDate !== ''
+          && this.editMetaData.version !== ''
+          && this.editMetaData.mode !== ''
+          && this.editMetaData.subscription !== ''
       },
       storeFormValid(){
         return this.addStore.name !== '' && this.addStore.address !== '' && this.addStore.city !== ''

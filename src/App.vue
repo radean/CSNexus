@@ -382,8 +382,9 @@ export default {
   }
   .gradientDialog{
     background: #000428;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fafafa, #f5f5f5);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fafafa, #f5f5f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #ada3ff, #3aa0ff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ada3ff, #3aa0ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #FFF;
   }
   .transper {
     background-color: rgba(240,240,240,0.8) !important;

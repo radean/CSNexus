@@ -196,24 +196,24 @@ export const store = new Vuex.Store({
 
       // Fetching from FireStore Server
       firebase.firestore().collection('app-init').get().then((appInfo) => {
-        let appinfo = {};
-        appInfo.forEach((app) => {
-            appinfo = {
-                name : app.data().name,
-                fullname: app.data().fullname,
-                company : app.data().company,
-                version : app.data().version,
-                status : app.data().status,
-                theme: app.data().theme,
-                startDate: app.data().startDate,
-                endDate: app.data().endDate,
-                mode: app.data().mode,
-                subscription: app.data().subscription
-            };
-        });
-        commit('setAppinformation', appinfo);
-        commit('SET_PERCENTAGE_LOADING',{isLoading: true,  percentage: 25});
-      })
+            let appinfo = {};
+            appInfo.forEach((app) => {
+                appinfo = {
+                    name : app.data().name,
+                    fullname: app.data().fullname,
+                    company : app.data().company,
+                    version : app.data().version,
+                    status : app.data().status,
+                    theme: app.data().theme,
+                    startDate: app.data().startDate,
+                    endDate: app.data().endDate,
+                    mode: app.data().mode,
+                    subscription: app.data().subscription
+                };
+            });
+            commit('setAppinformation', appinfo);
+            commit('SET_PERCENTAGE_LOADING',{isLoading: true,  percentage: 25});
+        })
 
       // Fetching Skus
       firebase.firestore().collection('app-init').doc('initial').collection('products').get().then((products) => {
@@ -1222,47 +1222,67 @@ export const store = new Vuex.Store({
         });
       });
     },
-    // Supervisor PUT
-    supervisorReg({commit}, payload){
+    // Application base inforamtion PUT
+    metaReg({commit}, payload){
       // Start Loading
       commit('SET_MAIN_LOADING', true);
-      // Authenticate Firebase User
-      var config = {
-        apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
-        authDomain: "bams-e190d.firebaseapp.com",
-        databaseURL: "https://bams-e190d.firebaseio.com"
-      };
-      let secondaryApp = firebase.initializeApp(config, "Secondary");
-      // admin.auth().createUser({
-      //   email: payload.email,
-      //   displayName: payload.ba.name,
-      //   emailVerified: false,
-      //   password: payload.password
-      // })
-      secondaryApp.auth().createUserWithEmailAndPassword(payload.email, payload.password).then((user) => {
-        const supervisor = {
-          uniqueId: user.uid,
-          name: payload.supervisor.name,
-          address: payload.supervisor.address,
-          email: payload.email,
-          store: {
-            id: 'none',
-            name: 'none'
-          },
-          password: payload.password,
-          role: 'Supervisor'
-        };
-        return firebase.database().ref('users').push(supervisor).then(() => {
-            // End Loading
-            secondaryApp.auth().signOut();
-            commit('SET_MAIN_LOADING', false);
-            // Sending Success Message
-            commit('SET_SUCCESS_MSG', 'Supervisor Successfully Created');
-            setTimeout(() => {
-              commit('SET_SUCCESS_MSG', 'Operation Successful');
-            }, 4000);
-          })
+      //Setting variables
+      let appInfo = payload;
+      // connecting to firestore
+        firebase.firestore().collection('app-init').doc('initial').set({
+            name : appInfo.name,
+            fullname: appInfo.fullname,
+            company : appInfo.company,
+            version : appInfo.version,
+            status : appInfo.status,
+            theme: appInfo.theme,
+            startDate: appInfo.startDate,
+            endDate: appInfo.endDate,
+            subscription: appInfo.subscription
+        }).then(function() {
+            console.log("App basic Information Transacted");
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
         });
+      commit('SET_MAIN_LOADING', false);
+      // Authenticate Firebase User
+      // var config = {
+      //   apiKey: "AIzaSyDsQvtEgYT_SiYeZ7YXtbAP0MLE1rudkJY",
+      //   authDomain: "bams-e190d.firebaseapp.com",
+      //   databaseURL: "https://bams-e190d.firebaseio.com"
+      // };
+      // let secondaryApp = firebase.initializeApp(config, "Secondary");
+      // // admin.auth().createUser({
+      // //   email: payload.email,
+      // //   displayName: payload.ba.name,
+      // //   emailVerified: false,
+      // //   password: payload.password
+      // // })
+      // secondaryApp.auth().createUserWithEmailAndPassword(payload.email, payload.password).then((user) => {
+      //   const supervisor = {
+      //     uniqueId: user.uid,
+      //     name: payload.supervisor.name,
+      //     address: payload.supervisor.address,
+      //     email: payload.email,
+      //     store: {
+      //       id: 'none',
+      //       name: 'none'
+      //     },
+      //     password: payload.password,
+      //     role: 'Supervisor'
+      //   };
+      //   return firebase.database().ref('users').push(supervisor).then(() => {
+      //       // End Loading
+      //       secondaryApp.auth().signOut();
+      //       commit('SET_MAIN_LOADING', false);
+      //       // Sending Success Message
+      //       commit('SET_SUCCESS_MSG', 'Supervisor Successfully Created');
+      //       setTimeout(() => {
+      //         commit('SET_SUCCESS_MSG', 'Operation Successful');
+      //       }, 4000);
+      //     })
+      //   });
     },
     // Store PUT
     storeReg({commit}, payload){

@@ -46,6 +46,7 @@ export const store = new Vuex.Store({
       subscription: true
     },
     // Data
+    optionalParameter: {},
     totalInterceptions: 0,
     totalPurchases: [],
     totalConversion: 0,
@@ -102,6 +103,9 @@ export const store = new Vuex.Store({
     },
     setUser (state, payload){
       state.user = payload;
+    },
+    setOptionalParameter (state, payload){
+      state.optionalParameter = payload;
     },
     setBaList (state, payload){
       state.baList = payload;
@@ -241,11 +245,18 @@ export const store = new Vuex.Store({
             commit('setAppinformation', appInfo);
           // Setting Progress Bar
           commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 75});
+      })
+
+      // Fetching Optional Parameters
+      firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('parameters').get().then((optional) => {
+          let optionalParameter = optional.data();
+          commit('setOptionalParameter', optionalParameter )
+          // Setting Progress Bar
+          commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 80});
           setTimeout(function () {
               commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
           },2000)
-      })
-
+  })
 
     },
     // USER AUTHENTICATION
@@ -1284,6 +1295,40 @@ export const store = new Vuex.Store({
       //     })
       //   });
     },
+    // Application Dashboard Charts Widget PUT
+    dashboardReg({commit}, payload){
+        // Start Loading
+        commit('SET_MAIN_LOADING', true);
+        //Setting variables
+        let appInfo = payload;
+        console.log(appInfo);
+        // connecting to firestore
+
+        firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').set(payload).then(function() {
+            console.log("App basic Information Transacted");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+
+        commit('SET_MAIN_LOADING', false);
+  },
+    // Application Dashboard Charts Widget PUT
+    optionalParameterReg({commit}, payload){
+        // Start Loading
+        commit('SET_MAIN_LOADING', true);
+        //Setting variables
+        console.log(payload)
+        // let optionalParameter = payload;
+        // connecting to firestore
+
+        firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('parameters').set(payload).then(function() {
+            console.log("App Optional Parameters Transacted");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+
+        commit('SET_MAIN_LOADING', false);
+    },
     // Store PUT
     storeReg({commit}, payload){
       // Start Loading
@@ -1327,6 +1372,9 @@ export const store = new Vuex.Store({
     },
     unAssignedStores (state){
       return state.unAssignedStores
+    },
+    optionalParameter (state){
+      return state.optionalParameter
     },
 
     // Accumulative Figures

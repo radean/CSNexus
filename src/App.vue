@@ -386,6 +386,29 @@ export default {
     background: linear-gradient(to right, #ada3ff, #3aa0ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     color: #FFF;
   }
+  .blueBleed {
+    background: #7fc9ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #f4f5ff, #f0f0f0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #f4f5ff, #f0f0f0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    box-shadow: 0px 8px 32px 2px rgba(0, 167, 255, 0.5) !important;
+    border-radius: 16px !important;
+    color: #00a3ff !important;
+  }
+  .greenBleed {
+    background: #a0ff9c;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #f4f5ff, #f0f0f0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #f4f5ff, #f0f0f0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    box-shadow: 0px 8px 32px 2px rgba(0, 255, 3, 0.5) !important;
+    border-radius: 16px !important;
+    color: #009442 !important;
+  }
+  .redSmallBleed {
+    background: transparent;  /* fallback for old browsers */
+    box-shadow: 0px 8px 32px 2px rgba(255, 0, 30, 0.5) !important;
+    border-radius: 64px !important;
+    border-color: red !important;
+    color: red !important;
+  }
   .transper {
     background-color: rgba(240,240,240,0.8) !important;
     box-shadow: 0px 0px 32px 0px rgba(0,0,0,0.2);

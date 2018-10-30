@@ -85,7 +85,7 @@
           <!--TOTAL TasteTrial-->
           <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart-->
-            <div class="header">Totalized </div>
+            <div class="header">{{ appInfo.widget02.title }} </div>{{ appInfo.widget02.description }}
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <!--<DoughNutChart :chart-data="tasteTrialData" :options="optionsDoughnut"></DoughNutChart>-->
           </v-flex>
@@ -95,19 +95,19 @@
         <v-flex xs12>
             <v-layout row wrap class="mb-0 pb-0">
           <v-flex md4 class="reportContainer elevation-20">
-              <div class="header"> &nbsp; {{ appInfo.widget03.title }} &nbsp; </div>
+              <div class="header"> &nbsp; {{ appInfo.widget03.title }} &nbsp; </div>{{ appInfo.widget03.description }}
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>-->
               <!--</div>-->
           </v-flex>
           <v-flex md3 class="reportContainer elevation-20">
-              <div class="header">&nbsp; {{ appInfo.widget04.title }} &nbsp;</div>
+              <div class="header">&nbsp; {{ appInfo.widget04.title }} &nbsp;</div>{{ appInfo.widget04.description }}
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>-->
               <!--</div>-->
           </v-flex>
           <v-flex md2 class="reportContainer elevation-20">
-              <div class="header">&nbsp; {{ appInfo.widget05.title }} &nbsp;</div>
+              <div class="header">&nbsp; {{ appInfo.widget05.title }} &nbsp;</div>{{ appInfo.widget05.description }}
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>-->
               <!--</div>-->

@@ -899,7 +899,7 @@
                                             <v-text-field
                                                     name="questionNode"
                                                     label="Question"
-                                                    v-model="editquestionNode.title"
+                                                    v-model="editquestionNode.question"
                                                     :clearable="true"
                                             ></v-text-field>
                                           </v-flex>
@@ -968,7 +968,7 @@
                                               class="elevation-16"
                                       >
                                         <template slot="items"  slot-scope="props">
-                                          <td>{{ props.item.title }}</td>
+                                          <td>{{ props.item.question }}</td>
                                           <td>
                                               <!--Adding array to chips-->
                                               <v-chip v-for="item in props.item.answers" :key="item" color="greenBleed">{{item}}</v-chip>
@@ -1161,6 +1161,11 @@
 
 //            para01: {title: '', type:'', description: ''},
         ],
+//      Questions in PWA
+        optionalQuestions: [
+
+//            para01: {question: '', answers:'', description: ''},
+        ],
 //      Question for B.A to Ask\
         editquestionNode: {
           answers: []
@@ -1220,10 +1225,10 @@
           currentAnswers.push(this.editquestionNode.answer);
           this.editquestionNode.answer = '';
       },
-        removeAnswerChip (item) {
-            this.editquestionNode.answers.splice(this.editquestionNode.answers.indexOf(item), 1)
-            this.editquestionNode.answers = [...this.editquestionNode.answers]
-        },
+      removeAnswerChip (item) {
+          this.editquestionNode.answers.splice(this.editquestionNode.answers.indexOf(item), 1)
+          this.editquestionNode.answers = [...this.editquestionNode.answers]
+      },
       deleteParameter(index) {
 //          Assiging local Variable
           let deleteItem = this.optionalParameter.indexOf(index);
@@ -1253,12 +1258,13 @@
       },
       onApplicationQuestionReg() {
 //          convertin array to object
-        let arrayList = this.optionalParameter;
-        let objectList = Object.assign({}, arrayList)
+        let arrayList = this.questionNode;
+        let objectList = Object.assign({}, arrayList);
+        console.log("Define Coglanted Measures", objectList);
 //          posting
-        this.$store.dispatch('optionalParameterReg', objectList).then(() => {
+        this.$store.dispatch('optionalQuestionReg', objectList).then(() => {
             setTimeout(() => {
-                document.location.reload();
+//                document.location.reload();
             },6000)
         })
       },
@@ -1348,6 +1354,22 @@
       },
     },
     created(){
+//    getting Optional Questions
+      let optionalQuestions = this.$store.getters.optionalQuestions;
+      let optionalQuestionArray = [];
+//    Seperating objects
+      for(let key in optionalQuestions) {
+          optionalQuestionArray.push({
+              question: optionalQuestions[key].question,
+              answers: optionalQuestions[key].answers,
+              description: optionalQuestions[key].description,
+          })
+      }
+
+      this.questionNode = this.questionNode.concat(optionalQuestionArray);
+      console.log(optionalQuestionArray);
+
+
 //    getting optional parameters
       let optionalParameter = this.$store.getters.optionalParameter;
       let optionalParameterArray = [];

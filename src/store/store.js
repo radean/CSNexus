@@ -47,6 +47,7 @@ export const store = new Vuex.Store({
     },
     // Data
     optionalParameter: {},
+    optionalQuestions:{},
     totalInterceptions: 0,
     totalPurchases: [],
     totalConversion: 0,
@@ -79,18 +80,33 @@ export const store = new Vuex.Store({
     user: null,
   },
   mutations: {
+    // ===================================
+    // ===================================
+
+    // I  N  I  T  I  A  T  E  D
+
+    // ===================================
+    // ===================================
+    setTheme(state, payload){
+        state.app.theme = payload;
+    },
+    setAppinformation(state, payload) {
+        state.appinfo = payload
+    },
+    setOptionalParameter (state, payload){
+        state.optionalParameter = payload;
+    },
+    setOptionalQuestions (state, payload){
+        state.optionalQuestions = payload;
+    },
+    // =================================
     setAppConnection (state, payload) {
       state.app.connection = payload
     },
-    setTheme(state, payload){
-      state.app.theme = payload;
-    },
+
     setAppHeader(state, payload){
       state.app.header.name = payload.name;
       state.app.header.location = payload.location;
-    },
-    setAppinformation(state, payload) {
-      state.appinfo = payload
     },
     setMode(state, payload){
       state.app.mode = payload;
@@ -103,9 +119,6 @@ export const store = new Vuex.Store({
     },
     setUser (state, payload){
       state.user = payload;
-    },
-    setOptionalParameter (state, payload){
-      state.optionalParameter = payload;
     },
     setBaList (state, payload){
       state.baList = payload;
@@ -254,10 +267,20 @@ export const store = new Vuex.Store({
           // Setting Progress Bar
           commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 80});
           setTimeout(function () {
-              commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
+              commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 85});
           },2000)
   })
 
+      // Fetching optional question Parameters
+      firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').get().then((optional) => {
+          let optionalQuestions = optional.data();
+          commit('setOptionalQuestions', optionalQuestions )
+          // Setting Progress Bar
+          commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 90});
+          setTimeout(function () {
+              commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
+          },2000)
+      })
     },
     // USER AUTHENTICATION
     userSignUp({commit}, payload){
@@ -1312,7 +1335,7 @@ export const store = new Vuex.Store({
 
         commit('SET_MAIN_LOADING', false);
   },
-    // Application Dashboard Charts Widget PUT
+    // Application Optional Parameter
     optionalParameterReg({commit}, payload){
         // Start Loading
         commit('SET_MAIN_LOADING', true);
@@ -1322,6 +1345,23 @@ export const store = new Vuex.Store({
         // connecting to firestore
 
         firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('parameters').set(payload).then(function() {
+            console.log("App Optional Parameters Transacted");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+
+        commit('SET_MAIN_LOADING', false);
+    },
+    // Application Optional Question
+    optionalQuestionReg({commit}, payload){
+        // Start Loading
+        commit('SET_MAIN_LOADING', true);
+        //Setting variables
+        console.log(payload)
+        // let optionalParameter = payload;
+        // connecting to firestore
+
+        firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').set(payload).then(function() {
             console.log("App Optional Parameters Transacted");
         }).catch(function(error) {
             console.error("Error writing document: ", error);
@@ -1376,8 +1416,11 @@ export const store = new Vuex.Store({
     optionalParameter (state){
       return state.optionalParameter
     },
+    optionalQuestions (state){
+        return state.optionalQuestions
+    },
 
-    // Accumulative Figures
+      // Accumulative Figures
 
     totalInterceptions (state){
       return state.totalInterceptions

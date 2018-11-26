@@ -405,7 +405,7 @@ export default {
   .greenBleed {
     background: #a0ff9c;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #ffffff, #f0f0f0);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #ffffff, #f0f0f0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to bottom, #ffffff, #f0f0f0) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     box-shadow: 0px 8px 32px 2px rgba(0, 255, 3, 0.25) !important;
     border-radius: 16px !important;
     color: #009442 !important;

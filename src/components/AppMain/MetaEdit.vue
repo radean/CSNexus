@@ -792,9 +792,6 @@
 
 
 
-
-
-
           <!--edit PWA Preferences-->
           <v-tab-item id="c2">
             <v-card flat class="gradientHead">
@@ -871,550 +868,165 @@
                         <v-flex xs6 >
 
                           <!--title-->
-                          <v-flex xs12 class="title"> Dashboard Widget Edit </v-flex>
-                          <v-flex xs12> All dashboard Text can be edit from here. </v-flex>
+                          <v-flex xs12 class="title"> Generic Controls </v-flex>
+                          <v-flex xs12> Add your questions here that will be asked by B.A to customers. </v-flex>
 
-                          <!--Dashboard edit Dialogue Button-->
-                          <v-flex xs10 offset-xs1>
+                          <!--Additional Controls-->
+                          <v-flex xs12>
+                            <!--Questions-->
+                            <v-flex xs10 offset-xs1>
 
-                            <v-dialog v-model="dashboardEditDialog" width="900">
-                              <v-btn slot="activator" :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
-                                Widget Controller
-                              </v-btn>
-                              <v-card>
-                                <v-card-title class="headline gradientDialog text--white" primary-title>
-                                  Widgets Text Controls
-                                </v-card-title>
+                              <v-dialog v-model="nodeQuestionsDialog" width="800">
+                                <v-btn slot="activator" class="blueBleed">
+                                  Manage Parameter
+                                </v-btn>
+                                <v-card>
+                                  <v-card-title class="headline gradientDialog text--white" primary-title>
+                                    QUESTION FOR CUSTOMERS
+                                  </v-card-title>
 
-                                <v-card-text>
+                                  <v-card-text>
 
-                                  <form @submit.prevent="onDashboardGUIReg">
+                                    <form @submit.prevent="onApplicationQuestionReg">
 
-                                    <!--Widget 01 , Widget 02 , Widget 03-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-
-                                        <!--Section A -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 01 </v-flex>
+                                      <!--Parameter Editing -->
+                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                        <v-flex xs12 class="text-lg-left subheading"> Please add/remove Application Questions from here.  </v-flex>
+                                        <v-layout row wrap>
+                                          <!-- Optional Parameters -->
+                                          <!--Main Question-->
+                                          <v-flex xs6 sm6 md6 offset-xs1>
                                             <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget01.title"
+                                                    name="questionNode"
+                                                    label="Question"
+                                                    v-model="editquestionNode.title"
                                                     :clearable="true"
                                             ></v-text-field>
+                                          </v-flex>
+                                          <!--Description-->
+                                          <v-flex xs4 sm4 md4 >
                                             <v-text-field
-                                                    name="widget01Description"
+                                                    name="descriptionNode"
                                                     label="Description"
-                                                    v-model="editDashboard.widget01.description"
+                                                    v-model="editquestionNode.description"
                                                     :clearable="true"
                                             ></v-text-field>
                                           </v-flex>
 
-                                        </v-flex>
+                                          <!--Answers-->
+                                          <v-flex xs10 sm10 md10 offset-xs1>
 
-                                        <!--Section B -->
-                                        <v-flex xs4 sm4 md4>
+                                            <template>
+                                              <v-combobox
+                                                      v-model="editquestionNode.answers"
+                                                      name="answerNode"
+                                                      :items="nodeQuestionsAnswerPreset"
+                                                      label="Possible Answers of this Question"
+                                                      chips
+                                                      clearable
+                                                      prepend-icon="filter_list"
+                                                      solo
+                                                      multiple
+                                              >
+                                                <template slot="selection" slot-scope="data">
+                                                  <v-chip
+                                                          :selected="data.selected"
+                                                          close
+                                                          @input="removeAnswerChip(data.item)"
+                                                  >
+                                                    <strong>{{ data.item }}</strong>&nbsp;
+                                                    <span>(Possible)</span>
+                                                  </v-chip>
+                                                </template>
+                                              </v-combobox>
+                                            </template>
 
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 02 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget02.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget02.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
+                                            <!--<v-text-field-->
+                                                    <!--name="answerNode"-->
+                                                    <!--label="Answers"-->
+                                                    <!--v-model="editquestionNode.answer"-->
+                                                    <!--:clearable="true"-->
+                                            <!--&gt;</v-text-field>-->
+                                            <!--Add Answer-->
+                                            <!--<v-btn fab small type="button" @click="addQuestionAnswerNode" class="darkBlueBleed ml-5" ><v-icon>add</v-icon></v-btn>-->
                                           </v-flex>
 
-                                        </v-flex>
-
-                                        <!--Section C -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 03 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget03.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget03.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
-
-                                    <!--Widget 04 , Widget 05 , Widget 06-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-
-                                        <!--Section D -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 04 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget04.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget04.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section E -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 05 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget05.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget05.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section F -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 06 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget06.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget06.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                      </v-layout>
-                                    </v-container>
-
-                                    <!--submission-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-                                        <!--Password-->
-                                        <v-flex xs3 class="ma-4 ml-0 mr-0">
-                                          <v-flex xs12 class="title"> Key Passcode Required </v-flex>
-                                          <v-text-field
-                                                  name="widgetDashboardPass"
-                                                  label="Passcode"
-                                                  v-model="editDashboardPass"
-                                                  type="password"
-                                                  :clearable="true"
-                                          ></v-text-field>
-                                          <v-btn large :disabled="!dashboardFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Buttons-->
-                                        <v-flex xs5 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Important Note! </v-flex>
-                                          <v-flex xs12> Widget are supposed to manage by <strong>Authorized</strong> personnel only. </v-flex>
-                                          <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
-                                          <v-btn type="button" class="green" dark> Support <v-icon right>add_alert</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Instructions-->
-                                        <v-flex xs3 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Reference Image </v-flex>
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
-
-                                  </form>
-
-                                </v-card-text>
-
-                                <v-divider></v-divider>
-
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn class="blueBleed" @click="dashboardEditDialog = false">
-                                    Done
-                                  </v-btn>
-                                </v-card-actions>
-
-                              </v-card>
-
-                            </v-dialog>
-
-                          </v-flex>
-
-                          <!--title-->
-                          <v-flex xs12 class="title"> Closed for Upgrade </v-flex>
-                          <v-flex xs12> Closed for Upgrade </v-flex>
-
-                          <!--Dashboard Parameter edit Dialogue Button-->
-                          <v-flex xs10 offset-xs1>
-
-                            <v-dialog v-model="dashboardEditDialog" width="900">
-                              <v-btn slot="activator" class="blueBleed">
-                                Widget Parameter
-                              </v-btn>
-                              <v-card>
-                                <v-card-title class="headline gradientDialog text--white" primary-title>
-                                  Widgets Parameter
-                                </v-card-title>
-
-                                <v-card-text>
-
-                                  <form @submit.prevent="onDashboardGUIReg">
-
-                                    <!--Widget 01 , Widget 02 , Widget 03-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-
-                                        <!--Section A -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 01 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget01.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget01.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section B -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 02 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget02.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget02.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section C -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 03 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget03.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget03.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
-
-                                    <!--Widget 04 , Widget 05 , Widget 06-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-
-                                        <!--Section D -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 04 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget04.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget04.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section E -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 05 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget05.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget05.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                        <!--Section F -->
-                                        <v-flex xs4 sm4 md4>
-
-                                          <!--Widget-1 Pie Chart-->
-                                          <v-flex xs10 offset-xs1>
-                                            <v-flex xs12 class="text-lg-left subheading"> Widget 06 </v-flex>
-                                            <v-text-field
-                                                    name="widget01Title"
-                                                    label="Title"
-                                                    v-model="editDashboard.widget06.title"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                            <v-text-field
-                                                    name="widget01Description"
-                                                    label="Description"
-                                                    v-model="editDashboard.widget06.description"
-                                                    :clearable="true"
-                                            ></v-text-field>
-                                          </v-flex>
-
-                                        </v-flex>
-
-                                      </v-layout>
-                                    </v-container>
-
-                                    <!--submission-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-                                        <!--Password-->
-                                        <v-flex xs3 class="ma-4 ml-0 mr-0">
-                                          <v-flex xs12 class="title"> Key Passcode Required </v-flex>
-                                          <v-text-field
-                                                  name="widgetDashboardPass"
-                                                  label="Passcode"
-                                                  v-model="editDashboardPass"
-                                                  type="password"
-                                                  :clearable="true"
-                                          ></v-text-field>
-                                          <v-btn large :disabled="!dashboardFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Buttons-->
-                                        <v-flex xs5 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Important Note! </v-flex>
-                                          <v-flex xs12> Widget are supposed to manage by <strong>Authorized</strong> personnel only. </v-flex>
-                                          <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
-                                          <v-btn type="button" class="green" dark> Support <v-icon right>add_alert</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Instructions-->
-                                        <v-flex xs3 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Reference Image </v-flex>
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
-
-                                  </form>
-
-                                </v-card-text>
-
-                                <v-divider></v-divider>
-
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn color="primary" flat @click="dashboardEditDialog = false">
-                                    Done
-                                  </v-btn>
-                                </v-card-actions>
-
-                              </v-card>
-
-                            </v-dialog>
-
-                          </v-flex>
-
-                          <!--title-->
-                          <v-flex xs12 class="title"> Manage Optional Parameter </v-flex>
-                          <v-flex xs12> Optional Question in PWA and Dashboard Charts can be Managed from Here. </v-flex>
-
-                          <!--Optional Parameter Editing-->
-                          <v-flex xs10 offset-xs1>
-
-                            <v-dialog v-model="optionalParameterDialog" width="600">
-                              <v-btn slot="activator" class="blueBleed">
-                                Manage Parameter
-                              </v-btn>
-                              <v-card>
-                                <v-card-title class="headline gradientDialog text--white" primary-title>
-                                  OPTIONAL PARAMETER MANAGER
-                                </v-card-title>
-
-                                <v-card-text>
-
-                                  <form @submit.prevent="onOptionalParameterReg">
-
-                                    <!--Parameter Editing -->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-flex xs12 class="text-lg-left subheading"> You can add/remove parameters.  </v-flex>
-                                      <v-layout row wrap>
-                                        <!-- Optional Parameters -->
-                                        <v-flex xs3 sm3 md3 offset-xs1>
-                                          <v-text-field
-                                                  name="optionalParameterTitle"
-                                                  label="Title"
-                                                  v-model="editOptionalParameter.title"
-                                                  :clearable="true"
-                                          ></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs3 sm3 md3 >
-                                          <v-select
-                                                  :items="['boolean', 'text']"
-                                                  name="optionalParameterType"
-                                                  label="Type"
-                                                  v-model="editOptionalParameter.type"
-                                                  :clearable="true"
-                                          ></v-select>
-                                        </v-flex>
-                                        <v-flex xs4 sm4 md4 >
-                                          <v-text-field
-                                                  name="widget01Title"
-                                                  label="Description"
-                                                  v-model="editOptionalParameter.description"
-                                                  :clearable="true"
-                                          ></v-text-field>
-                                        </v-flex>
-
-                                        <!--Add Parameter-->
-                                        <v-btn type="button" @click="addParameter" class="blueBleed ml-5 mb-5" ><v-icon left>add</v-icon> Add </v-btn>
-
-                                      </v-layout>
-                                    </v-container>
-
-                                    <v-data-table
-                                            :headers="[{ text: 'Title', value: 'title' },
-                                                { text: 'Type', value: 'type' },
+                                          <!--Add Parameter-->
+                                          <v-btn type="button" @click="addquestionNode" class="blueBleed ml-5 mb-5" ><v-icon left>add</v-icon> Add </v-btn>
+
+                                        </v-layout>
+                                      </v-container>
+
+                                      <v-data-table
+                                              :headers="[{ text: 'Question', value: 'question' },
+                                                { text: 'Possible Answers', value: 'possibleAnswers' },
                                                 { text: 'Description', value: 'description' },
                                                 { text: 'Action', value: 'action' }
                                                 ]"
-                                            :items="optionalParameter"
-                                            hide-actions
-                                            class="elevation-16"
-                                    >
-                                      <template slot="items"  slot-scope="props">
-                                        <td>{{ props.item.title }}</td>
-                                        <td class="text-xs-right">{{ props.item.type }}</td>
-                                        <td class="text-xs-right">{{ props.item.description }}</td>
-                                        <td class="text-xs-right"><v-btn outline small fab @click="deleteParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
-                                      </template>
-                                    </v-data-table>
+                                              :items="questionNode"
+                                              hide-actions
+                                              class="elevation-16"
+                                      >
+                                        <template slot="items"  slot-scope="props">
+                                          <td>{{ props.item.title }}</td>
+                                          <td>
+                                              <!--Adding array to chips-->
+                                              <v-chip v-for="item in props.item.answers" :key="item" color="greenBleed">{{item}}</v-chip>
+                                          </td>
+                                          <td>{{ props.item.description }}</td>
+                                          <td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
+                                        </template>
+                                      </v-data-table>
 
-                                    <!--submission-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-                                        <!--Password-->
-                                        <v-flex xs5 class="ma-4 ml-0 mr-0">
-                                          <v-flex xs12 class="title"> Submission </v-flex>
-                                          <v-flex xs12 class="caption"> Key Passcode Required </v-flex>
-                                          <v-text-field
-                                                  name="widgetDashboardPass"
-                                                  label="Passcode"
-                                                  v-model="editDashboardPass"
-                                                  type="password"
-                                                  :clearable="true"
-                                          ></v-text-field>
-                                          <v-btn  :disabled="!dashboardFormValid"  type="submit" class="greenBleed" ><v-icon left>create</v-icon> CONFIRM CHANGES </v-btn>
-                                        </v-flex>
-                                        <!--Buttons-->
-                                        <v-flex xs5 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Important Note! </v-flex>
-                                          <v-flex xs12> This section is supposed to be used by an <strong>Authorized</strong> personnel only. </v-flex>
-                                          <v-flex xs12> Misuse of this section may lead to software malfunction, If something went wrong please stop editing BAMS further and contact your I.T Support. </v-flex>
-                                          <v-btn type="button" class="greenBleed" ><v-icon left>add_alert</v-icon> Support </v-btn>
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
+                                      <!--submission-->
+                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                        <v-layout row wrap>
+                                          <!--Password-->
+                                          <v-flex xs5 class="ma-4 ml-0 mr-0">
+                                            <v-flex xs12 class="title"> Submission </v-flex>
+                                            <v-flex xs12 class="caption"> Key Passcode Required </v-flex>
+                                            <v-text-field
+                                                    name="widgetDashboardPass"
+                                                    label="Passcode"
+                                                    v-model="editDashboardPass"
+                                                    type="password"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                            <v-btn  :disabled="!dashboardFormValid"  type="submit" class="greenBleed" ><v-icon left>create</v-icon> CONFIRM CHANGES </v-btn>
+                                          </v-flex>
+                                          <!--Buttons-->
+                                          <v-flex xs5 class="mt-4 ml-0">
+                                            <v-flex xs12 class="title"> Important Note! </v-flex>
+                                            <v-flex xs12> This section is supposed to be used by an <strong>Authorized</strong> personnel only. </v-flex>
+                                            <v-flex xs12> Misuse of this section may lead to software malfunction, If something went wrong please stop editing BAMS further and contact your I.T Support. </v-flex>
+                                            <v-btn type="button" class="greenBleed" ><v-icon left>add_alert</v-icon> Support </v-btn>
+                                          </v-flex>
+                                        </v-layout>
+                                      </v-container>
 
-                                  </form>
+                                    </form>
 
-                                </v-card-text>
+                                  </v-card-text>
 
-                                <v-divider></v-divider>
+                                  <v-divider></v-divider>
 
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn color="primary" flat @click="optionalParameterDialog = false">
-                                    Done
-                                  </v-btn>
-                                </v-card-actions>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="primary" flat @click="nodeQuestionsDialog = false">
+                                      Done
+                                    </v-btn>
+                                  </v-card-actions>
 
-                              </v-card>
+                                </v-card>
 
-                            </v-dialog>
+                              </v-dialog>
 
+                            </v-flex>
                           </v-flex>
+
+                          <!--title-->
+                          <v-flex xs12 class="title"> Additional Controls </v-flex>
+                          <v-flex xs12> These control likely to be update in 1.5.0, Currently it is inactive </v-flex>
 
 
                         </v-flex>
@@ -1549,10 +1161,20 @@
 
 //            para01: {title: '', type:'', description: ''},
         ],
+//      Question for B.A to Ask\
+        editquestionNode: {
+          answers: []
+        },
+        nodeQuestionsAnswerPreset: ['Do not Know ', 'Do not want to tell'],
+        questionNode: [
+
+//            question: {question: '', type:'', description: ''},
+        ],
 //        GUI DATA
         selectLoading: true,
         tab: '',
         dashboardEditDialog: false,
+        nodeQuestionsDialog: false,
         optionalParameterDialog: false,
         editDashboardPass: 1000000,
         unAssignedStores: [
@@ -1581,16 +1203,35 @@
         })
       },
       addParameter() {
-//          Assiging local Variable
-          let add = this.editOptionalParameter;
 //          adding in optional Parameter Object
-          this.optionalParameter.push(this.editOptionalParameter);
-          this.editOptionalParameter = {};
+            this.optionalParameter.push(this.editOptionalParameter);
+            this.editOptionalParameter = {};
+        },
+      addquestionNode() {
+//          adding in optional Parameter Object
+          this.questionNode.push(this.editquestionNode);
+          this.editquestionNode = {
+              answers:[],
+          };
       },
+      addQuestionAnswerNode(){
+//          Adding Values to arrays in an object
+          let currentAnswers = this.editquestionNode.answers;
+          currentAnswers.push(this.editquestionNode.answer);
+          this.editquestionNode.answer = '';
+      },
+        removeAnswerChip (item) {
+            this.editquestionNode.answers.splice(this.editquestionNode.answers.indexOf(item), 1)
+            this.editquestionNode.answers = [...this.editquestionNode.answers]
+        },
       deleteParameter(index) {
 //          Assiging local Variable
           let deleteItem = this.optionalParameter.indexOf(index);
           this.optionalParameter.splice(index, 1)
+      },
+      deleteQuestionParameter(index){
+//          Deleting index
+          this.questionNode.splice(index, 1)
       },
       onDashboardGUIReg() {
           this.$store.dispatch('dashboardReg', this.editDashboard).then(() => {
@@ -1608,6 +1249,17 @@
             setTimeout(() => {
             document.location.reload();
           },6000)
+        })
+      },
+      onApplicationQuestionReg() {
+//          convertin array to object
+        let arrayList = this.optionalParameter;
+        let objectList = Object.assign({}, arrayList)
+//          posting
+        this.$store.dispatch('optionalParameterReg', objectList).then(() => {
+            setTimeout(() => {
+                document.location.reload();
+            },6000)
         })
       },
       onMetaReg() {

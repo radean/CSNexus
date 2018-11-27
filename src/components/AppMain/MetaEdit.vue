@@ -448,176 +448,108 @@
                             </v-flex>
 
                             <!--title-->
-                            <v-flex xs12 class="title"> Closed for Upgrade </v-flex>
-                            <v-flex xs12> Closed for Upgrade </v-flex>
+                            <v-flex xs12 class="title"> Manage Products </v-flex>
+                            <v-flex xs12> SKUs can be managed from here. </v-flex>
 
                             <!--Dashboard Parameter edit Dialogue Button-->
                             <v-flex xs10 offset-xs1>
 
-                              <v-dialog v-model="dashboardEditDialog" width="900">
+                              <v-dialog v-model="productEditDialog" width="980">
                                 <v-btn slot="activator" class="blueBleed">
-                                  Widget Parameter
+                                 Manage SKUs
                                 </v-btn>
                                 <v-card>
                                   <v-card-title class="headline gradientDialog text--white" primary-title>
-                                    Widgets Parameter
+                                    SKUs Manager
                                   </v-card-title>
 
                                   <v-card-text>
 
-                                    <form @submit.prevent="onDashboardGUIReg">
+                                    <form @submit.prevent="onProductsReg">
 
-                                      <!--Widget 01 , Widget 02 , Widget 03-->
+                                      <!--Products and pre existed list-->
                                       <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
                                         <v-layout row wrap>
 
                                           <!--Section A -->
                                           <v-flex xs4 sm4 md4>
 
-                                            <!--Widget-1 Pie Chart-->
-                                            <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 01 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget01.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget01.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
+                                              <!-- Add/Remove Products-->
+                                              <v-flex xs10 offset-xs1>
+                                                <v-flex xs12 class="text-lg-left headline "> Add/Remove Products </v-flex>
+                                                  <!--ID-->
+                                                  <v-text-field
+                                                          name="productID"
+                                                          hint="ID # for Each product must be unique or previous item will be replaced"
+                                                          persistent-hint
+                                                          type="number"
+                                                          label="ID"
+                                                          v-model="productSkus.id"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                  <!--Name-->
+                                                  <v-text-field
+                                                          name="productName"
+                                                          hint="Whatever you wish to commit"
+                                                          persistent-hint
+                                                          label="Product Name"
+                                                          v-model="productSkus.name"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                  <!--Category-->
+                                                  <v-text-field
+                                                          name="productCategory"
+                                                          hint="Category must be identical"
+                                                          persistent-hint
+                                                          label="Category"
+                                                          v-model="productSkus.category"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                  <!--Price-->
+                                                  <v-text-field
+                                                          name="productprice"
+                                                          hint="Actual Price of product in PKR"
+                                                          persistent-hint
+                                                          label="Price"
+                                                          type="number"
+                                                          v-model="productSkus.price"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                </v-flex>
+                                            <v-flex xs4 offset-xs2>
+                                              <v-btn :disabled="productSkus.id === '' || productSkus.name === '' " type="button" class="blueBleed" @click="onProductAdd" > + Product <v-icon right>add</v-icon></v-btn>
                                             </v-flex>
-
                                           </v-flex>
 
                                           <!--Section B -->
-                                          <v-flex xs4 sm4 md4>
+                                          <v-flex xs8 sm8 md8>
 
-                                            <!--Widget-1 Pie Chart-->
+                                            <!--Existing SKUs List-->
                                             <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 02 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget02.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget02.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
+                                              <v-flex xs12 class="text-lg-left headline"> SKUs List </v-flex>
+                                                <v-data-table
+                                                  :headers="[{ text: 'ID', value: 'id' },
+                                                  { text: 'Name', value: 'name' },
+                                                  { text: 'Category', value: 'category' },
+                                                  { text: 'Price', value: 'price' },
+                                                  { text: 'Actions', value: 'actions' }
+                                                  ]"
+                                                  :items="productList"
+                                                >
+                                                  <template slot="items"  slot-scope="props">
+                                                    <td>{{ props.item.id }}</td>
+                                                    <td class="text-xs-right">{{ props.item.name }}</td>
+                                                    <td class="text-xs-right">{{ props.item.category }}</td>
+                                                    <td class="text-xs-right">{{ props.item.price }}</td>
+                                                    <td class="text-xs-right"><v-btn flat icon @click="deleteProduct(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
+                                                  </template>
+                                                </v-data-table>
+                                              </v-flex>
                                             </v-flex>
 
-                                          </v-flex>
-
-                                          <!--Section C -->
-                                          <v-flex xs4 sm4 md4>
-
-                                            <!--Widget-1 Pie Chart-->
-                                            <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 03 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget03.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget03.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                            </v-flex>
-
-                                          </v-flex>
-                                        </v-layout>
-                                      </v-container>
-
-                                      <!--Widget 04 , Widget 05 , Widget 06-->
-                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                        <v-layout row wrap>
-
-                                          <!--Section D -->
-                                          <v-flex xs4 sm4 md4>
-
-                                            <!--Widget-1 Pie Chart-->
-                                            <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 04 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget04.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget04.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                            </v-flex>
-
-                                          </v-flex>
-
-                                          <!--Section E -->
-                                          <v-flex xs4 sm4 md4>
-
-                                            <!--Widget-1 Pie Chart-->
-                                            <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 05 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget05.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget05.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                            </v-flex>
-
-                                          </v-flex>
-
-                                          <!--Section F -->
-                                          <v-flex xs4 sm4 md4>
-
-                                            <!--Widget-1 Pie Chart-->
-                                            <v-flex xs10 offset-xs1>
-                                              <v-flex xs12 class="text-lg-left subheading"> Widget 06 </v-flex>
-                                              <v-text-field
-                                                      name="widget01Title"
-                                                      label="Title"
-                                                      v-model="editDashboard.widget06.title"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                              <v-text-field
-                                                      name="widget01Description"
-                                                      label="Description"
-                                                      v-model="editDashboard.widget06.description"
-                                                      :clearable="true"
-                                              ></v-text-field>
-                                            </v-flex>
-
-                                          </v-flex>
-
-                                        </v-layout>
-                                      </v-container>
-
-                                      <!--submission-->
-                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                        <v-layout row wrap>
-                                          <!--Password-->
-                                          <v-flex xs3 class="ma-4 ml-0 mr-0">
-                                            <v-flex xs12 class="title"> Key Passcode Required </v-flex>
+                                          <!--Submission-->
+                                          <v-flex xs4 offset-xs4>
+                                            <v-flex xs12 class="title"> Key Passcode Required for Submission</v-flex>
                                             <v-text-field
                                                     name="widgetDashboardPass"
                                                     label="Passcode"
@@ -625,19 +557,9 @@
                                                     type="password"
                                                     :clearable="true"
                                             ></v-text-field>
-                                            <v-btn large :disabled="!dashboardFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
+                                            <v-btn large :disabled="!dashboardFormValid" type="submit" class="darkBlueBleed" > CONFIRM <v-icon right>create</v-icon></v-btn>
                                           </v-flex>
-                                          <!--Buttons-->
-                                          <v-flex xs5 class="mt-4 ml-0">
-                                            <v-flex xs12 class="title"> Important Note! </v-flex>
-                                            <v-flex xs12> Widget are supposed to manage by <strong>Authorized</strong> personnel only. </v-flex>
-                                            <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
-                                            <v-btn type="button" class="green" dark> Support <v-icon right>add_alert</v-icon></v-btn>
-                                          </v-flex>
-                                          <!--Instructions-->
-                                          <v-flex xs3 class="mt-4 ml-0">
-                                            <v-flex xs12 class="title"> Reference Image </v-flex>
-                                          </v-flex>
+
                                         </v-layout>
                                       </v-container>
 
@@ -649,7 +571,7 @@
 
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="primary" flat @click="dashboardEditDialog = false">
+                                    <v-btn color="primary" flat @click="productEditDialog = false">
                                       Done
                                     </v-btn>
                                   </v-card-actions>
@@ -810,7 +732,7 @@
                       <v-layout row wrap>
                         <!--Section halfA-->
                         <v-flex xs6>
-                          <form @submit.prevent="onMetaReg">
+                          <form @submit.prevent="onNodeMetaReg">
                             <!--title-->
                             <v-flex xs12 class="title"> BAMS™ NODE Meta Edit </v-flex>
                             <v-flex xs12> All initial PWA meta can be managed from below </v-flex>
@@ -830,20 +752,20 @@
                             <!--Company & Version-->
                             <v-container grid-list-md text-xs-center class="ma-0 pa-0">
                               <v-layout row wrap>
-
-                                <!--Application Background Image-->
-                                <v-flex xs5 sm5 md5 offset-md1 >
-                                  <upload-btn
-                                          :fileChangedCallback="nodeBGImage"
-                                          title="BG Image"
-                                          color="darkBlueBleed mt-5"
-                                          large
-                                  >
-                                  </upload-btn>
+                                <!--Theme-->
+                                <v-flex xs5 sm5 md5 offset-md1>
+                                  <v-text-field
+                                          required
+                                          hint="Theme this should be annotation"
+                                          persistent-hint
+                                          name="appTheme"
+                                          label="Color Theme"
+                                          v-model="editMetaDataNode.theme"
+                                  ></v-text-field>
                                 </v-flex>
 
                                 <!--Version-->
-                                <v-flex xs5 sm5 md5>
+                                <v-flex xs5 sm5 md5 >
                                   <v-text-field
                                           required
                                           hint="Should be 1.0.0 [Any three digit according to build Number]"
@@ -858,7 +780,7 @@
 
                             <!--submission-->
                             <v-flex xs12>
-                              <v-btn large :disabled="!metaFormValid" type="submit" class="greenBleed" > EDIT <v-icon right>create</v-icon></v-btn>
+                              <v-btn large :disabled="!nodeMetaFormValid" type="submit" class="greenBleed" > EDIT <v-icon right>create</v-icon></v-btn>
                             </v-flex>
                           </form>
                         </v-flex>
@@ -868,7 +790,7 @@
                         <v-flex xs6 >
 
                           <!--title-->
-                          <v-flex xs12 class="title"> Generic Controls </v-flex>
+                          <v-flex xs12 class="title"> General Questions </v-flex>
                           <v-flex xs12> Add your questions here that will be asked by B.A to customers. </v-flex>
 
                           <!--Additional Controls-->
@@ -1025,8 +947,31 @@
                           </v-flex>
 
                           <!--title-->
-                          <v-flex xs12 class="title"> Additional Controls </v-flex>
-                          <v-flex xs12> These control likely to be update in 1.5.0, Currently it is inactive </v-flex>
+                          <v-flex xs12 class="title"> PWA Background Image </v-flex>
+                          <v-flex xs12> Manage you Node's Background Image </v-flex>
+                          <!--Additional Controls-->
+                          <v-flex xs12>
+                            <!--Questions-->
+                            <v-flex xs10 offset-xs1>
+                              <form @submit.prevent="onImgChangeNodeReg">
+
+                              <!--Application Background Image-->
+                              <upload-btn
+                                      :fileChangedCallback="nodeBGImage"
+                                      title="BG Image"
+                                      color="darkBlueBleed pl-5 pr-5"
+                                      large
+                                      :loading="this.uploading"
+                              >
+                              </upload-btn>
+                              file Name : {{ this.editMetaDataNode.imgTheme }}
+                              <!--Password-->
+                              <v-flex xs5 offset-xs1 class="ma-4 ml-0 mr-0">
+                                <v-btn type="submit" :disabled="this.editMetaDataNode.imgTheme === ''" class="greenBleed" large ><v-icon left>create</v-icon> CONFIRM BG CHANGE </v-btn>
+                              </v-flex>
+                              </form>
+                            </v-flex>
+                          </v-flex>
 
 
                         </v-flex>
@@ -1127,7 +1072,7 @@
             role: 'Supervisor',
         },
 //          Application basic information editing
-          editMetaData: {
+        editMetaData: {
               appName: '',
               fullAppName: '',
               companyName: '',
@@ -1139,11 +1084,12 @@
               colorTheme: ''
           },
 //          Application basic information editing
-          editMetaDataNode: {
+        editMetaDataNode: {
               appName: '',
               version: '',
               imgTheme: '',
-          },
+              img: null
+      },
 //          Editing Dashboard
         editDashboard: {
             widget01: {title: '', description: ''},
@@ -1175,10 +1121,19 @@
 
 //            question: {question: '', type:'', description: ''},
         ],
+        productSkus: {
+            id: null,
+            name: '',
+            category: '',
+            price: null
+        },
+        productList:[],
 //        GUI DATA
+        uploading: false,
         selectLoading: true,
         tab: '',
         dashboardEditDialog: false,
+        productEditDialog: false,
         nodeQuestionsDialog: false,
         optionalParameterDialog: false,
         editDashboardPass: 1000000,
@@ -1196,8 +1151,10 @@
     },
     methods:{
 //    UI
-      nodeBGImage(bgImg) {
-
+      nodeBGImage (bgImg) {
+        console.log('File Name :', bgImg);
+        this.editMetaDataNode.imgTheme = bgImg.name;
+        this.editMetaDataNode.img = bgImg;
       },
 //    Application
       onBAReg() {
@@ -1215,6 +1172,7 @@
       addquestionNode() {
 //          adding in optional Parameter Object
           this.questionNode.push(this.editquestionNode);
+//          Reseting Questions
           this.editquestionNode = {
               answers:[],
           };
@@ -1238,12 +1196,55 @@
 //          Deleting index
           this.questionNode.splice(index, 1)
       },
+      onProductAdd(){
+//          scoping Variable
+          let product = this.productSkus;
+//          Concating with Table/Array
+          this.productList.push(product);
+//          Reseting Products
+          this.productSkus = {
+              id: null,
+              name: '',
+              category: '',
+              price: null
+          };
+          console.log('Product Added');
+      },
+      deleteProduct(index) {
+//          Assiging local Variable
+          let deleteItem = this.productList.indexOf(index);
+          this.productList.splice(index, 1)
+      },
+
+
+
+//        STORE
       onDashboardGUIReg() {
           this.$store.dispatch('dashboardReg', this.editDashboard).then(() => {
 //            setTimeout(() => {
 //                document.location.reload();
 //            },6000)
           })
+      },
+      onProductsReg() {
+//          converting array to object
+        let payload = this.productList;
+
+        let objectList = Object.assign({}, payload);
+//          posting
+        this.$store.dispatch('productsReg', objectList).then(() => {
+            setTimeout(() => {
+                console.log('data sent to $store', objectList)
+//                document.location.reload();
+            },6000)
+        })
+      },
+      onImgChangeNodeReg(){
+        let img = this.editMetaDataNode.img;
+//        Sending to Store
+        this.$store.dispatch('appBgImgReg', img).then(() => {
+            console.log('Sent to $Store')
+        })
       },
       onOptionalParameterReg() {
 //          convertin array to object
@@ -1267,6 +1268,19 @@
 //                document.location.reload();
             },6000)
         })
+      },
+      onNodeMetaReg(){
+        let payload = this.editMetaDataNode;
+
+//        Sending Payload to store
+          this.$store.dispatch('nodeMetaDataReg', payload).then(() => {
+              setTimeout(() => {
+                console.log('Node metadata sent to $store');
+              },6000)
+          })
+
+
+
       },
       onMetaReg() {
         let StartDate = this.editMetaData.startDate;
@@ -1339,6 +1353,11 @@
           && this.editMetaData.mode !== ''
           && this.editMetaData.subscription !== ''
       },
+      nodeMetaFormValid(){
+            return this.editMetaDataNode.appName !== ''
+                && this.editMetaDataNode.version !== ''
+                && this.editMetaDataNode.theme !== ''
+      },
       dashboardFormValid(){
           return this.editDashboardPass === '100258'
       },
@@ -1354,6 +1373,12 @@
       },
     },
     created(){
+//    getting SKUS LIST
+      let skusListArray = this.$store.getters.skusLists;
+//      Setting product list
+      this.productList = skusListArray;
+
+
 //    getting Optional Questions
       let optionalQuestions = this.$store.getters.optionalQuestions;
       let optionalQuestionArray = [];

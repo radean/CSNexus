@@ -202,7 +202,7 @@
     <v-snackbar
       v-model="successFlag"
       :top="true"
-      class="green"
+      :timeout="5000"
       dark
     >
       {{ successMsg }}
@@ -240,6 +240,7 @@ export default {
       drawer: null,
       notLogin: false,
 //      User Details
+//      successFlag: false,
       currentDate: null,
       userDetail: {
         name: '',
@@ -343,7 +344,11 @@ export default {
         return this.$store.getters.successMsg
       },
       successFlag(){
-        return this.$store.getters.successFlag
+        return this.$store.getters.successFlag;
+//        this.successFlag = this.$store.getters.successFlag;
+//          setTimeout(() => {
+//              console.log('RESETED SnackBar')
+//          },5000)
       }
   },
   methods:{

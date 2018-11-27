@@ -46,6 +46,7 @@ export const store = new Vuex.Store({
       subscription: true
     },
     // Data
+    skusList: {},
     optionalParameter: {},
     optionalQuestions:{},
     totalInterceptions: 0,
@@ -95,6 +96,9 @@ export const store = new Vuex.Store({
     },
     setOptionalParameter (state, payload){
         state.optionalParameter = payload;
+    },
+    setSkusList (state, payload){
+        state.skusList = payload;
     },
     setOptionalQuestions (state, payload){
         state.optionalQuestions = payload;
@@ -210,7 +214,6 @@ export const store = new Vuex.Store({
       // Getting information from Server
       console.log('Information Parsed');
       // commit('SET_MAIN_LOADING', true);
-
       // Fetching from FireStore Server
       firebase.firestore().collection('app-init').get().then((appInfo) => {
             let appinfo = {};
@@ -232,18 +235,19 @@ export const store = new Vuex.Store({
             commit('SET_PERCENTAGE_LOADING',{isLoading: true,  percentage: 25});
         })
 
-      // Fetching Skus
-      firebase.firestore().collection('app-init').doc('initial').collection('products').get().then((products) => {
-        let skusData = {};
-        let skusDataObject = {};
-          products.forEach((skus) => {
-            skusData = {
-              name: skus.data(),
-            }
-          });
-        console.log(skusData);
+      // Fetching SKUS
+      firebase.firestore().collection('app-init').doc('initial').collection('products').doc('skus').get().then((products) => {
+        let skusData = [];
+        let skus = products.data();
+
+        // Filtering object
+        for(let key in skus){
+            skusData.push(skus[key]);
+        }
+        // setting SKUS list
+        commit('setSkusList', skusData);
         // Setting Progress Bar
-        commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 50});
+        commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 60});
       })
 
       // Fetching Dashboard Information
@@ -1335,6 +1339,21 @@ export const store = new Vuex.Store({
 
         commit('SET_MAIN_LOADING', false);
   },
+    // Application Products edit
+    productsReg({commit}, payload){
+      // Start Loading
+      commit('SET_MAIN_LOADING', true);
+      //Setting variables
+      let products = payload;
+      // connecting to firestore
+      firebase.firestore().collection('app-init').doc('initial').collection('products').doc('skus').set(products).then(function() {
+          console.log("SKUS Information Transacted");
+      }).catch(function(error) {
+          console.error("Error SKU Transaction: ", error);
+      });
+
+      commit('SET_MAIN_LOADING', false);
+    },
     // Application Optional Parameter
     optionalParameterReg({commit}, payload){
         // Start Loading
@@ -1363,6 +1382,46 @@ export const store = new Vuex.Store({
 
         firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').set(payload).then(function() {
             console.log("App Optional Parameters Transacted");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+
+        commit('SET_MAIN_LOADING', false);
+    },
+    // Application Background Image
+    appBgImgReg({commit}, payload){
+        // Start Loading
+        commit('SET_MAIN_LOADING', true);
+        //Setting variables
+        console.log(payload);
+
+        let metadata = {
+            contentType: 'image/jpeg',
+        }
+        // setting up Firestore
+        let storage = firebase.storage().ref();
+        // connecting to firestore
+
+        storage.child('bgpwa/BG.jpg').put(payload, metadata).then(function() {
+            console.log("Image Uploaded");
+            commit('SET_SUCCESS_MSG', "Background Image Uploading Completed");
+        }).catch(function(error) {
+            console.error("Command Encounter Error: ", error);
+        });
+
+        commit('SET_MAIN_LOADING', false);
+    },
+    // Application metadata edit
+    nodeMetaDataReg({commit}, payload){
+        // Start Loading
+        commit('SET_MAIN_LOADING', true);
+        //Setting variables
+        let nodeInfo = payload;
+        console.log(nodeInfo);
+        // connecting to firestore
+
+        firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(nodeInfo).then(function() {
+            console.log("Node Basic Information Transacted");
         }).catch(function(error) {
             console.error("Error writing document: ", error);
         });
@@ -1418,6 +1477,9 @@ export const store = new Vuex.Store({
     },
     optionalQuestions (state){
         return state.optionalQuestions
+    },
+    skusLists (state){
+      return state.skusList
     },
 
       // Accumulative Figures

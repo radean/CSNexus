@@ -143,7 +143,7 @@
                               </v-layout>
                             </v-container>
 
-                            <!--Themes & Misc-->
+                            <!--Themes & Brand Name-->
                             <v-container grid-list-md text-xs-center class="ma-0 pa-0">
                               <v-layout row wrap>
                                 <!--Theme-->
@@ -157,10 +157,7 @@
                                           label="Application Color Theme"
                                   ></v-select>
                                 </v-flex>
-                                <!--Version -->
-                                <v-flex xs5 sm5 md5>
-                                  More Options Will come by
-                                </v-flex>
+
                               </v-layout>
                             </v-container>
 
@@ -412,14 +409,14 @@
                                                   type="password"
                                                    :clearable="true"
                                           ></v-text-field>
-                                          <v-btn large :disabled="!dashboardFormValid" type="submit" class="green" > EDIT <v-icon right>create</v-icon></v-btn>
+                                          <v-btn large :disabled="!dashboardFormValid" type="submit" class="greenBleed" > EDIT <v-icon right>create</v-icon></v-btn>
                                         </v-flex>
                                         <!--Buttons-->
                                         <v-flex xs5 class="mt-4 ml-0">
                                           <v-flex xs12 class="title"> Important Note! </v-flex>
                                           <v-flex xs12> Widget are supposed to manage by <strong>Authorized</strong> personnel only. </v-flex>
                                           <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
-                                          <v-btn type="button" class="green" dark> Support <v-icon right>add_alert</v-icon></v-btn>
+                                          <v-btn type="button" class="greenBleed" dark> Support <v-icon right>add_alert</v-icon></v-btn>
                                         </v-flex>
                                         <!--Instructions-->
                                         <v-flex xs3 class="mt-4 ml-0">
@@ -604,30 +601,44 @@
 
                                       <!--Parameter Editing -->
                                       <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                        <v-flex xs12 class="text-lg-left subheading"> You can add/remove parameters.  </v-flex>
+                                        <v-flex xs12 class="text-lg-left subheading"> You can add/remove radio button parameters. </v-flex>
                                         <v-layout row wrap>
                                           <!-- Optional Parameters -->
-                                          <v-flex xs3 sm3 md3 offset-xs1>
+                                          <v-flex xs2 sm2 md2 offset-xs1>
+                                            <v-text-field
+                                                    name="optionalParameterID"
+                                                    label="ID"
+                                                    hint="QVar must a string"
+                                                    persistent-hint
+                                                    v-model="editOptionalParameter.id"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
+                                          <v-flex xs4 sm4 md4>
                                               <v-text-field
                                                       name="optionalParameterTitle"
                                                       label="Title"
+                                                      hint="Title must be String"
+                                                      persistent-hint
                                                       v-model="editOptionalParameter.title"
                                                       :clearable="true"
                                               ></v-text-field>
                                           </v-flex>
-                                          <v-flex xs3 sm3 md3 >
-                                            <v-select
-                                                    :items="['boolean', 'text']"
-                                                    name="optionalParameterType"
-                                                    label="Type"
-                                                    v-model="editOptionalParameter.type"
-                                                    :clearable="true"
-                                            ></v-select>
-                                          </v-flex>
+                                          <!--<v-flex xs3 sm3 md3 >-->
+                                            <!--<v-select-->
+                                                    <!--:items="['boolean', 'text']"-->
+                                                    <!--name="optionalParameterType"-->
+                                                    <!--label="Type"-->
+                                                    <!--v-model="editOptionalParameter.type"-->
+                                                    <!--:clearable="true"-->
+                                            <!--&gt;</v-select>-->
+                                          <!--</v-flex>-->
                                           <v-flex xs4 sm4 md4 >
                                             <v-text-field
                                                     name="widget01Title"
                                                     label="Description"
+                                                    hint="Write something related to question"
+                                                    persistent-hint
                                                     v-model="editOptionalParameter.description"
                                                     :clearable="true"
                                             ></v-text-field>
@@ -640,8 +651,8 @@
                                       </v-container>
 
                                       <v-data-table
-                                              :headers="[{ text: 'Title', value: 'title' },
-                                                { text: 'Type', value: 'type' },
+                                              :headers="[{ text: 'ID', value: 'id' },
+                                                { text: 'Title', value: 'title' },
                                                 { text: 'Description', value: 'description' },
                                                 { text: 'Action', value: 'action' }
                                                 ]"
@@ -650,9 +661,9 @@
                                               class="elevation-16"
                                       >
                                         <template slot="items"  slot-scope="props">
+                                          <td>{{ props.item.id }}</td>
                                           <td>{{ props.item.title }}</td>
-                                          <td class="text-xs-right">{{ props.item.type }}</td>
-                                          <td class="text-xs-right">{{ props.item.description }}</td>
+                                          <td>{{ props.item.description }}</td>
                                           <td class="text-xs-right"><v-btn outline small fab @click="deleteParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
                                         </template>
                                       </v-data-table>
@@ -671,7 +682,7 @@
                                                     type="password"
                                                     :clearable="true"
                                             ></v-text-field>
-                                            <v-btn  :disabled="!dashboardFormValid"  type="submit" class="greenBleed" ><v-icon left>create</v-icon> CONFIRM CHANGES </v-btn>
+                                            <v-btn :disabled="!dashboardFormValid" type="submit" class="greenBleed" ><v-icon left>create</v-icon> CONFIRM CHANGES </v-btn>
                                           </v-flex>
                                           <!--Buttons-->
                                           <v-flex xs5 class="mt-4 ml-0">
@@ -691,7 +702,7 @@
 
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="primary" flat @click="optionalParameterDialog = false">
+                                    <v-btn color="greenBleed" flat @click="optionalParameterDialog = false">
                                       Done
                                     </v-btn>
                                   </v-card-actions>
@@ -748,6 +759,35 @@
                                       :clearable="true"
                               ></v-text-field>
                             </v-flex>
+
+                            <!--Brand Name and Slogan-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!-- Brand Name -->
+                                <v-flex xs5 sm5 md5 offset-xs1>
+                                  <v-text-field
+                                          required
+                                          hint="Should be String Only"
+                                          persistent-hint
+                                          name="brandName"
+                                          label="Brand Name"
+                                          v-model="editMetaDataNode.brandName"
+                                  ></v-text-field>
+                                </v-flex>
+
+                                <!-- Brand Slogan  -->
+                                <v-flex xs5 sm5 md5>
+                                  <v-text-field
+                                          required
+                                          hint="Should be String Only"
+                                          persistent-hint
+                                          name="brandSlogan"
+                                          label="Brand Slogan"
+                                          v-model="editMetaDataNode.brandSlogan"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
 
                             <!--Company & Version-->
                             <v-container grid-list-md text-xs-center class="ma-0 pa-0">
@@ -811,13 +851,22 @@
 
                                     <form @submit.prevent="onApplicationQuestionReg">
 
-                                      <!--Parameter Editing -->
+                                      <!--Question Editing -->
                                       <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
                                         <v-flex xs12 class="text-lg-left subheading"> Please add/remove Application Questions from here.  </v-flex>
                                         <v-layout row wrap>
                                           <!-- Optional Parameters -->
+                                          <!--Identification -->
+                                          <v-flex xs1 sm1 md1 offset-xs1>
+                                            <v-text-field
+                                                    name="IDnode"
+                                                    label="ID"
+                                                    v-model="editquestionNode.id"
+                                                    :clearable="true"
+                                            ></v-text-field>
+                                          </v-flex>
                                           <!--Main Question-->
-                                          <v-flex xs6 sm6 md6 offset-xs1>
+                                          <v-flex xs5 sm5 md5>
                                             <v-text-field
                                                     name="questionNode"
                                                     label="Question"
@@ -880,7 +929,8 @@
                                       </v-container>
 
                                       <v-data-table
-                                              :headers="[{ text: 'Question', value: 'question' },
+                                              :headers="[{ text: 'ID', value: 'id' },
+                                                { text: 'Question', value: 'question' },
                                                 { text: 'Possible Answers', value: 'possibleAnswers' },
                                                 { text: 'Description', value: 'description' },
                                                 { text: 'Action', value: 'action' }
@@ -890,6 +940,7 @@
                                               class="elevation-16"
                                       >
                                         <template slot="items"  slot-scope="props">
+                                          <td>{{ props.item.id }}</td>
                                           <td>{{ props.item.question }}</td>
                                           <td>
                                               <!--Adding array to chips-->
@@ -1021,7 +1072,6 @@
                                 v-model="addStore.city"
                                 label="CITY"
                                 single-line
-                                bottom
                         ></v-select>
                       </v-flex>
                       <!--submission-->
@@ -1071,7 +1121,7 @@
             password: '',
             role: 'Supervisor',
         },
-//          Application basic information editing
+//        Application basic information editing
         editMetaData: {
               appName: '',
               fullAppName: '',
@@ -1083,14 +1133,14 @@
               subscription: '',
               colorTheme: ''
           },
-//          Application basic information editing
+//        Application basic information editing
         editMetaDataNode: {
               appName: '',
               version: '',
               imgTheme: '',
               img: null
       },
-//          Editing Dashboard
+//        Editing Dashboard
         editDashboard: {
             widget01: {title: '', description: ''},
             widget02: {title: '', description: ''},
@@ -1099,7 +1149,7 @@
             widget05: {title: '', description: ''},
             widget06: {title: '', description: ''},
         },
-//          Editing Optional Parameters
+//        Editing Optional Parameters
         editOptionalParameter: {
 
         },
@@ -1216,8 +1266,6 @@
           this.productList.splice(index, 1)
       },
 
-
-
 //        STORE
       onDashboardGUIReg() {
           this.$store.dispatch('dashboardReg', this.editDashboard).then(() => {
@@ -1265,8 +1313,9 @@
 //          posting
         this.$store.dispatch('optionalQuestionReg', objectList).then(() => {
             setTimeout(() => {
-//                document.location.reload();
-            },6000)
+                this.nodeQuestionsDialog = false;
+                this.editDashboardPass = null;
+            },1500)
         })
       },
       onNodeMetaReg(){
@@ -1319,7 +1368,9 @@
         })
       },
       onStoreReg() {
-        this.$store.dispatch('storeReg', this.addStore)
+        this.$store.dispatch('storeReg', this.addStore);
+//        After sending to store
+
       },
       fetchStoreList(){
 //        Fetching Required Data
@@ -1378,6 +1429,10 @@
 //      Setting product list
       this.productList = skusListArray;
 
+//    getting Widger Controller
+      let widgetdoc = this.$store.getters.appinfo;
+      this.editDashboard = widgetdoc.widgets
+
 
 //    getting Optional Questions
       let optionalQuestions = this.$store.getters.optionalQuestions;
@@ -1386,6 +1441,7 @@
       for(let key in optionalQuestions) {
           optionalQuestionArray.push({
               question: optionalQuestions[key].question,
+              id: optionalQuestions[key].id,
               answers: optionalQuestions[key].answers,
               description: optionalQuestions[key].description,
           })
@@ -1402,7 +1458,7 @@
       for(let key in optionalParameter) {
           optionalParameterArray.push({
               title: optionalParameter[key].title,
-              type: optionalParameter[key].type,
+              id: optionalParameter[key].id,
               description: optionalParameter[key].description,
           })
       }

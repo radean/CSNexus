@@ -59,8 +59,8 @@ new Vue({
         // messagingSenderId: "328928648457"
     };
     firebase.initializeApp(config);
-      const firestore = firebase.firestore();
-      const settings = {timestampsInSnapshots: true};
-      firestore.settings(settings);
+    const firestore = firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
   }
 });

@@ -111,24 +111,24 @@
     <!--<main>-->
       <v-content>
         <v-container>
-          <vue-particles
-             class="flying"
-             color="#000"
-             :particleOpacity="0.1"
-             :particlesNumber="70"
-             shapeType="circle"
-             :particleSize="6"
-             linesColor="#000"
-             :linesWidth="1"
-             :lineLinked="true"
-             :lineOpacity="0.2"
-             :linesDistance="150"
-             :moveSpeed="1"
-             :hoverEffect="false"
-             hoverMode="none"
-             :clickEffect="true"
-             clickMode="push"
-          ></vue-particles>
+          <!--<vue-particles-->
+             <!--class="flying"-->
+             <!--color="#000"-->
+             <!--:particleOpacity="0.1"-->
+             <!--:particlesNumber="70"-->
+             <!--shapeType="circle"-->
+             <!--:particleSize="6"-->
+             <!--linesColor="#000"-->
+             <!--:linesWidth="1"-->
+             <!--:lineLinked="true"-->
+             <!--:lineOpacity="0.2"-->
+             <!--:linesDistance="150"-->
+             <!--:moveSpeed="1"-->
+             <!--:hoverEffect="false"-->
+             <!--hoverMode="none"-->
+             <!--:clickEffect="true"-->
+             <!--clickMode="push"-->
+          <!--&gt;</vue-particles>-->
           <transition name="fade">
             <!--Content goes here-->
             <v-layout>
@@ -291,6 +291,8 @@ export default {
   created(){
 //      Fetching Information
     this.$store.dispatch('fetchAppInformation');
+//      Fetching Interceptions
+      this.$store.dispatch('fetchTotalInterceptions');
 //      Making User Session
     this.$store.dispatch('userSession');
     let user = this.$store.getters.user;

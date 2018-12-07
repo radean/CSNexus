@@ -254,7 +254,7 @@ export const store = new Vuex.Store({
       firebase.firestore().collection('app-init').doc('initial').collection('app-guis').get().then((dashboardGui) => {
             let dashboardData = {};
             dashboardGui.forEach((gui) => {
-                dashboardData = gui.data()
+                dashboardData.widgets = gui.data()
             });
 
             let appInfo = getters.appinfo;
@@ -285,6 +285,7 @@ export const store = new Vuex.Store({
               commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
           },2000)
       })
+
     },
     // USER AUTHENTICATION
     userSignUp({commit}, payload){
@@ -454,18 +455,35 @@ export const store = new Vuex.Store({
     // DASHBOARD GUI DATA
     // ===================
     fetchTotalInterceptions({commit}){
+        firebase.firestore().collection('storedata').get().then((interceptions) => {
+            // let interceptionNumbers = 0;
+            // let interceptionsdata = {};
+
+            // for (let key in interceptions){
+            //     console.log('for Loop',interceptions[key])
+            // }
+            // interceptions.forEach((info) => {
+            //     console.log('forEach loop' ,info.data())
+            //     interceptionsdata = info.data()
+            // })
+            // console.log('from outside Loop',interceptionsdata)
+            // console.log(interceptions.size());
+            // commit('setTotalInterceptions', interceptionsInfo);
+        })
       // Fetching List of Dates
-      firebase.database().ref('storedata').on('value', (report) => {
+      firebase.firestore().collection('storedata').get().then((report) => {
         // Creating a temporary Variable
         let totalInterceptions = 0;
+        let interceptionData = [];
         report.forEach((childReport) => {
-          const obj = childReport.val();
+          const obj = childReport.data();
           // reports[currentKey] = new Array;
-          for (let key in obj) {
+          interceptionData.push(obj);
             // Counting Objects Means interceptions
             totalInterceptions += 1;
-          }
         });
+        console.log( 'Total Number of Interception' ,totalInterceptions)
+        console.log( 'Interception Details' ,interceptionData)
         commit('setTotalInterceptions', totalInterceptions);
       })
     },
@@ -1331,7 +1349,7 @@ export const store = new Vuex.Store({
         console.log(appInfo);
         // connecting to firestore
 
-        firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').set(payload).then(function() {
+        firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').update(payload).then(function() {
             console.log("App basic Information Transacted");
         }).catch(function(error) {
             console.error("Error writing document: ", error);
@@ -1392,19 +1410,39 @@ export const store = new Vuex.Store({
     appBgImgReg({commit}, payload){
         // Start Loading
         commit('SET_MAIN_LOADING', true);
+
         //Setting variables
-        console.log(payload);
+        let presetInfo = {};
+
+        // Getting things up
+        firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').get().then((nodeInfo) => {
+            presetInfo = nodeInfo.data();
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
 
         let metadata = {
-            contentType: 'image/jpeg',
+            contentType: 'image/png',
         }
         // setting up Firestore
         let storage = firebase.storage().ref();
+        let reference = storage.child('bgpwa/BG.png');
         // connecting to firestore
 
-        storage.child('bgpwa/BG.jpg').put(payload, metadata).then(function() {
-            console.log("Image Uploaded");
-            commit('SET_SUCCESS_MSG', "Background Image Uploading Completed");
+        reference.put(payload, metadata).then(function() {
+            // Getting URL Data
+            reference.getDownloadURL().then(function(url) {
+                // Saving URL in Presetted Data
+                presetInfo.img = url;
+                console.log('After Url Saved', presetInfo);
+                // Setting BAMS Data Again
+                firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(presetInfo).then(function() {
+                    console.log("Node Basic Information Transacted");
+                }).catch(function(error) {
+                    console.error("Error writing document: ", error);
+                });
+            });
+            // dispatch('nodeMetaDataReg', presetInfo);
         }).catch(function(error) {
             console.error("Command Encounter Error: ", error);
         });
@@ -1418,13 +1456,29 @@ export const store = new Vuex.Store({
         //Setting variables
         let nodeInfo = payload;
         console.log(nodeInfo);
-        // connecting to firestore
 
-        firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(nodeInfo).then(function() {
-            console.log("Node Basic Information Transacted");
+
+        // Getting things up
+        firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').get().then((presetData) => {
+            let presetInfo = {};
+            presetInfo = presetData.data();
+            // Merging two Objects
+            Object.assign(nodeInfo, presetInfo);
+
+            // connecting to firestore
+            // console.log(nodeInfo);
+
+            firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(nodeInfo).then(function() {
+                console.log("Node Basic Information Transacted");
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+
         }).catch(function(error) {
             console.error("Error writing document: ", error);
         });
+
+
 
         commit('SET_MAIN_LOADING', false);
     },

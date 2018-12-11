@@ -7,9 +7,8 @@
         <v-card class="dashCards elevation-20">
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Total Sales</h6></v-card-title>
           <v-card-text>
-
             <h2 class="display-3 blue--text ma-0 pa-0">
-                <!--{{ totalSales }}--> 0
+                {{ totalSales }}
             </h2>
           </v-card-text>
         </v-card>
@@ -20,7 +19,7 @@
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Interceptions</h6></v-card-title>
           <v-card-text>
             <h2 class="display-3 blue--text ma-0 pa-0" >
-            <!--{{ totalInterceptions }} --> 156
+            {{ totalInterceptions }}
             </h2>
           </v-card-text>
         </v-card>

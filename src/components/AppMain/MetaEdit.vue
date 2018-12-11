@@ -723,8 +723,6 @@
             </v-card>
           </v-tab-item>
 
-
-
           <!--edit PWA Preferences-->
           <v-tab-item id="c2">
             <v-card flat class="gradientHead">
@@ -1033,59 +1031,315 @@
               </v-card-text>
             </v-card>
           </v-tab-item>
+
           <!--Manage Stores-->
-
-
-
           <v-tab-item id="c3">
             <v-card flat class="gradientHead">
               <v-card-text>
                 <v-container grid-list-md text-xs-center>
                   <v-layout row wrap>
-                    <v-flex xs12 class="title">ADD STORE </v-flex>
-                    <v-flex xs12 class="body-2"> Create a new Store.</v-flex>
-                    <v-flex xs12 class="body-1"> Please fill all fields and then click on Add Store.</v-flex>
-                    <form @submit.prevent="onStoreReg" class="mb-5">
-                      <!--username-->
-                      <v-flex xs10 offset-xs1>
-                        <v-text-field
-                                required
-                                name="storeName"
-                                label="STORE NAME"
-                                v-model="addStore.name"
-                        ></v-text-field>
-                      </v-flex>
-                      <!--username-->
-                      <v-flex xs10 offset-xs1>
-                        <v-text-field
-                                required
-                                name="address"
-                                label="ADDRESS"
-                                id="testing"
-                                v-model="addStore.address"
-                        ></v-text-field>
-                      </v-flex>
-                      <!-- Assign Store -->
-                      <v-flex xs10 offset-xs1>
-                        <v-select
-                                v-bind:items="cities"
-                                v-model="addStore.city"
-                                label="CITY"
-                                single-line
-                        ></v-select>
-                      </v-flex>
-                      <!--submission-->
-                      <v-flex xs12>
-                        <v-btn large :disabled="!storeFormValid" type="submit" class="green" > ADD STORE <v-icon right>send</v-icon></v-btn>
-                      </v-flex>
+                    <v-flex xs12 class="title">Manage BA/Stores</v-flex>
+                    <v-flex xs12 class="body-2"> You can Add/Remove Brand Ambassador's and Stores from here</v-flex>
+                    <v-flex xs12 class="body-1"> If you want to add a B.A. Please first add store in which they are supposed to mount then assign stores.</v-flex>
+                    <v-flex xs12 >
+                      Please make sure you are aware of this section this can cause <strong> massive DB errors</strong>  and BAMS™ can break.
+                      <br>
+                      Misuse of this section can take a minimum duration of <strong>eight working days</strong> to fix. So be sure before you commit any changes
+                    </v-flex>
+                    <v-container>
+                      <v-layout row wrap>
+                        <!--Section halfA-->
+                        <v-flex xs6>
+                          <!--title-->
+                          <v-flex xs12 class="title"> Add Stores</v-flex>
+                          <v-flex xs12> Please do not leavea any field empty. </v-flex>
+                          <form @submit.prevent="onStoreReg" class="mb-5">
+                          <!--Store ID and Name-->
+                          <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                            <v-layout row wrap>
+                              <!-- Store Name -->
+                              <v-flex xs5 sm5 md5 offset-xs1>
+                                <v-text-field
+                                        required
+                                        hint="Should be number only e.g. (10xx)"
+                                        persistent-hint
+                                        name="storeName"
+                                        label="ID"
+                                        v-model="addStore['id']"
+                                ></v-text-field>
+                              </v-flex>
+                              <!-- Store Name  -->
+                              <v-flex xs5 sm5 md5>
+                                <v-text-field
+                                        required
+                                        hint="Shoud be a string only no numbers"
+                                        persistent-hint
+                                        name="name"
+                                        label="NAME"
+                                        v-model="addStore['name']"
+                                ></v-text-field>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                          <!--Store description and Address-->
+                          <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                            <v-layout row wrap>
+                              <!-- Store Name -->
+                              <v-flex xs5 sm5 md5 offset-xs1>
+                                <v-text-field
+                                        required
+                                        hint="Should be anything just try to be concise"
+                                        persistent-hint
+                                        name="storeName"
+                                        label="DESCRIPTION"
+                                        v-model="addStore['description']"
+                                ></v-text-field>
+                              </v-flex>
+                              <!-- Brand Slogan  -->
+                              <v-flex xs5 sm5 md5>
+                                <v-text-field
+                                        required
+                                        hint="No Need to be Precise"
+                                        persistent-hint
+                                        name="address"
+                                        label="ADDRESS"
+                                        v-model="addStore['address']"
+                                ></v-text-field>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                          <!--Store Category and City-->
+                          <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                            <v-layout row wrap>
+                              <!-- Store Name -->
+                              <v-flex xs5 sm5 md5 offset-xs1>
+                                <v-select
+                                        :items="this.storeCategory"
+                                        outline
+                                        required
+                                        hint="Should be String Only (No numbers)"
+                                        persistent-hint
+                                        name="storeName"
+                                        label="STORE Category"
+                                        v-model="addStore['category']"
+                                ></v-select>
+                              </v-flex>
+                              <!-- Brand Slogan  -->
+                              <v-flex xs5 sm5 md5>
+                                <v-text-field
+                                        required
+                                        hint="Please be precise"
+                                        persistent-hint
+                                        name="city"
+                                        label="City"
+                                        v-model="addStore['city']"
+                                ></v-text-field>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
 
-                    </form>
+                          <!--submission-->
+                          <v-flex xs12>
+                            <v-btn large :disabled="addStore.name == null || addStore.name == ''" type="submit" class="greenBleed" > ADD STORE <v-icon right>send</v-icon></v-btn>
+                          </v-flex>
+                          </form>
+                          <!--Data Table for existing Stores-->
+                          <!--title-->
+                          <v-flex xs12 class="title">Existing Store in Firestore </v-flex>
+                          <v-flex xs12> You can only add new stores only. </v-flex>
+                          <v-data-table
+                                    :headers="[{ text: 'ID', value: 'id' },
+                                                { text: 'Name', value: 'name' },
+                                                { text: 'City', value: 'city' },
+//                                                { text: 'Action', value: 'action' }
+                                                ]"
+                                    :items="storesList"
+                                    hide-actions
+                                    class="elevation-0"
+                            >
+                              <template slot="items"  slot-scope="props">
+                                <td>{{ props.item.id }}</td>
+                                <td>{{ props.item.name }}</td>
+                                <td>{{ props.item.city }}</td>
+                                <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
+                              </template>
+                            </v-data-table>
+                        </v-flex>
 
+                        <!--Section halfA-->
+
+                        <v-flex xs6 >
+
+                          <!--title-->
+                          <v-flex xs12 class="title"> Add Brand Ambassadors </v-flex>
+                          <v-flex xs12> Please first add relevant store before creating a B.A. </v-flex>
+                          <form @submit.prevent="onbaReg" class="mb-5">
+                            <!--BA ID and email-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!-- BA UID -->
+                                <v-flex xs5 sm5 md5 offset-xs1>
+                                  <v-text-field
+                                          required
+                                          hint="Must match with DB. Ask the developer if help needed"
+                                          persistent-hint
+                                          name="uniqueID"
+                                          label="UID"
+                                          v-model="addBA['uniqueId']"
+                                  ></v-text-field>
+                                </v-flex>
+                                <!-- BA email  -->
+                                <v-flex xs5 sm5 md5>
+                                  <v-text-field
+                                          required
+                                          hint="Must match with EMAIL on SERVER"
+                                          persistent-hint
+                                          name="email"
+                                          label="EMAIL"
+                                          v-model="addBA['email']"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                            <!--BA Name and Last-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!-- BA Name -->
+                                <v-flex xs5 sm5 md5 offset-xs1>
+                                  <v-text-field
+                                          required
+                                          hint="Shoud be a string only, no numbers"
+                                          persistent-hint
+                                          name="name"
+                                          label="NAME"
+                                          v-model="addBA['name']"
+                                  ></v-text-field>
+
+                                </v-flex>
+                                <!-- BA LastName  -->
+                                <v-flex xs5 sm5 md5>
+                                  <v-text-field
+                                          required
+                                          hint="Should be a string only, no numbers"
+                                          persistent-hint
+                                          name="baLastName"
+                                          label="LAST NAME"
+                                          v-model="addBA['lastName']"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                            <!--BA DOB and Password-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!-- BA Password -->
+                                <v-flex xs5 sm5 md5 offset-xs1>
+                                  <v-text-field
+                                          required
+                                          hint="Must Match with Server Password"
+                                          persistent-hint
+                                          type="password"
+                                          name="baPass"
+                                          label="PASSWORD"
+                                          v-model="addBA['password']"
+                                  ></v-text-field>
+                                  <!--<p>Date in ISO format: <strong>{{ date }}</strong></p>-->
+                                </v-flex>
+                                <!-- BA DOB  -->
+                                <v-flex xs5 sm5 md5>
+                                  <v-menu
+                                          ref="baDobDateDialog"
+                                          :close-on-content-click="false"
+                                          v-model="baDobDateDialog"
+                                          :nudge-right="40"
+                                          lazy
+                                          transition="scale-transition"
+                                          offset-y
+                                          full-width
+                                          max-width="290px"
+                                          min-width="290px"
+                                  >
+                                    <v-text-field
+                                            slot="activator"
+                                            v-model="addBA['dob']"
+                                            label="DOB"
+                                            hint="MM/DD/YYYY format"
+                                            persistent-hint
+                                            prepend-icon="event"
+                                    ></v-text-field>
+                                    <v-date-picker v-model="addBA['dob']" no-title @input="baDobDateDialog = false"></v-date-picker>
+                                  </v-menu>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                            <!--BA Address and City-->
+                            <v-container grid-list-md text-xs-center class="ma-0 pa-0">
+                              <v-layout row wrap>
+                                <!-- BA store -->
+                                <v-flex xs5 sm5 md5 offset-xs1>
+                                  <v-select
+                                          :items="storesList"
+                                          item-text="name"
+                                          item-value="id"
+                                          outline
+                                          required
+                                          hint="Please Select from List"
+                                          persistent-hint
+                                          name="baStore"
+                                          label="BA Store"
+                                          v-model="addBA['store']"
+                                  ></v-select>
+                                </v-flex>
+                                <!-- BA Address  -->
+                                <v-flex xs5 sm5 md5>
+                                  <v-text-field
+                                          required
+                                          hint="Should be anywhere"
+                                          persistent-hint
+                                          name="address"
+                                          label="ADDRESS"
+                                          v-model="addBA['address']"
+                                  ></v-text-field>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+
+                            <!--submission-->
+                            <v-flex xs12>
+                              <v-btn large :disabled="addBA.name == null || addBA.lastName == '' || addBA.email == ''" type="submit" class="greenBleed" > ADD BA <v-icon right>send</v-icon></v-btn>
+                            </v-flex>
+                          </form>
+                          <!--Data Table for existing Stores-->
+                          <!--title-->
+                          <v-flex xs12 class="title">Existing BA in Firestore </v-flex>
+                          <v-flex xs12> You can only add New B.A [If you want to replace stores please refer to guide 0.2]. </v-flex>
+                          <v-data-table
+                                  :headers="[{ text: 'UID', value: 'uid' },
+                                                { text: 'Name', value: 'name' },
+                                                { text: 'Assigned Store', value: 'store' },
+//                                                { text: 'Action', value: 'action' }
+                                                ]"
+                                  :items="baList"
+                                  hide-actions
+                                  class="elevation-0"
+                          >
+                            <template slot="items"  slot-scope="props">
+                              <td>{{ props.item.uniqueId }}</td>
+                              <td>{{ props.item.name + props.item.lastName}}</td>
+                              <td>{{ props.item.store }}</td>
+                              <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
+                            </template>
+                          </v-data-table>
+
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
                   </v-layout>
                 </v-container>
               </v-card-text>
             </v-card>
           </v-tab-item>
+
         </v-tabs-items>
       </div>
     </v-layout>
@@ -1100,18 +1354,14 @@
       return {
 //        Add B.A
         addBA: {
-          name: '',
-          address: '',
-          email: '',
-          password: '',
-          store: '',
+//          name: '',
+//          address: '',
+//          email: '',
+//          password: '',
+//          store: '',
         },
 //        Add Store
         addStore: {
-          city: '',
-          address: '',
-          name: '',
-          assign: ''
         },
 //        Add Supervisor
         addSupervisor: {
@@ -1182,6 +1432,7 @@
         uploading: false,
         selectLoading: true,
         tab: '',
+        baDobDateDialog: false,
         dashboardEditDialog: false,
         productEditDialog: false,
         nodeQuestionsDialog: false,
@@ -1192,11 +1443,20 @@
         ],
         selectedDateTriggerStart: '',
         selectedDateTriggerEnd: '',
-        cities: [
-          'KHI',
-          'LHR',
-          'ISD'
+        storeCategory: [
+          'Mart',
+          'Shop',
+          'IMT',
+          'LMT',
+          'Other'
         ],
+        storeIDList: [
+        ],
+//        cities: [
+//          'KHI',
+//          'LHR',
+//          'ISD'
+//        ],
       }
     },
     methods:{
@@ -1372,6 +1632,9 @@
 //        After sending to store
 
       },
+      onbaReg(){
+        this.$store.dispatch('baReg', this.addBA);
+      },
       fetchStoreList(){
 //        Fetching Required Data
         this.$store.dispatch('unAssignedStoresListUPD')
@@ -1391,6 +1654,19 @@
 //      unAssigned Store List
       unAssignedStore(){
         return this.$store.getters.unAssignedStores
+      },
+      baList(){
+          return this.$store.getters.availableBA
+      },
+      storesList(){
+//          Conserving Store Data
+//          let storeList =  this.$store.getters.storeList;
+//          let simplifiedIDList
+////          Creating ID List
+//          for(let key in storeList){
+//              console.log(storeList[key].id)
+//          }
+          return this.$store.getters.storeList;
       },
 
 //      Validating Fields

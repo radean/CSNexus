@@ -29,7 +29,7 @@
             </v-tab>
             <v-tab class="gradientHead" href="#c3">
               <v-icon>store</v-icon>
-               Add Stores
+               Add BA/Stores
             </v-tab>
           </v-tabs>
         </v-toolbar>
@@ -1050,6 +1050,27 @@
                       <v-layout row wrap>
                         <!--Section halfA-->
                         <v-flex xs6>
+                          <!--Data Table for existing Stores-->
+                          <!--title-->
+                          <v-flex xs12 class="title">Existing Store in Firestore </v-flex>
+                          <v-flex xs12> You can only add new stores only. </v-flex>
+                          <v-data-table
+                                  :headers="[{ text: 'ID', value: 'id' },
+                                                { text: 'Name', value: 'name' },
+                                                { text: 'City', value: 'city' },
+//                                                { text: 'Action', value: 'action' }
+                                                ]"
+                                  :items="storesList"
+                                  hide-actions
+                                  class="elevation-0"
+                          >
+                            <template slot="items"  slot-scope="props">
+                              <td>{{ props.item.id }}</td>
+                              <td>{{ props.item.name }}</td>
+                              <td>{{ props.item.city }}</td>
+                              <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
+                            </template>
+                          </v-data-table>
                           <!--title-->
                           <v-flex xs12 class="title"> Add Stores</v-flex>
                           <v-flex xs12> Please do not leavea any field empty. </v-flex>
@@ -1143,33 +1164,35 @@
                             <v-btn large :disabled="addStore.name == null || addStore.name == ''" type="submit" class="greenBleed" > ADD STORE <v-icon right>send</v-icon></v-btn>
                           </v-flex>
                           </form>
-                          <!--Data Table for existing Stores-->
-                          <!--title-->
-                          <v-flex xs12 class="title">Existing Store in Firestore </v-flex>
-                          <v-flex xs12> You can only add new stores only. </v-flex>
-                          <v-data-table
-                                    :headers="[{ text: 'ID', value: 'id' },
-                                                { text: 'Name', value: 'name' },
-                                                { text: 'City', value: 'city' },
-//                                                { text: 'Action', value: 'action' }
-                                                ]"
-                                    :items="storesList"
-                                    hide-actions
-                                    class="elevation-0"
-                            >
-                              <template slot="items"  slot-scope="props">
-                                <td>{{ props.item.id }}</td>
-                                <td>{{ props.item.name }}</td>
-                                <td>{{ props.item.city }}</td>
-                                <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
-                              </template>
-                            </v-data-table>
+
                         </v-flex>
 
                         <!--Section halfA-->
 
                         <v-flex xs6 >
 
+                          <!--Data Table for existing Stores-->
+                          <!--title-->
+                          <v-flex xs12 class="title">Existing BA in Firestore </v-flex>
+                          <v-flex xs12> You can only add New B.A. </v-flex>
+                          <v-data-table
+                                  :headers="[{ text: 'Assigned Store', value: 'store' },
+                                                { text: 'Name', value: 'name' },
+                                                { text: 'UID', value: 'uid' },
+//                                                { text: 'Action', value: 'action' }
+                                                ]"
+                                  :items="baList"
+                                  hide-actions
+                                  class="elevation-0"
+                          >
+                            <template slot="items"  slot-scope="props">
+                              <td>{{ props.item.store }}</td>
+                              <td>{{ props.item.name + props.item.lastName}}</td>
+                              <td>{{ props.item.uniqueId }}</td>
+
+                              <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
+                            </template>
+                          </v-data-table>
                           <!--title-->
                           <v-flex xs12 class="title"> Add Brand Ambassadors </v-flex>
                           <v-flex xs12> Please first add relevant store before creating a B.A. </v-flex>
@@ -1309,31 +1332,18 @@
                               <v-btn large :disabled="addBA.name == null || addBA.lastName == '' || addBA.email == ''" type="submit" class="greenBleed" > ADD BA <v-icon right>send</v-icon></v-btn>
                             </v-flex>
                           </form>
-                          <!--Data Table for existing Stores-->
-                          <!--title-->
-                          <v-flex xs12 class="title">Existing BA in Firestore </v-flex>
-                          <v-flex xs12> You can only add New B.A [If you want to replace stores please refer to guide 0.2]. </v-flex>
-                          <v-data-table
-                                  :headers="[{ text: 'UID', value: 'uid' },
-                                                { text: 'Name', value: 'name' },
-                                                { text: 'Assigned Store', value: 'store' },
-//                                                { text: 'Action', value: 'action' }
-                                                ]"
-                                  :items="baList"
-                                  hide-actions
-                                  class="elevation-0"
-                          >
-                            <template slot="items"  slot-scope="props">
-                              <td>{{ props.item.uniqueId }}</td>
-                              <td>{{ props.item.name + props.item.lastName}}</td>
-                              <td>{{ props.item.store }}</td>
-                              <!--<td><v-btn outline small fab  @click="deleteQuestionParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>-->
-                            </template>
-                          </v-data-table>
-
                         </v-flex>
                       </v-layout>
                     </v-container>
+                    <v-flex xs12 class="title">Notice from Devs</v-flex>
+                    <v-flex xs12 >
+                      IN order to make the system work perfectly sound Admin must not add > <strong>250 BA/Store</strong> in the given system. In case of higher BA/Store Requirements please address you needs to DEVS.
+                      <br>
+                      If any issue created by this Section cause huge DB relation errors or even fatal errors. <strong>Unknown duration required</strong> to fix.
+                    </v-flex>
+                    <v-flex xs12 >
+                      Many Thanks
+                    </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>

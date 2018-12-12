@@ -52,6 +52,7 @@ export const store = new Vuex.Store({
     interceptionsData: {},
     optionalParameter: {},
     optionalQuestions:{},
+    optionalReport: {},
     totalInterceptions: 0,
     totalPurchases: [],
     totalConversion: 0,
@@ -126,6 +127,9 @@ export const store = new Vuex.Store({
     },
     setQuestions (state, payload) {
       state.questions = payload;
+    },
+    setOptionalsReport (state, payload) {
+        state.optionalReport = payload;
     },
     setTotalPurchases (state, payload){
       state.totalPurchases = payload;
@@ -311,54 +315,54 @@ export const store = new Vuex.Store({
 
       // Fetch Initial Store Reports
       // Fetching Pierces
-      firebase.firestore().collection('storedata').onSnapshot((rawdata) => {
-
-        let totalSales = 0;
-        let totalPurchases = {};
-        commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 95});
-        // Creating Similar keys in totalPurchases
-        rawdata.forEach((data) => {
-        // Storage Data
-        let purchase = data.data();
-        let purchased = purchase.purchased;
-        // Creating Similar keys in totalPurchases
-        for (let key in purchased){
-            totalPurchases[key] = 0;
-        }
-
-        });
-
-        // console.log( 'Creating TotalPurchase', totalPurchases);
-        // Making More Views
-        rawdata.forEach((data) => {
-        // Storage Data
-        let purchase = data.data();
-        let purchased = purchase.purchased;
-
-        // Failed Method
-        // Object.assign(totalPurchases, purchased)
-
-        for (let key in purchased){
-            let purchase = purchased[key];
-
-            // Conversion to Int
-            purchase = parseInt(purchase);
-            // console.log( 'Purchased ' + key +'=', purchase);
-            // Merging two objects
-            totalPurchases[key] = totalPurchases[key] + purchase;
-            // console.log( 'Adding up ', totalPurchases[key] = totalPurchases[key] + purchase);
-            // _.merge(totalPurchases[key], purchase);
-            // console.log( 'totalPurchases ', totalPurchases[key]);
-            // console.log( 'purchase ', purchase);
-        }
-        });
-        // console.log( 'Purchased ', totalPurchases);
-        totalSales = Object.values(totalPurchases).reduce((t, n) => t + n);
-        commit('setTotalSales', totalSales);
-        setTimeout(function () {
-          commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
-        },2000)
-      });
+      // firebase.firestore().collection('storedata').onSnapshot((rawdata) => {
+      //
+      //   let totalSales = 0;
+      //   let totalPurchases = {};
+      //   commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 95});
+      //   // Creating Similar keys in totalPurchases
+      //   rawdata.forEach((data) => {
+      //   // Storage Data
+      //   let purchase = data.data();
+      //   let purchased = purchase.purchased;
+      //   // Creating Similar keys in totalPurchases
+      //   for (let key in purchased){
+      //       totalPurchases[key] = 0;
+      //   }
+      //
+      //   });
+      //
+      //   // console.log( 'Creating TotalPurchase', totalPurchases);
+      //   // Making More Views
+      //   rawdata.forEach((data) => {
+      //   // Storage Data
+      //   let purchase = data.data();
+      //   let purchased = purchase.purchased;
+      //
+      //   // Failed Method
+      //   // Object.assign(totalPurchases, purchased)
+      //
+      //   for (let key in purchased){
+      //       let purchase = purchased[key];
+      //
+      //       // Conversion to Int
+      //       purchase = parseInt(purchase);
+      //       // console.log( 'Purchased ' + key +'=', purchase);
+      //       // Merging two objects
+      //       totalPurchases[key] = totalPurchases[key] + purchase;
+      //       // console.log( 'Adding up ', totalPurchases[key] = totalPurchases[key] + purchase);
+      //       // _.merge(totalPurchases[key], purchase);
+      //       // console.log( 'totalPurchases ', totalPurchases[key]);
+      //       // console.log( 'purchase ', purchase);
+      //   }
+      //   });
+      //   // console.log( 'Purchased ', totalPurchases);
+      //   totalSales = Object.values(totalPurchases).reduce((t, n) => t + n);
+      //   commit('setTotalSales', totalSales);
+      //   setTimeout(function () {
+      //     commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 100});
+      //   },2000)
+      // });
 
     },
     // USER AUTHENTICATION
@@ -584,7 +588,7 @@ export const store = new Vuex.Store({
           // Grabing Cities
           storelist.forEach((doc) => {
               // cities[doc.id] = doc.data();
-              console.log(doc.data())
+              // console.log(doc.data())
               stores.push(doc.data());
               totalStores = totalStores + 1;
           });
@@ -1217,33 +1221,86 @@ export const store = new Vuex.Store({
         });
     },
     // Fetch All Last Reports
-    fetchAllStoreReports({commit}){
+    fetchAllStoreReports({commit, getters}){
       commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata').limitToLast(1).on('value', (report) => {
+      firebase.firestore().collection('storedata').get().then((report) => {
         let reports = [];
-        let currentKey = null;
+
+        let parametersList = {};
+        let parametersName = [];
+        let optionalParameters = getters.optionalParameter;
+
+        let questionsList = {};
+        let questionParameters = getters.optionalQuestions;
+        let optionals = [];
+        let questions = [];
         // console.log(reports)
-        report.forEach((childReport) => {
-          const obj = childReport.val();
-          currentKey = childReport.key;
-          // reports[currentKey] = new Array;
-          for (let key in obj){
-            reports.push({
-              id: key,
-              date: childReport.key,
-              // Customer Information
-              customerName: obj[key].customerName,
-              // Store info
-              store: obj[key].store,
-              userName: obj[key].userName,
-            });
-          }
-          currentKey = null;
+
+        // Creating Keys in optionals
+        for (let key in optionalParameters){
+            parametersList[optionalParameters[key].id] = {yes: 0, no: 0}
+            parametersName.push(optionalParameters[key].id);
+        }
+
+        // Creating Keys in Questions
+        for (let key in questionParameters){
+            questionsList[questionParameters[key].id] = 0
+        }
+
+        // Creating the lists of optionals and questions that answeres by customers
+        report.forEach((recentReports) => {
+          let report = recentReports.data();
+          // let optionals = report.optionals;
+
+          // creating optionals parameters and combining them
+          optionals.push(report.optionals)
+          questions.push(report.questions);
         });
-        let crypted = reports.slice(-3);
+        //   We are first interate the names of parameter to compare
+          parametersName.forEach((parameter) => {
+            // this loop is returning names
+              optionals.forEach((option) => {
+                  if(option[parameter] == 'Yes'){
+                      parametersList[parameter].yes++;
+                  } else if (option[parameter] == 'No'){
+                      parametersList[parameter].no++;
+                  }
+              })
+          });
+          console.log('Total Yeses and nos',parametersList);
+          // console.log('Total parameters', parametersName)
+
+
+        // console.log( 'Generated Reports',reports);
+        // console.log('Generated Optionals List', parametersList);
+        // console.log('Generated Questions List', questionsList);
+        // console.log('Generated Optionals',optionals);
+        // console.log('Generated Questions',questions);
+
+        // Finding Optionals Parameters
+        // Finding Short Questions
+        // report.forEach((childReport) => {
+        //   const obj = childReport.data();
+        //   currentKey = childReport.key;
+        //   // reports[currentKey] = new Array;
+        //   for (let key in obj){
+        //     reports.push({
+        //       id: key,
+        //       date: childReport.key,
+        //       // Customer Information
+        //       customerName: obj[key].customerName,
+        //       // Store info
+        //       store: obj[key].store,
+        //       userName: obj[key].userName,
+        //     });
+        //   }
+        //   currentKey = null;
+        // });
+        let lastReports = reports.slice(-3);
         // console.log(reports)
         commit('SET_MAIN_LOADING', false);
-        commit('setAllStoreReport', crypted);
+        commit('setOptionalsReport', parametersList);
+        commit('setAllStoreReport', lastReports);
       });
     },
     // Fetch Compile Reports By Campaign
@@ -1687,6 +1744,9 @@ export const store = new Vuex.Store({
 
       // Accumulative Figures
 
+    optionalReport (state){
+        return state.optionalReport
+    },
     totalInterceptions (state){
       return state.totalInterceptions
     },

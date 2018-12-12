@@ -238,18 +238,151 @@
                             <!--Dashboard edit Dialogue Button-->
                             <v-flex xs10 offset-xs1>
 
-                              <v-dialog v-model="dashboardEditDialog" width="900">
+                              <v-dialog v-model="dashboardEditDialog" width="1000">
                                 <v-btn slot="activator" :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
-                                  Widget Controller
+                                  Widget Manager
                                 </v-btn>
                                 <v-card>
                                   <v-card-title class="headline gradientDialog text--white" primary-title>
-                                    Widgets Text Controls
+                                    Widgets Manager
                                   </v-card-title>
 
                                   <v-card-text>
 
                                     <form @submit.prevent="onDashboardGUIReg">
+
+                                    <!--List of Widgets-->
+                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                        <v-layout row wrap>
+
+                                          <!-- Edit Panel -->
+                                          <v-flex xs4 sm4 md4>
+
+                                            <!--Widget-1 Pie Chart-->
+                                            <v-flex xs11 offset-xs1>
+                                              <v-flex xs12 class="text-lg-left title"> Edit Charts </v-flex>
+                                              <!--ID and Name Fields-->
+                                              <v-layout row wrap>
+                                                <v-flex xs4>
+                                                  <v-text-field
+                                                          name="id"
+                                                          hint="ID # for Each widget must be unique or it will cause corruption"
+                                                          label="ID"
+                                                          v-model="editWidget['id']"
+                                                          type="number"
+                                                  ></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs8>
+                                                  <v-text-field
+                                                          name="title"
+                                                          hint="Should be string with less than 20 letters"
+                                                          label="Title"
+                                                          v-model="editWidget['title']"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                </v-flex>
+                                              </v-layout>
+                                              <!--Type and Category Fields-->
+                                              <v-layout row wrap>
+                                                <v-flex xs6>
+                                                  <v-select
+                                                          name="type"
+                                                          hint="Type of Chart either its is optional or Question Chart"
+                                                          persistent-hint
+                                                          outline
+                                                          label="Types"
+                                                          :items="['Optional', 'Question']"
+                                                          v-model="editWidget['type']"
+                                                          :clearable="true"
+                                                  ></v-select>
+                                                </v-flex>
+                                                <v-flex xs6>
+                                                  <v-select
+                                                          name="category"
+                                                          hint="Category or shape of chart you would like"
+                                                          persistent-hint
+                                                          outline
+                                                          :items="['Dough Nut', 'Bars', 'Line', 'Radar', 'Area', 'Bubble']"
+                                                          label="Category"
+                                                          v-model="editWidget['category']"
+                                                          :clearable="true"
+                                                  ></v-select>
+                                                </v-flex>
+                                              </v-layout>
+                                              <!--Sources and description Fields-->
+                                              <v-layout row wrap>
+                                                <v-flex xs12>
+                                                  <v-select
+                                                          name="source"
+                                                          hint="In particular category which Source of information you want to display"
+                                                          persistent-hint
+                                                          outline
+                                                          :items="['food', 'days', 'cousine']"
+                                                          label="Source"
+                                                          v-model="editWidget['source']"
+                                                          :clearable="true"
+                                                  ></v-select>
+                                                </v-flex>
+                                                <v-flex xs12>
+                                                  <v-text-field
+                                                          name="description"
+                                                          label="Description"
+                                                          v-model="editWidget['description']"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                </v-flex>
+                                              </v-layout>
+                                            </v-flex>
+
+                                            <!--submission-->
+                                            <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                              <v-layout row wrap>
+                                                <!--Password-->
+                                                <v-flex xs12 class="ma-4 ml-0 mr-0">
+                                                  <v-flex xs12 class="title"> Key Passcode Required </v-flex>
+                                                  <v-text-field
+                                                          name="widgetDashboardPass"
+                                                          label="Passcode"
+                                                          v-model="editDashboardPass"
+                                                          type="password"
+                                                          :clearable="true"
+                                                  ></v-text-field>
+                                                  <v-btn large :disabled="!dashboardFormValid" type="submit" class="greenBleed" > EDIT <v-icon right>create</v-icon></v-btn>
+                                                </v-flex>
+                                              </v-layout>
+                                            </v-container>
+
+                                          </v-flex>
+
+                                          <!-- List-->
+                                          <v-flex xs8 sm8 md8>
+
+                                            <!--Widget-1 Pie Chart-->
+                                            <v-flex xs12>
+                                              <v-flex xs12 class="text-lg-left title"> Available Widgets </v-flex>
+
+                                              <!--DataTable for Total Widgets-->
+                                              <v-data-table
+                                                      :headers="[{ text: 'ID', value: 'id' },
+                                                  { text: 'Title', value: 'title' },
+                                                  { text: 'Discription', value: 'description' },
+                                                  { text: 'Actions', value: 'actions' }
+                                                  ]"
+                                                      :items="dashboardWidgetList"
+                                              >
+                                                <template slot="items"  slot-scope="props">
+                                                  <td class="text-sm-left">{{ props.item.id }}</td>
+                                                  <td class="text-sm-left">{{ props.item.title }}</td>
+                                                  <td class="text-sm-left">{{ props.item.description }}</td>
+                                                  <td class="text-sm-left"><v-btn flat icon @click="deleteProduct(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
+                                                </template>
+                                              </v-data-table>
+
+                                            </v-flex>
+                                          </v-flex>
+
+                                        </v-layout>
+                                      </v-container>
 
                                     <!--Widget 01 , Widget 02 , Widget 03-->
                                     <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
@@ -396,34 +529,7 @@
                                       </v-layout>
                                     </v-container>
 
-                                    <!--submission-->
-                                    <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                      <v-layout row wrap>
-                                        <!--Password-->
-                                        <v-flex xs3 class="ma-4 ml-0 mr-0">
-                                          <v-flex xs12 class="title"> Key Passcode Required </v-flex>
-                                          <v-text-field
-                                                  name="widgetDashboardPass"
-                                                  label="Passcode"
-                                                  v-model="editDashboardPass"
-                                                  type="password"
-                                                   :clearable="true"
-                                          ></v-text-field>
-                                          <v-btn large :disabled="!dashboardFormValid" type="submit" class="greenBleed" > EDIT <v-icon right>create</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Buttons-->
-                                        <v-flex xs5 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Important Note! </v-flex>
-                                          <v-flex xs12> Widget are supposed to manage by <strong>Authorized</strong> personnel only. </v-flex>
-                                          <v-flex xs12> This procedure is the most critical by all mean. If something went wrong please do not proceed and contact your I.T Support. </v-flex>
-                                          <v-btn type="button" class="greenBleed" dark> Support <v-icon right>add_alert</v-icon></v-btn>
-                                        </v-flex>
-                                        <!--Instructions-->
-                                        <v-flex xs3 class="mt-4 ml-0">
-                                          <v-flex xs12 class="title"> Reference Image </v-flex>
-                                        </v-flex>
-                                      </v-layout>
-                                    </v-container>
+
 
                                     </form>
 
@@ -1409,6 +1515,8 @@
             widget05: {title: '', description: ''},
             widget06: {title: '', description: ''},
         },
+        editWidget: {},
+        dashboardWidgetList: [],
 //        Editing Optional Parameters
         editOptionalParameter: {
 
@@ -1716,8 +1824,13 @@
       this.productList = skusListArray;
 
 //    getting Widger Controller
-      let widgetdoc = this.$store.getters.appinfo;
-      this.editDashboard = widgetdoc.widgets
+      let widgetdoc = this.$store.getters.appinfo.widgets;
+      this.editDashboard = widgetdoc;
+//      inserting object in Array
+      for (let key in widgetdoc){
+          this.dashboardWidgetList.push(widgetdoc[key])
+      }
+
 
 
 //    getting Optional Questions

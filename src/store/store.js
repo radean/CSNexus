@@ -49,6 +49,7 @@ export const store = new Vuex.Store({
     skusList: {},
     optionals: {},
     questions: {},
+    dashboardWidgets: {},
     interceptionsData: {},
     optionalParameter: {},
     optionalQuestions:{},
@@ -106,6 +107,9 @@ export const store = new Vuex.Store({
     },
     setOptionalQuestions (state, payload){
         state.optionalQuestions = payload;
+    },
+    setDashboardWidget(state, payload) {
+        state.dashboardWidgets = payload;
     },
     // =================================
     setAppConnection (state, payload) {
@@ -267,15 +271,13 @@ export const store = new Vuex.Store({
       })
 
       // Fetching Dashboard Information
-      firebase.firestore().collection('app-init').doc('initial').collection('app-guis').get().then((dashboardGui) => {
-            let dashboardData = {};
-            dashboardGui.forEach((gui) => {
-                dashboardData.widgets = gui.data()
-            });
-
-            let appInfo = getters.appinfo;
-            Object.assign( appInfo, dashboardData);
-            commit('setAppinformation', appInfo);
+      firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').get().then((dashboardWidget) => {
+            // let dashboardData = {};
+            let guis = dashboardWidget.data();
+            // combining appinfo with newly created collection
+            // let appInfo = getters.appinfo;
+            // Object.assign( appInfo, dashboardData);
+            commit('setDashboardWidget', guis);
           // Setting Progress Bar
           commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 75});
       })
@@ -1484,7 +1486,10 @@ export const store = new Vuex.Store({
             endDate: appInfo.endDate,
             subscription: appInfo.subscription
         }).then(function() {
-            console.log("App basic Information Transacted");
+            commit('SET_SUCCESS_MSG', 'Meta Information Submitted');
+            setTimeout(() => {
+                commit('SET_SUCCESS_MSG', 'Operation Successful');
+            }, 4000);
         })
         .catch(function(error) {
             console.error("Error writing document: ", error);
@@ -1537,14 +1542,31 @@ export const store = new Vuex.Store({
         console.log(appInfo);
         // connecting to firestore
 
-        firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').update(payload).then(function() {
-            console.log("App basic Information Transacted");
+        firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').set(payload).then(function() {
+            commit('SET_SUCCESS_MSG', 'Dashboard submission Complete');
+            setTimeout(() => {
+                commit('SET_SUCCESS_MSG', 'Operation Successful');
+            }, 4000);
         }).catch(function(error) {
             console.error("Error writing document: ", error);
         });
 
         commit('SET_MAIN_LOADING', false);
-  },
+      },
+    dashboardSettingsReg({commit}, payload){
+          // Start Loading
+          commit('SET_MAIN_LOADING', true);
+          // connecting to firestore
+          firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('settings').update(payload).then(function() {
+              commit('SET_SUCCESS_MSG', 'Dashboard Setting submission Complete');
+              setTimeout(() => {
+                  commit('SET_SUCCESS_MSG', 'Operation Successful');
+              }, 4000);
+          }).catch(function(error) {
+              console.error("Error writing document: ", error);
+          });
+          commit('SET_MAIN_LOADING', false);
+      },
     // Application Products edit
     productsReg({commit}, payload){
       // Start Loading
@@ -1553,7 +1575,10 @@ export const store = new Vuex.Store({
       let products = payload;
       // connecting to firestore
       firebase.firestore().collection('app-init').doc('initial').collection('products').doc('skus').set(products).then(function() {
-          console.log("SKUS Information Transacted");
+          commit('SET_SUCCESS_MSG', 'SKU(s) successfully registered');
+          setTimeout(() => {
+              commit('SET_SUCCESS_MSG', 'Operation Successful');
+          }, 4000);
       }).catch(function(error) {
           console.error("Error SKU Transaction: ", error);
       });
@@ -1570,7 +1595,10 @@ export const store = new Vuex.Store({
         // connecting to firestore
 
         firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('parameters').set(payload).then(function() {
-            console.log("App Optional Parameters Transacted");
+            commit('SET_SUCCESS_MSG', 'Application Question Submitted');
+            setTimeout(() => {
+                commit('SET_SUCCESS_MSG', 'Operation Successful');
+            }, 4000);
         }).catch(function(error) {
             console.error("Error writing document: ", error);
         });
@@ -1587,7 +1615,10 @@ export const store = new Vuex.Store({
         // connecting to firestore
 
         firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').set(payload).then(function() {
-            console.log("App Optional Parameters Transacted");
+            commit('SET_SUCCESS_MSG', 'Optional Submitted');
+            setTimeout(() => {
+                commit('SET_SUCCESS_MSG', 'Operation Successful');
+            }, 4000);
         }).catch(function(error) {
             console.error("Error writing document: ", error);
         });
@@ -1657,7 +1688,10 @@ export const store = new Vuex.Store({
             // console.log(nodeInfo);
 
             firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(nodeInfo).then(function() {
-                console.log("Node Basic Information Transacted");
+                commit('SET_SUCCESS_MSG', 'Node Meta Information Submitted');
+                setTimeout(() => {
+                    commit('SET_SUCCESS_MSG', 'Operation Successful');
+                }, 4000);
             }).catch(function(error) {
                 console.error("Error writing document: ", error);
             });
@@ -1703,7 +1737,7 @@ export const store = new Vuex.Store({
           // End Loading
           commit('SET_MAIN_LOADING', false)
           // Sending Success Message
-          commit('SET_SUCCESS_MSG', 'BA Successfully Added');
+          commit('SET_SUCCESS_MSG', 'BA Successfully Registered');
           setTimeout(() => {
               commit('SET_SUCCESS_MSG', 'Operation Successful');
           },4000);
@@ -1714,6 +1748,8 @@ export const store = new Vuex.Store({
           },4000)
       });
     }
+
+    // Push Messages
   },
   getters: {
     // Application Details
@@ -1740,6 +1776,9 @@ export const store = new Vuex.Store({
     },
     skusLists (state){
       return state.skusList
+    },
+    dashboardWidgets (state){
+      return state.dashboardWidgets
     },
 
       // Accumulative Figures

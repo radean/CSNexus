@@ -51,7 +51,7 @@
             <v-layout row wrap >
           <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart-->
-            <div class="header">{{ appInfo.widgets.widget01.title }}</div>
+            <!--<div class="header">{{ dashboardWidgets[3003].title }}</div>-->
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <DoughNutChart :chart-data="optionals.food" :options="optionsDoughnut"></DoughNutChart>
           </v-flex>
@@ -84,7 +84,7 @@
           <!--TOTAL TasteTrial-->
           <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart-->
-            <div class="header">{{ appInfo.widgets.widget02.title }} </div>{{ appInfo.widgets.widget02.description }}
+            <!--<div class="header">{{ appInfo.widgets.widget02.title }} </div>{{ appInfo.widgets.widget02.description }}-->
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
             <DoughNutChart :chart-data="optionals.days" :options="optionsDoughnut"></DoughNutChart>
           </v-flex>
@@ -94,19 +94,19 @@
         <v-flex xs12>
             <v-layout row wrap class="mb-0 pb-0">
           <v-flex md4 class="reportContainer elevation-20">
-              <div class="header"> &nbsp; {{ appInfo.widgets.widget03.title }} &nbsp; </div>{{ appInfo.widgets.widget03.description }}
+              <!--<div class="header"> &nbsp; {{ appInfo.widgets.widget03.title }} &nbsp; </div>{{ appInfo.widgets.widget03.description }}-->
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>-->
               <!--</div>-->
           </v-flex>
           <v-flex md3 class="reportContainer elevation-20">
-              <div class="header">&nbsp; {{ appInfo.widgets.widget04.title }} &nbsp;</div>{{ appInfo.widgets.widget04.description }}
+              <!--<div class="header">&nbsp; {{ appInfo.widgets.widget04.title }} &nbsp;</div>{{ appInfo.widgets.widget04.description }}-->
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>-->
               <!--</div>-->
           </v-flex>
           <v-flex md2 class="reportContainer elevation-20">
-              <div class="header">&nbsp; {{ appInfo.widgets.widget05.title }} &nbsp;</div>{{ appInfo.widgets.widget05.description }}
+              <!--<div class="header">&nbsp; {{ appInfo.widgets.widget05.title }} &nbsp;</div>{{ appInfo.widgets.widget05.description }}-->
               <!--<div class="barChart">-->
                   <!--<BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>-->
               <!--</div>-->
@@ -115,7 +115,7 @@
         </v-flex>
 
       <v-flex xs12 class="reportContainer elevation-20">
-        <div class="header">&nbsp; {{ appInfo.widgets.widget06.title }} &nbsp;</div> {{ appInfo.widgets.widget06.description }}
+        <!--<div class="header">&nbsp; {{ appInfo.widgets.widget06.title }} &nbsp;</div> {{ appInfo.widgets.widget06.description }}-->
         <div class="barChart">
           <!--<BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>-->
         </div>
@@ -271,6 +271,13 @@
       },
       appInfo(){
         return this.$store.getters.appinfo;
+      },
+      dashboardWidgets(){
+//      local variables
+//          let dashboardWidgetList = this.$store.getters.dashboardWidgets
+
+          return this.$store.getters.dashboardWidgets
+
       },
       totalBAs(){
         return this.$store.getters.totalBA;

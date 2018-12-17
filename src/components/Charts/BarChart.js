@@ -17,15 +17,10 @@ export default {
     this.renderChart(this.chartData,this.options,{ responsive: true, maintainAspectRatio: false});
     // this.$data._chart.datasets[0]['colors'] = this.colors
     // Overriding some variables
-    // this.renderChart({
-    //   datasets: [
-    //       {
-    //           backgroundColor: this.colors,
-    //           color: this.colors,
-    //           borderWidth: 0,
-    //       }
-    //   ]},
-    // )
+      this.chart.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+      });
+      chart.update();
 
   }
 }

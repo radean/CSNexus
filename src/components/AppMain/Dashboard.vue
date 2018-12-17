@@ -250,12 +250,10 @@
         this.$router.push('/login')
       }
 
-//      Creating Virtual DOM for Charts
-        let chart = {
-          tag: 'ul',
-            attributes: {id: 'myID'},
-            children: []
-        }
+
+//        widgets.forEach((widget) => {
+//            console.log('Each Iteration', widget);
+//        });
 
 //      Fetching Interception Action
 //            Please Look in it!
@@ -263,7 +261,18 @@
 //      this.$store.dispatch('fetchTotalInterceptions');
         this.dashboardSettings()
       this.$store.dispatch('fetchStoreReports');
-      this.$store.dispatch('fetchAllStoreReports');
+      this.$store.dispatch('fetchAllStoreReports').then(() => {
+////        Generating Objects
+//        let widgets = this.widgets;
+////        Iterating each widget to created related Labels and apply colors;
+//        for(let key in widgets){
+//            let source = widgets[key].source
+//            let color = widgets[key].colors;
+//            this.optionals[source] = {};
+//            this.optionals[source].color = color
+//            console.log('Each Iteration', widgets[key].colors);
+//        }
+      });
       this.$store.dispatch('baListUPD');
       this.$store.dispatch('storeListUPD');
 //        ===========================================================
@@ -545,7 +554,7 @@
             ],
         };
 
-//        Generating Objects
+
         let optionalLabels = Object.keys( this.optionalReport.food);
         this.optionals['food'] = {
             labels: optionalLabels,

@@ -15,7 +15,7 @@
       </v-flex>
       <!--TOTAL INTERCEPTION-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-20" >
+        <v-card class="dashCards elevation-20 " >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Interceptions</h6></v-card-title>
           <v-card-text>
             <h2 class="display-3 blue--text ma-0 pa-0" >
@@ -26,7 +26,7 @@
       </v-flex>
       <!--TOTAL Brand Ambassador-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-20" >
+        <v-card class="dashCards elevation-20 " >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Brand Ambassador</h6></v-card-title>
           <v-card-text>
             <h2 class="display-3 blue--text ma-0 pa-0" >
@@ -37,7 +37,7 @@
       </v-flex>
       <!--Store Amount-->
       <v-flex flex xs3>
-        <v-card class="dashCards elevation-20" >
+        <v-card class="dashCards elevation-20 " >
           <v-card-title primary-title class="ma-0 pa-2"><h6 class="title ma-0 pa-0">Stores</h6></v-card-title>
           <v-card-text>
             <h2 class="display-3 blue--text ma-0 pa-0" >
@@ -50,10 +50,11 @@
         <v-flex xs12>
             <v-layout row wrap >
           <v-flex md3 class="GraphsContainer elevation-20">
-            <!--user chart-->
-            <!--<div class="header">{{ dashboardWidgets[3003].title }}</div>-->
+            <!--user chart WIDGET # 1-->
+            <div class="header">{{ widgets.widget1.title }}</div> {{ widgets.widget1.description }}
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <DoughNutChart :chart-data="optionals.food" :options="optionsDoughnut"></DoughNutChart>
+            <Doughtnut :is="widgets.widget1.category" :chart-data="optionals[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="optionsDoughnut"></Doughtnut>
+
           </v-flex>
             <!--Recent Entries-->
             <v-flex md5 class="GraphsContainer elevation-20">
@@ -83,36 +84,38 @@
             </v-flex>
           <!--TOTAL TasteTrial-->
           <v-flex md3 class="GraphsContainer elevation-20">
-            <!--user chart-->
-            <!--<div class="header">{{ appInfo.widgets.widget02.title }} </div>{{ appInfo.widgets.widget02.description }}-->
-            <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <DoughNutChart :chart-data="optionals.days" :options="optionsDoughnut"></DoughNutChart>
+            <!--user chart WIDGET # 2-->
+            <!--<div class="header">{{ widgets.widget2.title }} </div> {{ widgets.widget2.description }}-->
+            <!--<v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>-->
+            <!--<Doughtnut :is="widgets.widget2.category" :chart-data="optionals[widgets.widget2.source]" :options="optionsDoughnut"></Doughtnut>-->
+
           </v-flex>
         </v-layout>
         </v-flex>
-      <!--Previous Users-->
+      <!--Three Charts-->
         <v-flex xs12>
-            <v-layout row wrap class="mb-0 pb-0">
-          <v-flex md4 class="reportContainer elevation-20">
-              <!--<div class="header"> &nbsp; {{ appInfo.widgets.widget03.title }} &nbsp; </div>{{ appInfo.widgets.widget03.description }}-->
-              <!--<div class="barChart">-->
-                  <!--<BarChart :chart-data="previousUserButterData" :options="optionsCity"></BarChart>-->
-              <!--</div>-->
-          </v-flex>
-          <v-flex md3 class="reportContainer elevation-20">
-              <!--<div class="header">&nbsp; {{ appInfo.widgets.widget04.title }} &nbsp;</div>{{ appInfo.widgets.widget04.description }}-->
-              <!--<div class="barChart">-->
-                  <!--<BarChart :chart-data="previousUserCheeseData" :options="optionsCity"></BarChart>-->
-              <!--</div>-->
-          </v-flex>
-          <v-flex md2 class="reportContainer elevation-20">
-              <!--<div class="header">&nbsp; {{ appInfo.widgets.widget05.title }} &nbsp;</div>{{ appInfo.widgets.widget05.description }}-->
-              <!--<div class="barChart">-->
-                  <!--<BarChart :chart-data="previousUserFrozenData" :options="optionsCity"></BarChart>-->
-              <!--</div>-->
-          </v-flex>
-      </v-layout>
+            <v-layout wrap row class="ma-0 pb-0">
+              <v-flex xs3 sm3 md3 class="GraphsContainer elevation-20">
+                  <div class="header"> &nbsp; {{ widgets.widget3.title }} &nbsp; </div>{{ widgets.widget3.description }}
+                  <!--<div class="barChart">-->
+                  <!--<Doughtnut :is="widgets.widget3.category" :chart-data="optionals[widgets.widget3.source]" :options="optionsDoughnut"></Doughtnut>-->
+                  <!--</div>-->
+              </v-flex>
+              <v-flex  class="GraphsContainer elevation-20">
+                  <div xs3 sm3 md3 class="header"> &nbsp; {{ widgets.widget4.title }} &nbsp; </div>{{ widgets.widget4.description }}
+                  <!--<div class="barChart">-->
+                  <!--<Doughtnut :is="widgets.widget4.category" :chart-data="optionals[widgets.widget4.source]" :options="optionsDoughnut"></Doughtnut>-->
+                  <!--</div>-->
+              </v-flex>
+              <v-flex xs3 sm3 md3  class="GraphsContainer elevation-20">
+                  <div class="header"> &nbsp; {{ widgets.widget6.title }} &nbsp; </div>{{ widgets.widget6.description }}
+                  <!--<div class="barChart">-->
+                  <!--<Doughtnut :is="widgets.widget6.category" :chart-data="optionals[widgets.widget6.source]" :options="optionsDoughnut"></Doughtnut>-->
+                  <!--</div>-->
+              </v-flex>
+            </v-layout>
         </v-flex>
+
 
       <v-flex xs12 class="reportContainer elevation-20">
         <!--<div class="header">&nbsp; {{ appInfo.widgets.widget06.title }} &nbsp;</div> {{ appInfo.widgets.widget06.description }}-->
@@ -130,9 +133,12 @@
   import UserCount from '../Charts/LineChart'
   import DoughNutChart from '../Charts/DoughNutChart'
   import BarChart from '../Charts/BarChart'
+  import BubbleChart from '../Charts/bubbleChart'
+  import line from '../Charts/line'
   import ssCanolaOil from '../Charts/ssCanolaOil'
   import ssBanaspati from '../Charts/ssBanaspatiGhee'
   import ssBanaspatiWOlive from '../Charts/ssBanaspatiWOlive'
+  import radarChart from "../Charts/radarChart";
 
   export default {
     data () {
@@ -149,6 +155,7 @@
         isd_Stores_visited: 24,
 //      Charts Data
         optionals: {},
+        widgets: {},
         recentReports: [
         ],
         recentEntriesHeader: [
@@ -223,13 +230,18 @@
     },
 
     components:{
-      'DoughNutChart' : DoughNutChart,
+      'DoughnNutChart' : DoughNutChart,
+      'Doughnut' : DoughNutChart,
       'app-user-count': UserCount,
       'ssCookingOil': ssCookingOil,
       'ssCanolaOil': ssCanolaOil,
       'ssBanaspatiOil': ssBanaspati,
       'ssBanaspatiWOlive': ssBanaspatiWOlive,
-      'BarChart': BarChart
+      'BarChart': BarChart,
+//        Charts
+      'LineChart': line,
+      'radarChart': radarChart,
+      'bubbleChart': BubbleChart
     },
 
     created(){
@@ -237,10 +249,19 @@
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
+
+//      Creating Virtual DOM for Charts
+        let chart = {
+          tag: 'ul',
+            attributes: {id: 'myID'},
+            children: []
+        }
+
 //      Fetching Interception Action
 //            Please Look in it!
 //        ===========================================================
 //      this.$store.dispatch('fetchTotalInterceptions');
+        this.dashboardSettings()
       this.$store.dispatch('fetchStoreReports');
       this.$store.dispatch('fetchAllStoreReports');
       this.$store.dispatch('baListUPD');
@@ -258,6 +279,15 @@
         this.fillData();
 //        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
       }, 3000);
+//      Sync Once after 3 seconds
+        setTimeout(() =>{
+//            let widgetUpdate = this.widgets.widget1;
+//            let widgetUpdateSource = widgetUpdate.source;
+//            let widgetSource = this.optionals[widgetUpdateSource];
+//            let widgetColors = widgetUpdate.color;
+            console.log('Sources', 'Times Up')
+//        this.optionals[this.widgets.widget01.source] =
+        }, 5000);
 
     },
 
@@ -275,9 +305,7 @@
       dashboardWidgets(){
 //      local variables
 //          let dashboardWidgetList = this.$store.getters.dashboardWidgets
-
           return this.$store.getters.dashboardWidgets
-
       },
       totalBAs(){
         return this.$store.getters.totalBA;
@@ -353,7 +381,7 @@
     },
 //    All Charts Update Information
     methods: {
-      recentPurchase() {
+        recentPurchase() {
         let storeReport = [];
         storeReport = this.$store.getters.recentReport;
         let check = [];
@@ -368,7 +396,22 @@
         this.recentStore = check;
         return true
       },
-      fillData () {
+        dashboardSettings(){
+            let widgets = this.widgets;
+            let settings = this.$store.getters.dashboardSettings;
+            let guiData = this.$store.getters.dashboardWidgets;
+
+        //          iterate and applying each settings on Widgets
+            for(let key in guiData){
+                for (let skey in settings){
+                    if(settings[skey] == guiData[key].id){
+                        widgets[skey] = guiData[key];
+                    }
+                }
+            }
+//            console.log('GUI Data', widgets);
+        },
+        fillData () {
         this.showProgress = false;
 //        Recent Purchase
         this.recentPurchase();
@@ -443,7 +486,7 @@
                     ]
                 },
             ],
-        }
+        };
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
 //          For Butter
@@ -465,7 +508,7 @@
                     ]
                 },
             ],
-        }
+        };
 //      For Cheese
         this.previousUserCheeseData = {
             labels: ['Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'],
@@ -484,7 +527,7 @@
                     ]
                 },
             ],
-        }
+        };
 //        For Frozen
         this.previousUserFrozenData = {
             labels: ['Star', 'Fresh & Frozen', 'Other'],
@@ -500,14 +543,15 @@
                     ]
                 },
             ],
-        }
+        };
+
+//        Generating Objects
         let optionalLabels = Object.keys( this.optionalReport.food);
         this.optionals['food'] = {
             labels: optionalLabels,
             datasets: [
                 {
                     backgroundColor: ['#d6a150', '#3f91db'],
-                    borderWidth: 0,
                     color: ['#ffc85a', '#49a9ff'],
                     data: [
                         this.optionalReport.food.yes,
@@ -533,6 +577,8 @@
               },
           ],
         }
+
+
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
         this.tasteTrialData = {
@@ -561,7 +607,7 @@
   .GraphsContainer {
     /*max-width: 50%;*/
     background-color: rgba(240,240,240,0.2);
-    margin: 10px;
+    margin: .5vw;
     text-align: center;
     padding-bottom: 0px;
     border: 1px solid #d8d8d8;

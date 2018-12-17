@@ -417,6 +417,14 @@ export default {
     border-radius: 16px !important;
     color: #009442 !important;
   }
+  .greenSmalllBleed {
+    background: #00ff8a;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #ffffff, #f0f0f0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #ffffff, #f0f0f0) !important; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    box-shadow: 0px 8px 32px 2px rgba(0, 255, 82, 0.64) !important;
+    border-radius: 4px !important;
+    color: #009442 !important;
+  }
   .redBleed {
     background: transparent;  /* fallback for old browsers */
     box-shadow: 0px 8px 32px 2px rgba(255, 0, 30, 0.51) !important;

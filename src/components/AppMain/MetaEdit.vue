@@ -303,7 +303,9 @@
                                                           hint="Category or shape of chart you would like"
                                                           persistent-hint
                                                           outline
-                                                          :items="['Dough Nut', 'Bars', 'Line', 'Radar', 'Area', 'Bubble']"
+                                                          :items="charts"
+                                                          item-text="title"
+                                                          item-value="value"
                                                           label="Category"
                                                           v-model="editWidget['category']"
                                                           :clearable="true"
@@ -333,6 +335,23 @@
                                                   ></v-text-field>
                                                 </v-flex>
                                               </v-layout>
+                                              <!--Sources and description Fields-->
+                                              <v-layout row wrap>
+                                                <v-flex xs12>
+                                                  Please Select color from here
+                                                </v-flex>
+                                                <v-flex xs12>
+                                                  <v-btn flat icon class=" ma-0 pa-0 " color="greenSmalllBleed" @click="onColorAddWidget">
+                                                    <v-icon >add</v-icon>
+                                                  </v-btn>
+                                                  <color-picker class="ma-2" type="sketch" v-model="widgetColors"></color-picker>
+                                                </v-flex>
+                                                <v-flex xs12 md12 >
+                                                  <v-chip v-for="color in this.editWidget.colors" :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip>
+                                                </v-flex>
+                                              </v-layout>
+
+
                                               <!--Add New Wigdget-->
                                               <v-flex xs12 class="ma-4 ml-0 mr-0">
                                                 <v-btn class="greenBleed" @click="onAddWidget"> ADD Widget <v-icon right>add</v-icon></v-btn>
@@ -362,7 +381,7 @@
                                           <!-- List and Assign area-->
                                           <v-flex xs8 sm8 md8>
 
-                                            <!--Widget-1 Pie Chart-->
+                                            <!--Widgets List-->
                                             <v-flex xs12>
                                               <v-flex xs12 class="text-lg-left title"> Available Widgets </v-flex>
                                               <v-flex xs12 class="text-lg-left subheading"> Available widgets from synced from server. </v-flex>
@@ -374,17 +393,19 @@
                                                   { text: 'Discription', value: 'description' },
                                                   { text: 'Type', value: 'type' },
                                                   { text: 'Category', value: 'category' },
+                                                  { text: 'Colors', value: 'colors' },
                                                   { text: 'Source', value: 'source' },
                                                   { text: 'Actions', value: 'actions' }
                                                   ]"
                                                   :items="dashboardWidgetList"
                                               >
-                                                <template slot="items"  slot-scope="props">
+                                                <template slot="items" slot-scope="props">
                                                   <td class="text-sm-left">{{ props.item.id }}</td>
                                                   <td class="text-sm-left">{{ props.item.title }}</td>
                                                   <td class="text-sm-left">{{ props.item.description }}</td>
                                                   <td class="text-sm-left">{{ props.item.type }}</td>
                                                   <td class="text-sm-left">{{ props.item.category }}</td>
+                                                  <td class="text-sm-left"><v-chip v-for="color in props.item.colors" :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
                                                   <td class="text-sm-left">{{ props.item.source }}</td>
                                                   <td class="text-sm-left"><v-btn flat icon @click="onDeleteWidget(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
                                                 </template>
@@ -1410,6 +1431,7 @@
 
 <script>
   import UploadButton from 'vuetify-upload-button';
+  import { VueColorpicker } from 'vue-pop-colorpicker'
 
   export default {
     data () {
@@ -1461,7 +1483,9 @@
             widget05: {title: '', description: ''},
             widget06: {title: '', description: ''},
         },
-        editWidget: {},
+        editWidget: {
+            colors: []
+        },
         widgetSettings: {},
         dashboardWidgetList: [],
 //        Editing Optional Parameters
@@ -1506,6 +1530,7 @@
         unAssignedStores: [
 
         ],
+        widgetColors: '#fff',
         selectedDateTriggerStart: '',
         selectedDateTriggerEnd: '',
         storeCategory: [
@@ -1514,6 +1539,13 @@
           'IMT',
           'LMT',
           'Other'
+        ],
+        charts: [
+            { title: 'Line', value: 'lineChart' },
+            { title: 'Bubble', value: 'bubbleChart' },
+            { title: 'Dough Nut', value: 'doughnutChart' },
+            { title: 'Radar', value: 'radarChart' },
+            { title: 'Bar', value: 'barChart' },
         ],
         storeIDList: [
         ],
@@ -1625,6 +1657,13 @@
 
 //          Sending it to Store
           this.$store.dispatch('dashboardSettingsReg', payload).then(() => {})
+      },
+      onColorAddWidget () {
+//          Fetching Color from DATA Vue
+          let color = this.widgetColors;
+//          Adding color to addWidget Object
+          this.editWidget.colors.push(color)
+          console.log(this.widgetColors)
       },
       onProductsReg() {
 //          converting array to object
@@ -1851,7 +1890,8 @@
       },2000);
     },
     components: {
-        'upload-btn': UploadButton
+        'upload-btn': UploadButton,
+        'color-picker': VueColorpicker
     }
   }
 </script>

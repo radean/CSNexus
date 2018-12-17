@@ -50,6 +50,7 @@ export const store = new Vuex.Store({
     optionals: {},
     questions: {},
     dashboardWidgets: {},
+    dashboardSettings: {},
     interceptionsData: {},
     optionalParameter: {},
     optionalQuestions:{},
@@ -110,6 +111,9 @@ export const store = new Vuex.Store({
     },
     setDashboardWidget(state, payload) {
         state.dashboardWidgets = payload;
+    },
+    setDashboardSettings(state, payload) {
+        state.dashboardSettings = payload;
     },
     // =================================
     setAppConnection (state, payload) {
@@ -232,7 +236,7 @@ export const store = new Vuex.Store({
     // Application Basic Information
     fetchAppInformation({commit, getters}){
       // Getting information from Server
-      console.log('Information Parsed');
+      // console.log('Information Parsed');
       // commit('SET_MAIN_LOADING', true);
       // Fetching from FireStore Server
       firebase.firestore().collection('app-init').get().then((appInfo) => {
@@ -270,14 +274,23 @@ export const store = new Vuex.Store({
         commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 60});
       })
 
-      // Fetching Dashboard Information
-      firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').get().then((dashboardWidget) => {
-            // let dashboardData = {};
-            let guis = dashboardWidget.data();
+      // Fetching Dashboard Information and settings
+      firebase.firestore().collection('app-init').doc('initial').collection('app-guis').get().then((dashboardWidget) => {
+            let gui = {}
+            let data = dashboardWidget;
+
+            data.forEach((info) => {
+                let init = info.data()
+                let key = info.id;
+                gui[key] = init;
+            })
+
+            // console.log('Dashboard Object from fetchAppInformation', gui)
             // combining appinfo with newly created collection
             // let appInfo = getters.appinfo;
             // Object.assign( appInfo, dashboardData);
-            commit('setDashboardWidget', guis);
+            commit('setDashboardWidget', gui.dashboard);
+            commit('setDashboardSettings', gui.settings);
           // Setting Progress Bar
           commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 75});
       })
@@ -303,17 +316,6 @@ export const store = new Vuex.Store({
               commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 95});
           },2000)
       })
-
-      // Fetching Total Stores Information
-      firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').get().then((optional) => {
-            let optionalQuestions = optional.data();
-            commit('setOptionalQuestions', optionalQuestions )
-            // Setting Progress Bar
-            commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 90});
-            setTimeout(function () {
-                commit('SET_PERCENTAGE_LOADING',{isLoading: false, percentage: 95});
-            },2000)
-        })
 
       // Fetch Initial Store Reports
       // Fetching Pierces
@@ -382,7 +384,7 @@ export const store = new Vuex.Store({
             address: payload.userInfo.address,
             role: payload.userInfo.role
           };
-          console.log(userInfo);
+          // console.log(userInfo);
             return firebase.database().ref('administrator').push(userInfo).then(() => {
             commit('SET_MAIN_LOADING', false);
             commit('SET_SUCCESS_MSG', "Successfuly Sign Up.");
@@ -514,7 +516,7 @@ export const store = new Vuex.Store({
     // USER UPDATES
     updateSelectedBa({commit, getters},payload){
       // initiate Loading
-      console.log("Reached Action");
+      // console.log("Reached Action");
       commit('SET_MAIN_LOADING', true);
       firebase.database().ref('stores/' + getters.selectedBa.store.id).update({
         assign: 'none'
@@ -537,7 +539,7 @@ export const store = new Vuex.Store({
     fetchTotalInterceptions({commit}){
       // Fetching List of Dates
         firebase.firestore().collection('storedata').onSnapshot((report) => {
-            console.log(report.size);
+            // console.log(report.size);
             commit('setTotalInterceptions', report.size);
         });
       // firebase.firestore().collection('storedata').onSnapshot((report) => {
@@ -1184,7 +1186,7 @@ export const store = new Vuex.Store({
         // let define some variables for Dates
         let date = new Date();
         let dateStart = date.getDate();
-        console.log(dateStart);
+        // console.log(dateStart);
         firebase.database().ref('storedata').once('value', (report) => {
             let reports = [];
             let currentKey = null;
@@ -1269,7 +1271,7 @@ export const store = new Vuex.Store({
                   }
               })
           });
-          console.log('Total Yeses and nos',parametersList);
+          // console.log('Total Yeses and nos',parametersList);
           // console.log('Total parameters', parametersName)
 
 
@@ -1539,7 +1541,7 @@ export const store = new Vuex.Store({
         commit('SET_MAIN_LOADING', true);
         //Setting variables
         let appInfo = payload;
-        console.log(appInfo);
+        // console.log(appInfo);
         // connecting to firestore
 
         firebase.firestore().collection('app-init').doc('initial').collection('app-guis').doc('dashboard').set(payload).then(function() {
@@ -1590,7 +1592,7 @@ export const store = new Vuex.Store({
         // Start Loading
         commit('SET_MAIN_LOADING', true);
         //Setting variables
-        console.log(payload)
+        // console.log(payload)
         // let optionalParameter = payload;
         // connecting to firestore
 
@@ -1610,7 +1612,7 @@ export const store = new Vuex.Store({
         // Start Loading
         commit('SET_MAIN_LOADING', true);
         //Setting variables
-        console.log(payload)
+        // console.log(payload)
         // let optionalParameter = payload;
         // connecting to firestore
 
@@ -1653,7 +1655,7 @@ export const store = new Vuex.Store({
             reference.getDownloadURL().then(function(url) {
                 // Saving URL in Presetted Data
                 presetInfo.img = url;
-                console.log('After Url Saved', presetInfo);
+                // console.log('After Url Saved', presetInfo);
                 // Setting BAMS Data Again
                 firebase.firestore().collection('app-init').doc('initial').collection('node-guis').doc('main').set(presetInfo).then(function() {
                     console.log("Node Basic Information Transacted");
@@ -1674,7 +1676,7 @@ export const store = new Vuex.Store({
         commit('SET_MAIN_LOADING', true);
         //Setting variables
         let nodeInfo = payload;
-        console.log(nodeInfo);
+        // console.log(nodeInfo);
 
 
         // Getting things up
@@ -1780,7 +1782,9 @@ export const store = new Vuex.Store({
     dashboardWidgets (state){
       return state.dashboardWidgets
     },
-
+    dashboardSettings (state){
+      return state.dashboardSettings
+    },
       // Accumulative Figures
 
     optionalReport (state){

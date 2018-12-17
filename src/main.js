@@ -10,6 +10,7 @@ import { store } from './store/store'
 import { routes } from './router';
 import lodash from 'lodash';
 import VueParticles from 'vue-particles'
+import VueColorpicker from 'vue-pop-colorpicker'
 
 // Vue Usage
 Vue.use(Vuetify);
@@ -17,6 +18,7 @@ Vue.use(lodash);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueParticles);
+Vue.use(VueColorpicker)
 
 
 

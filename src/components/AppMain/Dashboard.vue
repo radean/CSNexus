@@ -245,7 +245,7 @@
     },
 
     created(){
-//        getting Random store Details
+//        Pushing out user from the system
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
@@ -262,16 +262,40 @@
         this.dashboardSettings()
       this.$store.dispatch('fetchStoreReports');
       this.$store.dispatch('fetchAllStoreReports').then(() => {
-////        Generating Objects
-//        let widgets = this.widgets;
-////        Iterating each widget to created related Labels and apply colors;
-//        for(let key in widgets){
-//            let source = widgets[key].source
-//            let color = widgets[key].colors;
-//            this.optionals[source] = {};
-//            this.optionals[source].color = color
-//            console.log('Each Iteration', widgets[key].colors);
-//        }
+//    First Creating Optionals objects and its DATA
+//          Getting the optionals put variable
+          let optional = this.optionals;
+//          Getting Data from Server [In this case coming from $Store]
+          let optionalReport = this.$store.getters.optionalReport;
+
+//          Now iterating Data[from Server] to find its keys
+          let keyName = Object.keys(optionalReport);
+//          Creating a new object inside optional
+          keyName.forEach((name) => {
+              optional[name] = {}
+          });
+
+//          Creating Dataset for each Chart
+          for (let key in optional){
+              let keyNames = Object.keys(optionalReport[key]);
+              console.log('Optional Keys',optionalReport[key])
+                optional[key] = {
+                    labels: keyNames,
+                    datasets: [
+                        {
+                            backgroundColor: ['#d6a150', '#3f91db'],
+                            label: keyNames,
+                            color: ['#ffc85a', '#49a9ff'],
+                            data: [
+                                optionalReport[key].yes,
+    //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
+                                optionalReport[key].no,
+                            ]
+                        }
+                    ]
+                }
+          }
+
       });
       this.$store.dispatch('baListUPD');
       this.$store.dispatch('storeListUPD');
@@ -294,7 +318,7 @@
 //            let widgetUpdateSource = widgetUpdate.source;
 //            let widgetSource = this.optionals[widgetUpdateSource];
 //            let widgetColors = widgetUpdate.color;
-            console.log('Sources', 'Times Up')
+            console.log('5 Seconds Timer', 'Times Up')
 //        this.optionals[this.widgets.widget01.source] =
         }, 5000);
 
@@ -305,7 +329,7 @@
         return this.$store.getters.recentReport;
       },
       optionalReport(){
-        console.log('From Dashboard',this.$store.getters.optionalReport)
+//        console.log('From Dashboard',this.$store.getters.optionalReport)
         return this.$store.getters.optionalReport;
       },
       appInfo(){
@@ -498,95 +522,42 @@
         };
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands
-//          For Butter
-        this.previousUserButterData = {
-            labels: ['Lurpak', 'Emborg', 'BlueBand', 'Nurpur', 'Aseel', 'Mumtaz', 'Other'],
-            datasets: [
-                {
-                    backgroundColor: ['#172c69', '#6a2686', '#3ac2ff', '#ffe684', '#ac0705', '#158d45', '#b8b8b8'],
-                    borderWidth: 0,
-                    color: ['#172c69', '#6a2686', '#3ac2ff', '#ffe684', '#ac0705', '#158d45', '#b8b8b8'],
-                    data: [
-                        this.totalPreviousUserButter.Lurpak,
-                        this.totalPreviousUserButter.Emborg,
-                        this.totalPreviousUserButter.Blueband,
-                        this.totalPreviousUserButter.Nurpur,
-                        this.totalPreviousUserButter.Aseel,
-                        this.totalPreviousUserButter.Mumtaz,
-                        this.totalPreviousUserButter.Other
-                    ]
-                },
-            ],
-        };
-//      For Cheese
-        this.previousUserCheeseData = {
-            labels: ['Emborg', 'Happy Cow', 'Adams', 'President', 'Lactima', 'Other'],
-            datasets: [
-                {
-                    backgroundColor: ['#6a2686', '#a53a1a', '#05081b', '#f64614', '#0074bf', '#b8b8b8'],
-                    borderWidth: 0,
-                    color: ['#6a2686', '#a53a1a', '#05081b', '#f64614', '#0074bf', '#b8b8b8'],
-                    data: [
-                        this.totalPreviousUserCheese.Emborg,
-                        this.totalPreviousUserCheese.HappyCow,
-                        this.totalPreviousUserCheese.Adams,
-                        this.totalPreviousUserCheese.President,
-                        this.totalPreviousUserCheese.Lactima,
-                        this.totalPreviousUserCheese.Other
-                    ]
-                },
-            ],
-        };
-//        For Frozen
-        this.previousUserFrozenData = {
-            labels: ['Star', 'Fresh & Frozen', 'Other'],
-            datasets: [
-                {
-                    backgroundColor: ['#467e25', '#41395e', '#b8b8b8'],
-                    borderWidth: 0,
-                    color: ['#467e25', '#41395e', '#b8b8b8'],
-                    data: [
-                        this.totalPreviousUserFrozen.Star,
-                        this.totalPreviousUserFrozen.FreshAndFreeze,
-                        this.totalPreviousUserFrozen.Other,
-                    ]
-                },
-            ],
-        };
+
+
+//      Optionals Information Manuplating
 
 
         let optionalLabels = Object.keys( this.optionalReport.food);
-        this.optionals['food'] = {
-            labels: optionalLabels,
-            datasets: [
-                {
-                    backgroundColor: ['#d6a150', '#3f91db'],
-                    color: ['#ffc85a', '#49a9ff'],
-                    data: [
-                        this.optionalReport.food.yes,
-//                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-                        this.optionalReport.food.no
-                    ]
-                },
-            ],
-        }
+//        this.optionals['food'] = {
+//            labels: optionalLabels,
+//            datasets: [
+//                {
+//                    backgroundColor: ['#d6a150', '#3f91db'],
+//                    color: ['#ffc85a', '#49a9ff'],
+//                    data: [
+//                        this.optionalReport.food.yes,
+////                        Taking Out Peoples who said Nothing or Clearly Say "NO"
+//                        this.optionalReport.food.no
+//                    ]
+//                },
+//            ],
+//        }
         let optionalLabelCuisine = Object.keys( this.optionalReport.days);
-        this.optionals['days'] = {
-          labels: optionalLabelCuisine,
-          datasets: [
-              {
-                  backgroundColor: ['#d6a150', '#3f91db'],
-                  borderWidth: 0,
-                  color: ['#ffc85a', '#49a9ff'],
-                  data: [
-                      this.optionalReport.days.yes,
-        //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-                      this.optionalReport.days.no
-                  ]
-              },
-          ],
-        }
-
+//        this.optionals['days'] = {
+//          labels: optionalLabelCuisine,
+//          datasets: [
+//              {
+//                  backgroundColor: ['#d6a150', '#3f91db'],
+//                  borderWidth: 0,
+//                  color: ['#ffc85a', '#49a9ff'],
+//                  data: [
+//                      this.optionalReport.days.yes,
+//        //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
+//                      this.optionalReport.days.no
+//                  ]
+//              },
+//          ],
+//        }
 
 //      Conversion Progress
 //      How Many peoples converted to Emborg from other brands

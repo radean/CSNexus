@@ -19,7 +19,7 @@
           >
             <v-tabs-slider color="blue"></v-tabs-slider>
 
-            <v-tab class="gradientHead" href="#c1" v-on:click="fetchStoreList">
+            <v-tab class="gradientHead" href="#c1" >
               <v-icon>people</v-icon>
                Edit Meta Data
             </v-tab>
@@ -238,9 +238,16 @@
                             <!--Dashboard edit Dialogue Button-->
                             <v-flex xs10 offset-xs1>
 
-                              <v-dialog v-model="dashboardEditDialog" width="1000">
-                                <v-btn slot="activator" :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
-                                  Widget Manager
+                              <v-dialog width="1000">
+                                <!--=======================-->
+                                <!--Activation-->
+                              <!--<v-dialog v-model="dashboardEditDialog" width="1000">-->
+                                <!--<v-btn slot="activator" :ripple="{ class: 'blue&#45;&#45;text' }" color="white" class="blueBleed">-->
+                                  <!--Widget Manager &#45;&#45;Unavailable-->
+                                <!--</v-btn>-->
+                                <!--=================-->
+                                <v-btn  :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
+                                  Widget Manager --Unavailable
                                 </v-btn>
                                 <v-card>
                                   <v-card-title class="headline gradientDialog text--white" primary-title>
@@ -320,7 +327,7 @@
                                                           hint="In particular category which Source of information you want to display"
                                                           persistent-hint
                                                           outline
-                                                          :items="['food', 'days', 'cousine']"
+                                                          :items="['food', 'days', 'cuisine']"
                                                           label="Source"
                                                           v-model="editWidget['source']"
                                                           :clearable="true"
@@ -674,8 +681,9 @@
 
                                       <!--Parameter Editing -->
                                       <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
-                                        <v-flex xs12 class="text-lg-left subheading"> You can add/remove radio button parameters. </v-flex>
+                                        <v-flex xs12 offset-xs1 class="text-lg-left subheading"> You can add/remove radio button parameters. </v-flex>
                                         <v-layout row wrap>
+
                                           <!-- Optional Parameters -->
                                           <v-flex xs2 sm2 md2 offset-xs1>
                                             <v-text-field
@@ -687,7 +695,7 @@
                                                     :clearable="true"
                                             ></v-text-field>
                                           </v-flex>
-                                          <v-flex xs4 sm4 md4>
+                                          <v-flex xs3 sm3 md3>
                                               <v-text-field
                                                       name="optionalParameterTitle"
                                                       label="Title"
@@ -697,16 +705,7 @@
                                                       :clearable="true"
                                               ></v-text-field>
                                           </v-flex>
-                                          <!--<v-flex xs3 sm3 md3 >-->
-                                            <!--<v-select-->
-                                                    <!--:items="['boolean', 'text']"-->
-                                                    <!--name="optionalParameterType"-->
-                                                    <!--label="Type"-->
-                                                    <!--v-model="editOptionalParameter.type"-->
-                                                    <!--:clearable="true"-->
-                                            <!--&gt;</v-select>-->
-                                          <!--</v-flex>-->
-                                          <v-flex xs4 sm4 md4 >
+                                          <v-flex xs5 sm5 md5 >
                                             <v-text-field
                                                     name="widget01Title"
                                                     label="Description"
@@ -717,16 +716,38 @@
                                             ></v-text-field>
                                           </v-flex>
 
-                                          <!--Add Parameter-->
-                                          <v-btn type="button" @click="addParameter" class="blueBleed ml-5 mb-5" ><v-icon left>add</v-icon> Add </v-btn>
+                                        </v-layout>
+                                      </v-container>
+                                      <!--Color and submission-->
+                                      <v-container grid-list-md text-xs-center class="ma-0 pa-0 gradientHead">
+                                        <v-flex xs12 offset-xs1 class="text-lg-left subheading"> You can edit color from below. Do not add more than two colors for true and false</v-flex>
+                                        <v-layout row wrap>
+
+                                          <!-- Optional Parameters -->
+                                          <v-flex xs1 sm1 md1 offset-xs1>
+                                            <color-picker class="mt-1 mr-1" type="sketch" v-model="widgetColors"></color-picker>
+                                          </v-flex>
+                                          <v-flex xs1 sm1 md1>
+                                            <v-btn outline small fab @click="addColorToOptional()" class='blueBleed ma-0 pa-0'><v-icon>add</v-icon></v-btn>
+                                          </v-flex>
+                                          <v-flex  v-for="color in editOptionalParameter.color">
+                                            <v-chip :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF" close @input="removeColorToOptional(color)" >{{color}}</v-chip>
+                                          </v-flex>
 
                                         </v-layout>
+
+                                        <v-flex xs2 sm2 md2 class="ma-2">
+                                          <!--Add Parameter-->
+                                          <v-btn type="button" @click="addParameter" class="greenBleed ml-5 mb-5" ><v-icon left>add</v-icon> Add to List </v-btn>
+                                        </v-flex>
+
                                       </v-container>
 
                                       <v-data-table
                                               :headers="[{ text: 'ID', value: 'id' },
                                                 { text: 'Title', value: 'title' },
                                                 { text: 'Description', value: 'description' },
+                                                { text: 'Color', value: 'color' },
                                                 { text: 'Action', value: 'action' }
                                                 ]"
                                               :items="optionalParameter"
@@ -737,7 +758,8 @@
                                           <td>{{ props.item.id }}</td>
                                           <td>{{ props.item.title }}</td>
                                           <td>{{ props.item.description }}</td>
-                                          <td class="text-xs-right"><v-btn outline small fab @click="deleteParameter(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
+                                          <td v-for="color in props.item.color"><v-chip :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
+                                          <td class="text-xs-right"><v-btn outline small fab @click="deleteParameter(props.item)" class='redSmallBleed' ><v-icon>delete</v-icon></v-btn></td>
                                         </template>
                                       </v-data-table>
 
@@ -746,7 +768,7 @@
                                         <v-layout row wrap>
                                           <!--Password-->
                                           <v-flex xs5 class="ma-4 ml-0 mr-0">
-                                            <v-flex xs12 class="title"> Submission </v-flex>
+                                            <v-flex xs12 class="title"> Submit </v-flex>
                                             <v-flex xs12 class="caption"> Key Passcode Required </v-flex>
                                             <v-text-field
                                                     name="widgetDashboardPass"
@@ -1484,13 +1506,14 @@
             widget06: {title: '', description: ''},
         },
         editWidget: {
-            colors: []
+            color: []
         },
         widgetSettings: {},
         dashboardWidgetList: [],
+        dashboardWidgetColor: [],
 //        Editing Optional Parameters
         editOptionalParameter: {
-
+            color: []
         },
         optionalParameter: [
 
@@ -1523,13 +1546,14 @@
         tab: '',
         baDobDateDialog: false,
         dashboardEditDialog: false,
+        dashboardColorDialog: false,
         productEditDialog: false,
         nodeQuestionsDialog: false,
         optionalParameterDialog: false,
         editDashboardPass: 1000000,
-        unAssignedStores: [
-
-        ],
+//        unAssignedStores: [
+//
+//        ],
         widgetColors: '#fff',
         selectedDateTriggerStart: '',
         selectedDateTriggerEnd: '',
@@ -1601,7 +1625,8 @@
       },
       deleteQuestionParameter(index){
 //          Deleting index
-          this.questionNode.splice(index, 1)
+          let item = this.questionNode.indexOf(index);
+          this.questionNode.splice(item, 1)
       },
       onProductAdd(){
 //          scoping Variable
@@ -1623,6 +1648,18 @@
 
           this.dashboardWidgetList.push(widget);
           this.editWidget = {};
+      },
+      addColorToOptional(){
+//          Fetching the Color Object
+          let color = this.widgetColors;
+//        now pushing it Widget Array
+
+          this.editOptionalParameter.color.push(color);
+          this.widgetColors = '#FFF'
+      },
+      removeColorToOptional (item) {
+          this.editOptionalParameter.color.splice(this.editOptionalParameter.color.indexOf(item), 1)
+//          this.editOptionalParameter.color = [...this.chips]
       },
       onDeleteWidget(index){
 //        now pushing it into array
@@ -1648,6 +1685,19 @@
 
 //          Sending it to Store
           this.$store.dispatch('dashboardReg', payload).then(() => {})
+      },
+      onDashboardColorReg() {
+//          Converting the Object into Widget
+            let data = this.dashboardWidgetColor;
+            let payload ={};
+            data.forEach((info) => {
+                payload[info.id] = info;
+            });
+//          Braodcasting
+//          console.log('Widget Info => Store',payload);
+
+//          Sending it to Store
+            this.$store.dispatch('dashboardReg', payload).then(() => {})
       },
       onDashboardGUISettingsReg() {
 //          Converting the Object into Widget
@@ -1766,19 +1816,19 @@
       onbaReg(){
         this.$store.dispatch('baReg', this.addBA);
       },
-      fetchStoreList(){
-//        Fetching Required Data
-        this.$store.dispatch('unAssignedStoresListUPD')
-      },
-      populateUnassignedStoreList(){
-//      Converting Firebase Raw Returns to Vialable Form
-        let obj = this.unAssignedStore;
-        let convert = Object.keys(obj).map((key) => {
-          return { id: obj[key].id,name : obj[key].name};
-        });
-//      Storing to Application
-        this.unAssignedStores = convert;
-      },
+//      fetchStoreList(){
+////        Fetching Required Data
+//        this.$store.dispatch('unAssignedStoresListUPD')
+//      },
+//      populateUnassignedStoreList(){
+////      Converting Firebase Raw Returns to Vialable Form
+//        let obj = this.unAssignedStore;
+//        let convert = Object.keys(obj).map((key) => {
+//          return { id: obj[key].id,name : obj[key].name};
+//        });
+////      Storing to Application
+//        this.unAssignedStores = convert;
+//      },
     },
     computed: {
 //      Fetching Data
@@ -1787,7 +1837,17 @@
         return this.$store.getters.unAssignedStores
       },
       baList(){
-          return this.$store.getters.availableBA
+        return this.$store.getters.availableBA
+      },
+      dashboardWidgets(){
+//      local variables
+//          let dashboardWidgetList = this.$store.getters.dashboardWidgets
+          return this.$store.getters.dashboardWidgets
+      },
+      dashboardSettings(){
+//      local variables
+//          let dashboardWidgetList = this.$store.getters.dashboardWidgets
+          return this.$store.getters.dashboardSettings
       },
       storesList(){
 //          Conserving Store Data
@@ -1836,14 +1896,17 @@
 //      Setting product list
       this.productList = skusListArray;
 
-//    getting Widger Controller
+//      Setting Widget Assignment Fields
+      let widgetSettings = this.dashboardSettings
+//    getting Widget Controller
       let widgetdoc = this.$store.getters.dashboardWidgets;
       this.editDashboard = widgetdoc;
 //      inserting object in Array
       for (let key in widgetdoc){
           this.dashboardWidgetList.push(widgetdoc[key])
       }
-
+      this.widgetSettings = widgetSettings;
+        console.log(widgetSettings);
 
 
 //    getting Optional Questions
@@ -1872,6 +1935,7 @@
               title: optionalParameter[key].title,
               id: optionalParameter[key].id,
               description: optionalParameter[key].description,
+              color: optionalParameter[key].color,
           })
       }
 
@@ -1881,13 +1945,13 @@
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
       }
-      this.$store.dispatch('unAssignedStoresListUPD').then(() => {
-      });
-      setTimeout(() => {
-//  dispatch Order to retrieve Unassigned store List
-        this.populateUnassignedStoreList();
-        this.selectLoading = false;
-      },2000);
+//      this.$store.dispatch('unAssignedStoresListUPD').then(() => {
+//      });
+//      setTimeout(() => {
+////  dispatch Order to retrieve Unassigned store List
+//        this.populateUnassignedStoreList();
+//        this.selectLoading = false;
+//      },2000);
     },
     components: {
         'upload-btn': UploadButton,

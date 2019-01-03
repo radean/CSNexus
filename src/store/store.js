@@ -57,22 +57,22 @@ export const store = new Vuex.Store({
     optionalReport: {},
     totalInterceptions: 0,
     totalPurchases: [],
-    totalConversion: 0,
-    totalTasteTrial: 0,
+    // totalConversion: 0,
+    // totalTasteTrial: 0,
     totalSales: 0,
-    totalPreviousUserButter: 0,
-    totalPreviousUserCheese: 0,
-    totalPreviousUserFrozen: 0,
-    productCategory: {},
-    unAssignedStores: [],
+    // totalPreviousUserButter: 0,
+    // totalPreviousUserCheese: 0,
+    // totalPreviousUserFrozen: 0,
+    // productCategory: {},
+    // unAssignedStores: [],
     selectedBa: {},
     recentReports: [],
     // Total Number of Stores
     totalStore: 0,
     stores: [],
     storeDetails: [],
-    storeStockReports: [],
-    consumerStoreReports: [],
+    // storeStockReports: [],
+    // consumerStoreReports: [],
     storeReports: [],
     currentStoreReports: [],
     compileReports: [],
@@ -154,36 +154,36 @@ export const store = new Vuex.Store({
     settotalBA (state, payload){
       state.totalBA = payload;
     },
-    setTotalConversion (state, payload) {
-      state.totalConversion = payload;
-    },
+    // setTotalConversion (state, payload) {
+    //   state.totalConversion = payload;
+    // },
     setSelectedBa (state, payload){
       state.selectedBa = payload;
     },
-    setConsumerReport (state, payload){
-      state.consumerStoreReports = payload;
-    },
-    setCompileReport (state, payload){
-      state.compileReports = payload;
-    },
+    // setConsumerReport (state, payload){
+    //   state.consumerStoreReports = payload;
+    // },
+    // setCompileReport (state, payload){
+    //   state.compileReports = payload;
+    // },
     setTotalStore (state, payload) {
       state.totalStore = payload;
     },
-    setTotalTasteTrial (state, payload){
-      return state.totalTasteTrial = payload
-    },
+    // setTotalTasteTrial (state, payload){
+    //   return state.totalTasteTrial = payload
+    // },
     setTotalSales (state, payload){
       return state.totalSales = payload
     },
-    setTotalPreviousUserButter (state, payload){
-      return state.totalPreviousUserButter = payload
-    },
-    setTotalPreviousUserCheese (state, payload){
-        return state.totalPreviousUserCheese= payload
-    },
-    setTotalPreviousUserFrozen (state, payload){
-        return state.totalPreviousUserFrozen= payload
-    },
+    // setTotalPreviousUserButter (state, payload){
+    //   return state.totalPreviousUserButter = payload
+    // },
+    // setTotalPreviousUserCheese (state, payload){
+    //     return state.totalPreviousUserCheese= payload
+    // },
+    // setTotalPreviousUserFrozen (state, payload){
+    //     return state.totalPreviousUserFrozen= payload
+    // },
     setProductCategory (state, payload){
       return state.productCategory = payload;
     },
@@ -196,9 +196,9 @@ export const store = new Vuex.Store({
     setAllStoreReport (state, payload){
       state.recentReports = payload
     },
-    setStockReport (state, payload){
-      state.storeStockReports = payload;
-    },
+    // setStockReport (state, payload){
+    //   state.storeStockReports = payload;
+    // },
     setUserInfo (state, payload){
       state.userinfo = payload;
     },
@@ -211,9 +211,9 @@ export const store = new Vuex.Store({
     'SET_STORE_DETAILS'(state, payload){
       state.storeDetails = payload;
     },
-    'SET_MERCHANDISER_REPORTS'(state, payload) {
-      state.merchandiserReports = payload
-    },
+    // 'SET_MERCHANDISER_REPORTS'(state, payload) {
+    //   state.merchandiserReports = payload
+    // },
     'SET_MAIN_LOADING'(state, payload){
       state.loadingState.mainLoading = payload;
     },
@@ -309,7 +309,8 @@ export const store = new Vuex.Store({
       // Fetching optional question Parameters
       firebase.firestore().collection('app-init').doc('initial').collection('optionals').doc('questions').get().then((optional) => {
           let optionalQuestions = optional.data();
-          commit('setOptionalQuestions', optionalQuestions )
+          commit('setOptionalQuestions', optionalQuestions );
+
           // Setting Progress Bar
           commit('SET_PERCENTAGE_LOADING',{isLoading: true, percentage: 90});
           setTimeout(function () {
@@ -645,21 +646,21 @@ export const store = new Vuex.Store({
       // });
     },
     // Unassigned Stores
-    unAssignedStoresListUPD({commit}){
-      firebase.database().ref('stores').orderByChild('assign').equalTo('none').on('value', (storelist) => {
-        const stores = [];
-        const obj = storelist.val();
-        for (let key in obj) {
-          stores.push({
-            id: key,
-            name: obj[key].name,
-            address: obj[key].address,
-            city: obj[key].city
-          })
-        }
-        commit('SET_UNASSIGNED_STORES', stores);
-      });
-    },
+    // unAssignedStoresListUPD({commit}){
+    //   firebase.database().ref('stores').orderByChild('assign').equalTo('none').on('value', (storelist) => {
+    //     const stores = [];
+    //     const obj = storelist.val();
+    //     for (let key in obj) {
+    //       stores.push({
+    //         id: key,
+    //         name: obj[key].name,
+    //         address: obj[key].address,
+    //         city: obj[key].city
+    //       })
+    //     }
+    //     commit('SET_UNASSIGNED_STORES', stores);
+    //   });
+    // },
     // All B.A list
     //   Feching Total NUmbers of BA
     baListUPD({commit}){
@@ -702,96 +703,96 @@ export const store = new Vuex.Store({
       // });
     },
     // All B.A list
-    fetchSelectedBa({commit}, payload){
-      commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('users').orderByKey().equalTo(payload).on('value', (baValue) => {
-        let ba = {};
-        const obj = baValue.val();
-         for (let key in obj) {
-           ba = ({
-             id: key,
-             name: obj[key].name,
-             store: obj[key].store,
-             address: obj[key].address,
-             email: obj[key].email,
-             uniqueId: obj[key].uniqueId,
-           });
-         }
-        commit('SET_MAIN_LOADING', false);
-        commit('setSelectedBa', ba);
-      });
-    },
+    // fetchSelectedBa({commit}, payload){
+    //   commit('SET_MAIN_LOADING', true);
+    //   firebase.database().ref('users').orderByKey().equalTo(payload).on('value', (baValue) => {
+    //     let ba = {};
+    //     const obj = baValue.val();
+    //      for (let key in obj) {
+    //        ba = ({
+    //          id: key,
+    //          name: obj[key].name,
+    //          store: obj[key].store,
+    //          address: obj[key].address,
+    //          email: obj[key].email,
+    //          uniqueId: obj[key].uniqueId,
+    //        });
+    //      }
+    //     commit('SET_MAIN_LOADING', false);
+    //     commit('setSelectedBa', ba);
+    //   });
+    // },
     // Fetching Store Details
-    fetchShopDetails({commit, getters}, payload){
-      commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('stores').orderByKey().equalTo(payload).once('value', (storedetails) => {
-        const storeDetail = getters.storeDetails;
-        if(getters.storeDetails.length === 3){
-          getters.storeDetails.shift();
-        }
-        const obj = storedetails.val();
-        for (let key in obj) {
-          storeDetail.push({
-            id: key,
-            name: obj[key].name,
-            location: obj[key].location
-          });
-        }
-        commit('SET_MAIN_LOADING', false);
-        commit('SET_STORE_DETAILS', storeDetail)
-      });
-    },
+    // fetchShopDetails({commit, getters}, payload){
+    //   commit('SET_MAIN_LOADING', true);
+    //   firebase.database().ref('stores').orderByKey().equalTo(payload).once('value', (storedetails) => {
+    //     const storeDetail = getters.storeDetails;
+    //     if(getters.storeDetails.length === 3){
+    //       getters.storeDetails.shift();
+    //     }
+    //     const obj = storedetails.val();
+    //     for (let key in obj) {
+    //       storeDetail.push({
+    //         id: key,
+    //         name: obj[key].name,
+    //         location: obj[key].location
+    //       });
+    //     }
+    //     commit('SET_MAIN_LOADING', false);
+    //     commit('SET_STORE_DETAILS', storeDetail)
+    //   });
+    // },
     // Fetch By ADMIN --ONLY
-    fetchStockReports({commit}, payload){
-      commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('stockdata').orderByChild('date').equalTo(payload.toString()).once('value', (report) => {
-        const reports = [];
-        const obj = report.val();
-        for (let key in obj) {
-          reports.push({
-            id: key,
-            date: obj[key].date,
-            // Images
-            baPictureUrl: obj[key].baPictureImgUrl,
-            storePictureUrl: obj[key].storePicImgUrl,
-            shelfPictureUrl: obj[key].shelfPictureImgUrl,
-            // Store info
-            baName: obj[key].baName,
-            interceptions: obj[key].interceptions,
-            storeId: obj[key].storeid,
-            storeName: obj[key].storename,
-            userName: obj[key].userName,
-            // Stock Information
-            stock : obj[key].soyaSupremeStock
-          });
-        }
-        commit('SET_MAIN_LOADING', false);
-        commit('setStockReport', reports)
-      });
-    },
+    // fetchStockReports({commit}, payload){
+    //   commit('SET_MAIN_LOADING', true);
+    //   firebase.database().ref('stockdata').orderByChild('date').equalTo(payload.toString()).once('value', (report) => {
+    //     const reports = [];
+    //     const obj = report.val();
+    //     for (let key in obj) {
+    //       reports.push({
+    //         id: key,
+    //         date: obj[key].date,
+    //         // Images
+    //         baPictureUrl: obj[key].baPictureImgUrl,
+    //         storePictureUrl: obj[key].storePicImgUrl,
+    //         shelfPictureUrl: obj[key].shelfPictureImgUrl,
+    //         // Store info
+    //         baName: obj[key].baName,
+    //         interceptions: obj[key].interceptions,
+    //         storeId: obj[key].storeid,
+    //         storeName: obj[key].storename,
+    //         userName: obj[key].userName,
+    //         // Stock Information
+    //         stock : obj[key].soyaSupremeStock
+    //       });
+    //     }
+    //     commit('SET_MAIN_LOADING', false);
+    //     commit('setStockReport', reports)
+    //   });
+    // },
     // Fetch By ADMIN --ONLY
-    fetchConsumerReports({commit}, payload){
-      commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.store).once('value', (report) => {
-        const reports = [];
-        const obj = report.val();
-        for (let key in obj) {
-          reports.push({
-            id: key,
-            // Customer Information
-            customerName: obj[key].customerName,
-            customerContact: obj[key].customerContact,
-            // Store info
-            storeName: obj[key].store.name,
-            userName: obj[key].userName,
-            // Stock Information
-            purchased : obj[key].purchased
-          });
-        }
-        commit('SET_MAIN_LOADING', false);
-        commit('setConsumerReport', reports)
-      });
-    },
+    // fetchConsumerReports({commit}, payload){
+    //   commit('SET_MAIN_LOADING', true);
+    //   firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.store).once('value', (report) => {
+    //     const reports = [];
+    //     const obj = report.val();
+    //     for (let key in obj) {
+    //       reports.push({
+    //         id: key,
+    //         // Customer Information
+    //         customerName: obj[key].customerName,
+    //         customerContact: obj[key].customerContact,
+    //         // Store info
+    //         storeName: obj[key].store.name,
+    //         userName: obj[key].userName,
+    //         // Stock Information
+    //         purchased : obj[key].purchased
+    //       });
+    //     }
+    //     commit('SET_MAIN_LOADING', false);
+    //     commit('setConsumerReport', reports)
+    //   });
+    // },
     // Fetch Store Reports By Campaign
     fetchStoreReports({commit}){
       commit('SET_MAIN_LOADING', true);
@@ -1122,112 +1123,112 @@ export const store = new Vuex.Store({
       //   });
     },
     // Fetch Store Reports By Campaign
-    fetchStoreReportsByObject({commit}, payload){
-        commit('SET_MAIN_LOADING', true);
-        firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
-            let reports = [];
-            let currentKey = null;
-            report.forEach((childReport) => {
-                const obj = childReport.val();
-                currentKey = childReport.key;
-                reports.push({
-                    // date: currentKey,
-                    // Customer Information
-                    date: obj[key],
-                    customerName: obj.customerName,
-                    customerContact: obj.customerContact,
-                    customerRemarks: obj.customerRemarks,
-                    // Conversion
-                    conversion: obj.conversion,
-                    // Taste Trail
-                    tasteTrial: obj.tasteTrial,
-                    pUFrozen: obj.pUFrozen,
-                    pUCheese: obj.pUCheese,
-                    pUButter: obj.pUButter,
-                    // Store info
-                    store: obj.store,
-                    userName: obj.userName,
-                    // Stock Information
-                    purchased: obj.purchased
-                });
-                // reports[currentKey] = new Array;
-                // for (let key in obj){
-                //     reports.push({
-                //         id: key,
-                //         date: childReport.key,
-                //         // Customer Information
-                //         customerName: obj[key].customerName,
-                //         customerContact: obj[key].customerContact,
-                //         // Conversion
-                //         conversion: obj[key].conversion,
-                //         // Taste Trail
-                //         tasteTrial: obj[key].tasteTrial,
-                //         pUFrozen: obj[key].pUFrozen,
-                //         pUCheese: obj[key].pUCheese,
-                //         pUButter: obj[key].pUButter,
-                //         // Store info
-                //         store: obj[key].store,
-                //         userName: obj[key].userName,
-                //         // Stock Information
-                //         purchased: obj[key].purchased
-                //     });
-                // }
-                currentKey = null;
-            });
-            // console.log(reports)
-            // console.log(reports)
-            commit('SET_MAIN_LOADING', false);
-            commit('setStoreReport', reports);
-        });
-  },
+  //   fetchStoreReportsByObject({commit}, payload){
+  //       commit('SET_MAIN_LOADING', true);
+  //       firebase.database().ref('storedata/' + payload.date).orderByChild('store/id').equalTo(payload.id).once('value', (report) => {
+  //           let reports = [];
+  //           let currentKey = null;
+  //           report.forEach((childReport) => {
+  //               const obj = childReport.val();
+  //               currentKey = childReport.key;
+  //               reports.push({
+  //                   // date: currentKey,
+  //                   // Customer Information
+  //                   date: obj[key],
+  //                   customerName: obj.customerName,
+  //                   customerContact: obj.customerContact,
+  //                   customerRemarks: obj.customerRemarks,
+  //                   // Conversion
+  //                   conversion: obj.conversion,
+  //                   // Taste Trail
+  //                   tasteTrial: obj.tasteTrial,
+  //                   pUFrozen: obj.pUFrozen,
+  //                   pUCheese: obj.pUCheese,
+  //                   pUButter: obj.pUButter,
+  //                   // Store info
+  //                   store: obj.store,
+  //                   userName: obj.userName,
+  //                   // Stock Information
+  //                   purchased: obj.purchased
+  //               });
+  //               // reports[currentKey] = new Array;
+  //               // for (let key in obj){
+  //               //     reports.push({
+  //               //         id: key,
+  //               //         date: childReport.key,
+  //               //         // Customer Information
+  //               //         customerName: obj[key].customerName,
+  //               //         customerContact: obj[key].customerContact,
+  //               //         // Conversion
+  //               //         conversion: obj[key].conversion,
+  //               //         // Taste Trail
+  //               //         tasteTrial: obj[key].tasteTrial,
+  //               //         pUFrozen: obj[key].pUFrozen,
+  //               //         pUCheese: obj[key].pUCheese,
+  //               //         pUButter: obj[key].pUButter,
+  //               //         // Store info
+  //               //         store: obj[key].store,
+  //               //         userName: obj[key].userName,
+  //               //         // Stock Information
+  //               //         purchased: obj[key].purchased
+  //               //     });
+  //               // }
+  //               currentKey = null;
+  //           });
+  //           // console.log(reports)
+  //           // console.log(reports)
+  //           commit('SET_MAIN_LOADING', false);
+  //           commit('setStoreReport', reports);
+  //       });
+  // },
     // Fetch All Store Related Reports
-    fetchStoreReportsByName({commit}){
-        commit('SET_MAIN_LOADING', true);
-        // let define some variables for Dates
-        let date = new Date();
-        let dateStart = date.getDate();
-        // console.log(dateStart);
-        firebase.database().ref('storedata').once('value', (report) => {
-            let reports = [];
-            let currentKey = null;
-            // console.log(reports)
-            report.forEach((childReport) => {
-                const obj = childReport.val();
-                currentKey = childReport.key;
-                // console.log(obj)
-                // reports[currentKey] = new Array;
-                for (let key in obj){
-                    reports.push({
-                        // date: currentKey,
-                        // Customer Information
-                        date: obj[key],
-                        customerName: obj[key].customerName,
-                        customerContact: obj[key].customerContact,
-                        customerRemarks: obj[key].customerRemarks,
-                        // Conversion
-                        conversion: obj[key].conversion,
-                        // Taste Trail
-                        tasteTrial: obj[key].tasteTrial,
-                        pUFrozen: obj[key].pUFrozen,
-                        pUCheese: obj[key].pUCheese,
-                        pUButter: obj[key].pUButter,
-                        // Store info
-                        store: obj[key].store,
-                        userName: obj[key].userName,
-                        // Stock Information
-                        purchased: obj[key].purchased
-                    });
-                }
-                // currentKey = null;
-            });
-            commit('SET_MAIN_LOADING', false);
-            // commit('setCurrentStoreReport', report);
-        });
-    },
+    // fetchStoreReportsByName({commit}){
+    //     commit('SET_MAIN_LOADING', true);
+    //     // let define some variables for Dates
+    //     let date = new Date();
+    //     let dateStart = date.getDate();
+    //     // console.log(dateStart);
+    //     firebase.database().ref('storedata').once('value', (report) => {
+    //         let reports = [];
+    //         let currentKey = null;
+    //         // console.log(reports)
+    //         report.forEach((childReport) => {
+    //             const obj = childReport.val();
+    //             currentKey = childReport.key;
+    //             // console.log(obj)
+    //             // reports[currentKey] = new Array;
+    //             for (let key in obj){
+    //                 reports.push({
+    //                     // date: currentKey,
+    //                     // Customer Information
+    //                     date: obj[key],
+    //                     customerName: obj[key].customerName,
+    //                     customerContact: obj[key].customerContact,
+    //                     customerRemarks: obj[key].customerRemarks,
+    //                     // Conversion
+    //                     conversion: obj[key].conversion,
+    //                     // Taste Trail
+    //                     tasteTrial: obj[key].tasteTrial,
+    //                     pUFrozen: obj[key].pUFrozen,
+    //                     pUCheese: obj[key].pUCheese,
+    //                     pUButter: obj[key].pUButter,
+    //                     // Store info
+    //                     store: obj[key].store,
+    //                     userName: obj[key].userName,
+    //                     // Stock Information
+    //                     purchased: obj[key].purchased
+    //                 });
+    //             }
+    //             // currentKey = null;
+    //         });
+    //         commit('SET_MAIN_LOADING', false);
+    //         // commit('setCurrentStoreReport', report);
+    //     });
+    // },
     // Fetch All Last Reports
     fetchAllStoreReports({commit, getters}){
       commit('SET_MAIN_LOADING', true);
-      firebase.firestore().collection('storedata').get().then((report) => {
+      firebase.firestore().collection('storedata').onSnapshot((report) => {
         let reports = [];
 
         let parametersList = {};
@@ -1235,6 +1236,9 @@ export const store = new Vuex.Store({
         let optionalParameters = getters.optionalParameter;
 
         let questionsList = {};
+        let questionName =[];
+        let answers = {};
+        let answersReading = {}
         let questionParameters = getters.optionalQuestions;
         let optionals = [];
         let questions = [];
@@ -1248,18 +1252,44 @@ export const store = new Vuex.Store({
 
         // Creating Keys in Questions
         for (let key in questionParameters){
-            questionsList[questionParameters[key].id] = 0
+            questionsList[questionParameters[key].id] = questionParameters[key].answers;
+            questionName.push(questionParameters[key].id);
         }
 
-        // Creating the lists of optionals and questions that answeres by customers
+        console.log('from stores', questionsList);
+
+        // Creating the lists of optionals and questions that answers by customers
         report.forEach((recentReports) => {
           let report = recentReports.data();
           // let optionals = report.optionals;
 
           // creating optionals parameters and combining them
-          optionals.push(report.optionals)
+          optionals.push(report.optionals);
           questions.push(report.questions);
         });
+          // console.log(questions)
+          // Creating variables in Answers
+          for (let key in questionParameters) {
+              answersReading[questionParameters[key].id] = [];
+              answersReading[questionParameters[key].id][questionParameters[key].answers] = 0
+
+          }
+
+          console.log('Prederfined questionParameters', answersReading + ',' );
+
+          questionName.forEach((name) => {
+              answers[name] = {}
+              for (let qkey in questionsList) {
+                  let variables = questionsList[qkey];
+                  variables.forEach((tags) => {
+                      answers[name][tags] = 0
+                      // console.log('tags from iterator =>', tags );
+                  })
+                  // console.log('questionsList from iterator =>', questionsList );
+              }
+              // console.log('name from iterator =>', name );
+          })
+          // console.log('Prederfined answer', answersReading);
         //   We are first interate the names of parameter to compare
           parametersName.forEach((parameter) => {
             // this loop is returning names
@@ -1269,12 +1299,40 @@ export const store = new Vuex.Store({
                   } else if (option[parameter] == 'No'){
                       parametersList[parameter].no++;
                   }
+                  // else if (option[parameter] == null || option[parameter] == '' ){
+                  //     parametersList[parameter].no++;
+                  // }
               })
           });
           // console.log('Total Yeses and nos',parametersList);
           // console.log('Total parameters', parametersName)
-
-
+        // Making Names Variables
+          questionName.forEach((name) => {
+              for(let qkey in questionsList){
+                  console.log('Questions Lists', questionsList[qkey]);
+                  let questionOutput = questionsList[qkey];
+                  questionOutput.forEach((question) => {
+                      for (let key in questions){
+                          // console.log('IF Condition =>', questions[key][name] + ' ,,, ' + question);
+                          if(question == questions[key][name]){
+                              // console.log('Matched =>', questions[key][name] + ' === ' + question);
+                              answers[name][question]++
+                              // answers['food']++
+                          }
+                      }
+                  })
+              }
+              // console.log('Question name =>', questionName + 'Question' + question);
+              // questions.forEach((answer) => {
+              //     console.log('Question Data =>', questions + 'Answers' + answer)
+              //     if(answer[question] == 'Yes'){
+              //         answer[question].yes++;
+              //     }
+              // })
+          });
+          // console.log('Questions List =>', questionsList);
+          // console.log('Questions Name =>', questions);
+          console.log('Answer List =>', answers);
         // console.log( 'Generated Reports',reports);
         // console.log('Generated Optionals List', parametersList);
         // console.log('Generated Questions List', questionsList);
@@ -1308,33 +1366,33 @@ export const store = new Vuex.Store({
       });
     },
     // Fetch Compile Reports By Campaign
-    fetchCompileReports({commit}, payload){
-      commit('SET_MAIN_LOADING', true);
-      firebase.database().ref('storedata').orderByKey().startAt(payload.from).endAt(payload.to).once('value', (report) => {
-        const reports = [];
-        // let purchased;
-        // let totals;
-        report.forEach((childReport) => {
-          const obj = childReport.val();
-          for (let key in obj) {
-            reports.push({
-              id: key,
-              // Customer Information
-              customerName: obj[key].customerName,
-              customerContact: obj[key].customerContact,
-              // Store info
-              storeName: obj[key].store.name,
-              store: obj[key].store,
-              userName: obj[key].userName,
-              // Stock Information
-              purchased : obj[key].purchased
-            });
-          }
-        });
-        commit('SET_MAIN_LOADING', false);
-        commit('setCompileReport', reports)
-      });
-    },
+    // fetchCompileReports({commit}, payload){
+    //   commit('SET_MAIN_LOADING', true);
+    //   firebase.database().ref('storedata').orderByKey().startAt(payload.from).endAt(payload.to).once('value', (report) => {
+    //     const reports = [];
+    //     // let purchased;
+    //     // let totals;
+    //     report.forEach((childReport) => {
+    //       const obj = childReport.val();
+    //       for (let key in obj) {
+    //         reports.push({
+    //           id: key,
+    //           // Customer Information
+    //           customerName: obj[key].customerName,
+    //           customerContact: obj[key].customerContact,
+    //           // Store info
+    //           storeName: obj[key].store.name,
+    //           store: obj[key].store,
+    //           userName: obj[key].userName,
+    //           // Stock Information
+    //           purchased : obj[key].purchased
+    //         });
+    //       }
+    //     });
+    //     commit('SET_MAIN_LOADING', false);
+    //     commit('setCompileReport', reports)
+    //   });
+    // },
     // Total Purchase Amount
     fetchPurchaseReports({commit}){
       firebase.database().ref('storedata').on('value', (report) => {
@@ -1805,21 +1863,21 @@ export const store = new Vuex.Store({
     totalConversion (state) {
       return state.totalConversion
     },
-    totalTasteTrial (state) {
-      return state.totalTasteTrial
-    },
+    // totalTasteTrial (state) {
+    //   return state.totalTasteTrial
+    // },
     totalSales (state) {
       return state.totalSales
     },
-    totalPreviousUserButter (state){
-      return state.totalPreviousUserButter
-    },
-    totalPreviousUserCheese (state){
-        return state.totalPreviousUserCheese
-    },
-    totalPreviousUserFrozen (state){
-        return state.totalPreviousUserFrozen
-    },
+    // totalPreviousUserButter (state){
+    //   return state.totalPreviousUserButter
+    // },
+    // totalPreviousUserCheese (state){
+    //     return state.totalPreviousUserCheese
+    // },
+    // totalPreviousUserFrozen (state){
+    //     return state.totalPreviousUserFrozen
+    // },
     productCategory (state) {
       return state.productCategory
     },
@@ -1837,15 +1895,15 @@ export const store = new Vuex.Store({
     storeDetails (state) {
       return state.storeDetails
     },
-    storeStockReports (state) {
-      return state.storeStockReports
-    },
+    // storeStockReports (state) {
+    //   return state.storeStockReports
+    // },
     recentReport (state){
       return state.recentReports
     },
-    consumerStoreReports (state) {
-      return state.consumerStoreReports
-    },
+    // consumerStoreReports (state) {
+    //   return state.consumerStoreReports
+    // },
     compileReport (state) {
       return state.compileReports
     },

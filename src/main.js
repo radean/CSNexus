@@ -18,8 +18,7 @@ Vue.use(lodash);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueParticles);
-Vue.use(VueColorpicker)
-
+Vue.use(VueColorpicker);
 
 
 // Setting HTTP

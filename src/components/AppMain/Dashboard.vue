@@ -53,7 +53,7 @@
             <!--user chart WIDGET # 1-->
             <div class="header">{{ widgets.widget1.title }}</div> {{ widgets.widget1.description }}
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <Doughtnut :is="widgets.widget1.category" :chart-data="optionals[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="optionsDoughnut"></Doughtnut>
+            <Doughtnut :is="widgets.widget1.category" :chart-data="optionals[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="chartOptionSelector(widgets.widget1.category)"></Doughtnut>
 
           </v-flex>
             <!--Recent Entries-->
@@ -85,42 +85,79 @@
           <!--TOTAL TasteTrial-->
           <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart WIDGET # 2-->
-            <!--<div class="header">{{ widgets.widget2.title }} </div> {{ widgets.widget2.description }}-->
+            <div class="header">{{ widgets.widget2.title }} </div> {{ widgets.widget2.description }}
             <!--<v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>-->
-            <!--<Doughtnut :is="widgets.widget2.category" :chart-data="optionals[widgets.widget2.source]" :options="optionsDoughnut"></Doughtnut>-->
+            <Doughtnut :is="widgets.widget2.category" :chart-data="optionals[widgets.widget2.source]" :options="chartOptionSelector(widgets.widget2.category)"></Doughtnut>
 
           </v-flex>
         </v-layout>
         </v-flex>
       <!--Three Charts-->
-        <v-flex xs12>
-            <v-layout wrap row class="ma-0 pb-0">
-              <v-flex xs3 sm3 md3 class="GraphsContainer elevation-20">
-                  <div class="header"> &nbsp; {{ widgets.widget3.title }} &nbsp; </div>{{ widgets.widget3.description }}
-                  <!--<div class="barChart">-->
-                  <!--<Doughtnut :is="widgets.widget3.category" :chart-data="optionals[widgets.widget3.source]" :options="optionsDoughnut"></Doughtnut>-->
-                  <!--</div>-->
-              </v-flex>
-              <v-flex  class="GraphsContainer elevation-20">
-                  <div xs3 sm3 md3 class="header"> &nbsp; {{ widgets.widget4.title }} &nbsp; </div>{{ widgets.widget4.description }}
-                  <!--<div class="barChart">-->
-                  <!--<Doughtnut :is="widgets.widget4.category" :chart-data="optionals[widgets.widget4.source]" :options="optionsDoughnut"></Doughtnut>-->
-                  <!--</div>-->
-              </v-flex>
-              <v-flex xs3 sm3 md3  class="GraphsContainer elevation-20">
-                  <div class="header"> &nbsp; {{ widgets.widget6.title }} &nbsp; </div>{{ widgets.widget6.description }}
-                  <!--<div class="barChart">-->
-                  <!--<Doughtnut :is="widgets.widget6.category" :chart-data="optionals[widgets.widget6.source]" :options="optionsDoughnut"></Doughtnut>-->
-                  <!--</div>-->
-              </v-flex>
-            </v-layout>
-        </v-flex>
+        <!--<v-flex xs12>-->
+            <!--<v-layout wrap row class="ma-0 pb-0">-->
+              <!--<v-flex xs3 sm3 md3 class="GraphsContainer elevation-20">-->
+                  <!--<div class="header"> &nbsp; {{ widgets.widget3.title }} &nbsp; </div>{{ widgets.widget3.description }}-->
+                  <!--&lt;!&ndash;<div class="barChart">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<Doughtnut :is="widgets.widget3.category" :chart-data="optionals[widgets.widget3.source]" :options="chartOptionSelector(widgets.widget3.category)"></Doughtnut>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--</v-flex>-->
+              <!--<v-flex xs5 sm5 md5 class="GraphsContainer elevation-20">-->
+                  <!--<div class="header"> &nbsp; {{ widgets.widget4.title }} &nbsp; </div>{{ widgets.widget4.description }}-->
+                  <!--&lt;!&ndash;<div class="barChart">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<Doughtnut :is="widgets.widget4.category" :height='240' :chart-data="optionals[widgets.widget4.source]" :options="chartOptionSelector(widgets.widget4.category)"></Doughtnut>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--</v-flex>-->
+              <!--<v-flex xs3 sm3 md3 class="GraphsContainer elevation-20">-->
+                  <!--<div class="header"> &nbsp; {{ widgets.widget5.title }} &nbsp; </div>{{ widgets.widget5.description }}-->
+                  <!--&lt;!&ndash;<div class="barChart">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<Doughtnut :is="widgets.widget5.category" :chart-data="optionals[widgets.widget5.source]" :options="chartOptionSelector(widgets.widget5.category)"></Doughtnut>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--</v-flex>-->
+            <!--</v-layout>-->
+        <!--</v-flex>-->
 
+      <!--Two Charts-->
+      <v-flex xs12>
+          <v-container grid-list-md text-xs-left class="pa-0">
+            <v-layout wrap row class="ma-0 pb-0">
+                <v-flex xs12 class="GraphsContainer elevation-20">
+                    <div class="header"> &nbsp; Optional Questions &nbsp; </div>
+                    <!--<div class="barChart">-->
+                    <Doughtnut :is="widgets.widget3.category" :height='240' :chart-data="optionalDataset" :options="optionsCity"></Doughtnut>
+                    <!--</div>-->
+                </v-flex>
+                <v-flex xs12 class="GraphsContainer elevation-20">
+                    <div class="header"> &nbsp; General Questions &nbsp; </div>
+                    <!--<div class="barChart">-->
+                    <Doughtnut :is="widgets.widget4.category" :height='240' :chart-data="optionals[widgets.widget4.source]" :options="optionsCity"></Doughtnut>
+                    <!--</div>-->
+                </v-flex>
+            </v-layout>
+          </v-container>
+    </v-flex>
+    <!--<v-flex xs12>-->
+        <!--<v-container grid-list-md text-xs-left class="pa-0">-->
+            <!--<v-layout wrap row class="ma-0 pb-0">-->
+                <!--<v-flex class="GraphsContainer elevation-20">-->
+                    <!--<div class="header"> &nbsp; {{ widgets.widget3.title }} &nbsp; </div>{{ widgets.widget3.description }}-->
+                    <!--&lt;!&ndash;<div class="barChart">&ndash;&gt;-->
+                    <!--<Doughtnut :is="widgets.widget3.category" :height='240' :chart-data="optionals[widgets.widget3.source]" :options="chartOptionSelector(widgets.widget3.category)"></Doughtnut>-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--</v-flex>-->
+                <!--<v-flex  class="GraphsContainer elevation-20">-->
+                    <!--<div class="header"> &nbsp; {{ widgets.widget4.title }} &nbsp; </div>{{ widgets.widget4.description }}-->
+                    <!--&lt;!&ndash;<div class="barChart">&ndash;&gt;-->
+                    <!--<Doughtnut :is="widgets.widget4.category" :height='240' :chart-data="optionals[widgets.widget4.source]" :options="chartOptionSelector(widgets.widget4.category)"></Doughtnut>-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--</v-flex>-->
+            <!--</v-layout>-->
+        <!--</v-container>-->
+    <!--</v-flex>-->
 
       <v-flex xs12 class="reportContainer elevation-20">
-        <!--<div class="header">&nbsp; {{ appInfo.widgets.widget06.title }} &nbsp;</div> {{ appInfo.widgets.widget06.description }}-->
+        <div class="header">&nbsp; {{ widgets.widget5.title }} &nbsp;</div> {{ widgets.widget5.description }}
         <div class="barChart">
-          <!--<BarChart :chart-data="productCategoryData" :options="optionsCity"></BarChart>-->
+          <BarChart :chart-data="datasetChart" :options="optionsCity"></BarChart>
         </div>
       </v-flex>
     </v-layout>
@@ -128,7 +165,9 @@
 </template>
 
 <script>
-//  importing Charts
+//  Importing Charts
+
+//  Importing Charts
   import ssCookingOil from '../Charts/ssCanolaOil'
   import UserCount from '../Charts/LineChart'
   import DoughNutChart from '../Charts/DoughNutChart'
@@ -164,12 +203,63 @@
             { text: 'Address', value: 'storeAddress', sortable: false },
             { text: 'Customer', value: 'customer', sortable: false }
         ],
-        conversionData: null,
-        tasteTrialData: null,
-        productCategoryData: null,
-        StoreDataCollection: null,
-        CityDataCollection: null,
+//        conversionData: null,
+//        tasteTrialData: null,
+//        productCategoryData: null,
+//        StoreDataCollection: null,
+//        CityDataCollection: null,
         stores: 20,
+//          Chart Data
+        optionalDataset: {
+        },
+        questionsDataset: {
+        },
+        datasetChart: {
+          labels: ['KHI', 'LHR', 'ISD'],
+          datasets: [
+              {
+                  labels: ['Yes'],
+                  backgroundColor: ['#FF4944', '#D80600', 'yellow'],
+                  borderWidth: 1,
+                  color: ['#FF4944', '#D80600', 'yellow'],
+                  data: [33,23,16]
+              },
+              {
+                  labels: ['No'],
+                  backgroundColor: ['#f5ff4e', '#f5ff4e', 'f5ff4e'],
+                  borderWidth: 1,
+                  color: ['#f5ff4e', '#f5ff4e', 'f5ff4e'],
+                  data: [5,5,9]
+              },
+          ],
+        },
+        chartOptions: {
+            dataLabels: {
+                enabled: false
+            },
+            chart: {
+                id: "chartArea",
+                toolbar: {
+                    autoSelected: "pan",
+                    show: false
+                }
+            },
+            responsive: [{
+                breakpoint: 320,
+                options: {
+                    chart: {
+                        width: 240
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            legend: {
+                show: false
+            }
+        },
+//          Charts Configurations
         optionsCity: {
           responsive: true,
           maintainAspectRatio: false,
@@ -216,10 +306,50 @@
             }
           }
         },
-        optionsDoughnut: {
+        barChart: {
+            legend: {
+                display: false,
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: '#000000',
+                    padding: 1,
+                    boxWidth: 1,
+                    usePointStyle: true
+                }
+            },
+            barValueSpacing: 20,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        fontColor: "black",
+                        autoSkip: false
+                    },
+                    barPercentage: 1,
+                    gridLines: {
+                        offsetGridLines: false,
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    stacked:true,
+                    gridLines: {
+                        display:true,
+                        offsetGridLines: false,
+                        color:"rgba(255,99,132,0.2)"
+                    },
+                    ticks: {
+                        beginAtZero:true,
+                        fontColor: "black",
+                    }
+                }]
+            }
+        },
+        doughnutChart: {
             responsive: true,
             maintainAspectRatio: true,
             legend: {
+                display: false,
+                position: 'top',
                 labels: {
                     // This more specific font property overrides the global property
                     fontColor: 'black',
@@ -231,7 +361,7 @@
 
     components:{
       'DoughnNutChart' : DoughNutChart,
-      'Doughnut' : DoughNutChart,
+      'doughnutChart' : DoughNutChart,
       'app-user-count': UserCount,
       'ssCookingOil': ssCookingOil,
       'ssCanolaOil': ssCanolaOil,
@@ -259,42 +389,22 @@
 //            Please Look in it!
 //        ===========================================================
 //      this.$store.dispatch('fetchTotalInterceptions');
-        this.dashboardSettings()
+        this.dashboardSettings();
       this.$store.dispatch('fetchStoreReports');
-      this.$store.dispatch('fetchAllStoreReports').then(() => {
+      this.$store.dispatch('fetchAllStoreReports').then(() => { setTimeout(() => {
 //    First Creating Optionals objects and its DATA
 //          Getting the optionals put variable
           let optional = this.optionals;
 //          Getting Data from Server [In this case coming from $Store]
-          let optionalReport = this.$store.getters.optionalReport;
+          let optionalReports = this.$store.getters.optionalReport;
 
 //          Now iterating Data[from Server] to find its keys
-          let keyName = Object.keys(optionalReport);
+          let keyName = Object.keys(optionalReports);
 //          Creating a new object inside optional
           keyName.forEach((name) => {
               optional[name] = {}
           });
-
-//          Creating Dataset for each Chart
-          for (let key in optional){
-              let keyNames = Object.keys(optionalReport[key]);
-              console.log('Optional Keys',optionalReport[key])
-                optional[key] = {
-                    labels: keyNames,
-                    datasets: [
-                        {
-                            backgroundColor: ['#d6a150', '#3f91db'],
-                            label: keyNames,
-                            color: ['#ffc85a', '#49a9ff'],
-                            data: [
-                                optionalReport[key].yes,
-    //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-                                optionalReport[key].no,
-                            ]
-                        }
-                    ]
-                }
-          }
+      }, 6000);
 
       });
       this.$store.dispatch('baListUPD');
@@ -309,18 +419,13 @@
     mounted() {
 //        sync Data after 2 seconds
       setInterval(() =>{
-        this.fillData();
+//        this.fillData();
+//          Setting up chart PaymentDetails
+        this.updateCharts();
 //        this.$store.dispatch('fetchShopDetails', this.rndNumber.toString());
-      }, 3000);
+//          console.log('3 Seconds Timer', 'Ping!')
+      }, 5000);
 //      Sync Once after 3 seconds
-        setTimeout(() =>{
-//            let widgetUpdate = this.widgets.widget1;
-//            let widgetUpdateSource = widgetUpdate.source;
-//            let widgetSource = this.optionals[widgetUpdateSource];
-//            let widgetColors = widgetUpdate.color;
-            console.log('5 Seconds Timer', 'Times Up')
-//        this.optionals[this.widgets.widget01.source] =
-        }, 5000);
 
     },
 
@@ -328,9 +433,12 @@
       recentReport(){
         return this.$store.getters.recentReport;
       },
-      optionalReport(){
+      optionalReports(){
 //        console.log('From Dashboard',this.$store.getters.optionalReport)
         return this.$store.getters.optionalReport;
+      },
+      optionalParameter(){
+          return this.$store.getters.optionalParameter;
       },
       appInfo(){
         return this.$store.getters.appinfo;
@@ -349,21 +457,21 @@
       totalConversion(){
         return this.$store.getters.totalConversion;
       },
-      totalTasteTrial(){
-        return this.$store.getters.totalTasteTrial;
-      },
+//      totalTasteTrial(){
+//        return this.$store.getters.totalTasteTrial;
+//      },
       totalSales() {
         return this.$store.getters.totalSales;
       },
-      totalPreviousUserButter() {
-          return this.$store.getters.totalPreviousUserButter;
-      },
-      totalPreviousUserCheese() {
-          return this.$store.getters.totalPreviousUserCheese;
-      },
-      totalPreviousUserFrozen() {
-          return this.$store.getters.totalPreviousUserFrozen;
-      },
+//      totalPreviousUserButter() {
+//          return this.$store.getters.totalPreviousUserButter;
+//      },
+//      totalPreviousUserCheese() {
+//          return this.$store.getters.totalPreviousUserCheese;
+//      },
+//      totalPreviousUserFrozen() {
+//          return this.$store.getters.totalPreviousUserFrozen;
+//      },
       productCategory() {
           return this.$store.getters.productCategory;
       },
@@ -444,6 +552,193 @@
             }
 //            console.log('GUI Data', widgets);
         },
+        chartOptionSelector(category) {
+//            Conditioning the existance of parameter
+            if (category != null || category != ''){
+//                Matching the Category from list of Charts
+                switch(category) {
+                    case 'barChart':
+                        return this.barChart;
+                        break;
+                    case 'doughnutChart':
+                        return this.doughnutChart;
+                        break;
+                    case 'lineChart':
+                        return this.optionsLine
+                        break;
+//                    case 'radarChart':
+//                        return 'radarChart'
+//                        break;
+//                    case 'bubbleChart':
+//                        return 'bubbleChart'
+//                        break;
+                    default:
+                        return 'doughnutChart';
+                }
+            } else {
+                console.log('Not appropriate Category');
+            }
+        },
+        updateCharts(){
+//          First Creating Optionals objects and its DATA
+//          Getting the optionals put variable
+            let optional = this.optionals;
+            let question = 'as';
+//          Getting Data from Server [In this case coming from $Store]
+            let optionalReports = this.$store.getters.optionalReport;
+            let questionReports = this.$store.getters.optionalReport;
+            let widgets = this.widgets;
+
+//      Increasing autonimius Process
+
+//      Creating Dataset for each Chart
+            for (let okey in optional){
+//              Finding assigned Widget
+                for (let wkey in widgets){
+//                  Conditioning if Match
+                    if (widgets[wkey].source == okey){
+//                        Total Numbers
+                        let yes = parseInt(optionalReports[okey].yes);
+                        let no = parseInt(optionalReports[okey].no);
+//                      console.log('From Widget', widgets[wkey])
+//                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + okey)
+//                      If Widget contain a color array then
+                        if (widgets[wkey].colors != null){
+//                            If the charts category is Doughnut or Pie
+                            if (widgets[wkey].category == 'doughnutChart' || widgets[wkey].category == 'pieChart') {
+//                                console.log(widgets[wkey].id)
+                                let color = widgets[wkey].colors;
+                                optional[okey] = {
+                                    labels: ['Yes', 'No'],
+                                    datasets: [{
+                                        label: widgets[wkey].title,
+                                        backgroundColor: color,
+                                        color: color,
+                                        data: [yes, no]
+                                    }
+                                    ]
+                                }
+                            } else {
+//                            If the charts category are not Doughnut or Pie
+                                let color = widgets[wkey].colors;
+                                console.log(yes + '-' + no);
+                                optional[okey] = {
+                                    labels: ['Yes', 'No'],
+                                    datasets: [{
+                                        backgroundColor: color,
+                                        color: color,
+                                        data: [
+                                            yes,
+//                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
+                                            no
+                                        ]
+                                        }
+                                    ]
+                                }
+                            }
+                        } else {
+                            optional[okey] = {
+                                labels: ['Yes', 'No'],
+                                datasets: [{
+                                    backgroundColor: ['#d6a150', '#3f91db'],
+                                    color: ['#ffc85a', '#49a9ff'],
+                                    data: [
+                                        yes,
+//                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
+                                        no
+                                    ]
+                                }
+                                ]
+                            }
+//                            console.log('From Widget Color UNMATCHED',
+//                                ' ==>  Widget Source = ' + widgets[wkey].id +
+//                                ' . Data Array = ' + optionalReports[okey].yes +
+//                                '-' + optionalReports[okey].no);
+//                      Assigning parameters on charts
+//                      let keyNames = Object.keys(optionalReport[okey]);
+//                      console.log('Optional Keys',optionalReport[okey])
+
+                        }
+//                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + optional[okey])
+                    }
+                }
+    }
+
+//      Creating Datasets of Cumulative charts means y adding all optionals into one
+            let chartsdatasets = {};
+            let datasetsLabels = [];
+            let datasetColors = [];
+            let dataset = [];
+            let chartsData = {};
+            let chartsAltData = {};
+            let chartColors = {
+                yes: [],
+                no: []
+            };
+
+            chartsData.color = [];
+            chartsData.data = {}
+//            Setting keys in ChartsData
+            for (let key in optionalReports){
+                let optionalData = optionalReports[key];
+                for (let okey in optionalData){
+                    chartsData.data[okey] = [];
+                    chartsAltData[okey] = [];
+
+                }
+            }
+
+            for (let key in optionalReports){
+//                pushing labels inside labels
+                datasetsLabels.push(key);
+//                Dividing the labels
+                let optionalData = optionalReports[key];
+//                Setting Datas Values
+                chartsAltData = optionalReports[key];
+                for (let okey in optionalData){
+                    chartsData.data[okey].push(optionalData[okey]);
+                }
+            }
+//            Creating Colors
+            let optParameter = this.optionalParameter;
+//            let rgbColors = ['rgb(200, 160, 140)', 'rgb(162, 33, 140)', 'rgb(12, 160, 50)', 'rgb(18, 160, 60)', 'rgb(90, 160, 20)', 'rgb(0, 160, 0)', 'rgb(0, 160, 140)' , 'rgb(0, 33, 140)']
+//            chartsData.color = rgbColors;
+            for (let optPKe in optParameter) {
+//                pushing Color inside labels
+                chartsData.color.push(optParameter[optPKe].color);
+                chartColors['yes'].push(optParameter[optPKe].color[0]);
+                chartColors['no'].push(optParameter[optPKe].color[1]);
+            }
+//          Iterating from chartsData to form Datasets
+//            comparing optianl parameter to assign colors
+            for (let ckey in chartsData.data) {
+//              Forming datasets
+                dataset.push({
+//                        label: ['yes', 'No'],
+                    label: ckey,
+                    backgroundColor: chartColors[ckey],
+                    color: chartsData.color[ckey],
+                    data: chartsData.data[ckey]
+                });
+            }
+//            Forming the optionals
+            this.optionalDataset = {
+                labels: datasetsLabels,
+                datasets: dataset
+            };
+//            console.log('Charts =>', chartsData);
+//            console.log('Charts Dataset', this.optionalDataset);
+//            console.log('optionals from DT', optional);
+//            console.log('Charts Dataset before', chartsdatasets);
+//            combining Labels and datasets
+//            console.log('Charts Dataset', chartsdatasets);
+//            this.optionalDataset = dataset;
+//            chartsdatasets.forEach((chartData, key) => {
+//                this.optionalDataset[key] = chartData
+//            })
+//       Setting loading to false
+            this.showProgress = false;
+        },
         fillData () {
         this.showProgress = false;
 //        Recent Purchase
@@ -479,103 +774,54 @@
 //          SeaFood
 //          Vegetable
 //          console.log(this.productCategory);/**/
-        this.productCategoryData = {
-            labels: [
-                'Cheese',
-                'Butter',
-                'Block Cheese Cream',
-                'Cream Food Service',
-                'Milk',
-                'Process Cheese',
-                'Shakes',
-                'Shredded Cheese',
-                'Fish',
-                'French Fries',
-                'Fruits',
-                'Meat',
-                'Sea Food',
-                'Vegetable'
-            ],
-            datasets: [
-                {
-                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
-                    borderWidth: 0,
-                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
-                    data: [
-                        this.productCategory.BlockCheese,
-                        this.productCategory.Butter,
-                        this.productCategory.BlockCheeseCream,
-                        this.productCategory.CreamFoodService,
-                        this.productCategory.Milk,
-                        this.productCategory.ProcessCheese,
-                        this.productCategory.Shakes,
-                        this.productCategory.ShreddedCheese,
-                        this.productCategory.Fish,
-                        this.productCategory.FrenchFries,
-                        this.productCategory.Fruits,
-                        this.productCategory.Meat,
-                        this.productCategory.SeaFood,
-                        this.productCategory.Vegetable
-                    ]
-                },
-            ],
-        };
-//      Conversion Progress
-//      How Many peoples converted to Emborg from other brands
-
-
-//      Optionals Information Manuplating
-
-
-        let optionalLabels = Object.keys( this.optionalReport.food);
-//        this.optionals['food'] = {
-//            labels: optionalLabels,
+//        this.productCategoryData = {
+//            labels: [
+//                'Cheese',
+//                'Butter',
+//                'Block Cheese Cream',
+//                'Cream Food Service',
+//                'Milk',
+//                'Process Cheese',
+//                'Shakes',
+//                'Shredded Cheese',
+//                'Fish',
+//                'French Fries',
+//                'Fruits',
+//                'Meat',
+//                'Sea Food',
+//                'Vegetable'
+//            ],
 //            datasets: [
 //                {
-//                    backgroundColor: ['#d6a150', '#3f91db'],
-//                    color: ['#ffc85a', '#49a9ff'],
+//                    backgroundColor: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
+//                    borderWidth: 0,
+//                    color: ['#d6a150', '#b78de5', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135','#d6a150', '#401585', '#3849d6', '#10293d', '#64d680', '#dbbf3a', '#937135'],
 //                    data: [
-//                        this.optionalReport.food.yes,
-////                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-//                        this.optionalReport.food.no
+//                        this.productCategory.BlockCheese,
+//                        this.productCategory.Butter,
+//                        this.productCategory.BlockCheeseCream,
+//                        this.productCategory.CreamFoodService,
+//                        this.productCategory.Milk,
+//                        this.productCategory.ProcessCheese,
+//                        this.productCategory.Shakes,
+//                        this.productCategory.ShreddedCheese,
+//                        this.productCategory.Fish,
+//                        this.productCategory.FrenchFries,
+//                        this.productCategory.Fruits,
+//                        this.productCategory.Meat,
+//                        this.productCategory.SeaFood,
+//                        this.productCategory.Vegetable
 //                    ]
 //                },
 //            ],
-//        }
-        let optionalLabelCuisine = Object.keys( this.optionalReport.days);
-//        this.optionals['days'] = {
-//          labels: optionalLabelCuisine,
-//          datasets: [
-//              {
-//                  backgroundColor: ['#d6a150', '#3f91db'],
-//                  borderWidth: 0,
-//                  color: ['#ffc85a', '#49a9ff'],
-//                  data: [
-//                      this.optionalReport.days.yes,
-//        //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-//                      this.optionalReport.days.no
-//                  ]
-//              },
-//          ],
-//        }
+//        };
 
-//      Conversion Progress
-//      How Many peoples converted to Emborg from other brands
-        this.tasteTrialData = {
-            labels: ['Yes', 'No'],
-            datasets: [
-              {
-                  backgroundColor: ['#d6a150', '#3f91db'],
-                  borderWidth: 0,
-                  color: ['#ffc85a', '#49a9ff'],
-                  data: [
-                      this.totalTasteTrial,
-        //                        Taking Out Peoples who said Nothing or Clearly Say "NO"
-                      (this.totalInterceptions - this.totalTasteTrial)
-                  ]
-              },
-            ],
-        }
+//      Optionals Information Manuplating
+//      Re-rendering all charts
+
+
+//        let optionalLabels = Object.keys( this.optionalReports.food);
+//        let optionalLabelCuisine = Object.keys( this.optionalReports.days);
       }
     }
 
@@ -586,6 +832,7 @@
 <style scoped>
   .GraphsContainer {
     /*max-width: 50%;*/
+    max-height: 320px;
     background-color: rgba(240,240,240,0.2);
     margin: .5vw;
     text-align: center;
@@ -600,18 +847,20 @@
     font-size:18px;
   }
   .reportContainer {
-    min-width: 30%;
+    /*min-width: 30%;*/
     background-color: rgba(240,240,240,0.2);
-    margin: 10px;
+    margin: .5vw;
+    max-height: 280px;
     height: 240px;
     border: 1px solid #d8d8d8;
+    text-align: center;
+    padding-bottom: 0px;
     border-radius: 14px;
     z-index: 2;
   }
   .reportContainer .header {
-    height: 16%;
-    margin-bottom: 10px;
-    line-height: 200%;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 14px;
     font-size: 18px;
   }
   .dashCards {

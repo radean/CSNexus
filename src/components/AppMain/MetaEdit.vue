@@ -238,17 +238,17 @@
                             <!--Dashboard edit Dialogue Button-->
                             <v-flex xs10 offset-xs1>
 
-                              <v-dialog width="1000">
+                              <!--<v-dialog width="1000">-->
                                 <!--=======================-->
                                 <!--Activation-->
-                              <!--<v-dialog v-model="dashboardEditDialog" width="1000">-->
-                                <!--<v-btn slot="activator" :ripple="{ class: 'blue&#45;&#45;text' }" color="white" class="blueBleed">-->
+                              <v-dialog v-model="dashboardEditDialog" width="1000">
+                                <v-btn slot="activator" :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
+                                  Widget Manager
+                                </v-btn>
+                                <!--=================-->
+                                <!--<v-btn  :ripple="{ class: 'blue&#45;&#45;text' }" color="white" class="blueBleed">-->
                                   <!--Widget Manager &#45;&#45;Unavailable-->
                                 <!--</v-btn>-->
-                                <!--=================-->
-                                <v-btn  :ripple="{ class: 'blue--text' }" color="white" class="blueBleed">
-                                  Widget Manager --Unavailable
-                                </v-btn>
                                 <v-card>
                                   <v-card-title class="headline gradientDialog text--white" primary-title>
                                     Widgets Manager
@@ -292,15 +292,27 @@
                                               </v-layout>
                                               <!--Type and Category Fields-->
                                               <v-layout row wrap>
+                                                <!--<v-flex xs6>-->
+                                                  <!--<v-select-->
+                                                          <!--name="type"-->
+                                                          <!--hint="Type of Chart either its is optional or Question Chart"-->
+                                                          <!--persistent-hint-->
+                                                          <!--outline-->
+                                                          <!--label="Types"-->
+                                                          <!--:items="['Optional', 'Question']"-->
+                                                          <!--v-model="editWidget['type']"-->
+                                                          <!--:clearable="true"-->
+                                                  <!--&gt;</v-select>-->
+                                                <!--</v-flex>-->
                                                 <v-flex xs6>
                                                   <v-select
-                                                          name="type"
-                                                          hint="Type of Chart either its is optional or Question Chart"
+                                                          name="source"
+                                                          hint="In particular category which Source of information you want to display"
                                                           persistent-hint
                                                           outline
-                                                          label="Types"
-                                                          :items="['Optional', 'Question']"
-                                                          v-model="editWidget['type']"
+                                                          :items="sources"
+                                                          label="Source"
+                                                          v-model="editWidget['source']"
                                                           :clearable="true"
                                                   ></v-select>
                                                 </v-flex>
@@ -322,18 +334,6 @@
                                               <!--Sources and description Fields-->
                                               <v-layout row wrap>
                                                 <v-flex xs12>
-                                                  <v-select
-                                                          name="source"
-                                                          hint="In particular category which Source of information you want to display"
-                                                          persistent-hint
-                                                          outline
-                                                          :items="['food', 'days', 'cuisine']"
-                                                          label="Source"
-                                                          v-model="editWidget['source']"
-                                                          :clearable="true"
-                                                  ></v-select>
-                                                </v-flex>
-                                                <v-flex xs12>
                                                   <v-text-field
                                                           name="description"
                                                           label="Description"
@@ -348,13 +348,13 @@
                                                   Please Select color from here
                                                 </v-flex>
                                                 <v-flex xs12>
-                                                  <v-btn flat icon class=" ma-0 pa-0 " color="greenSmalllBleed" @click="onColorAddWidget">
+                                                  <v-btn flat icon class=" ma-0 pa-0 " color="greenSmalllBleed" @click="addColorToWidget">
                                                     <v-icon >add</v-icon>
                                                   </v-btn>
                                                   <color-picker class="ma-2" type="sketch" v-model="widgetColors"></color-picker>
                                                 </v-flex>
                                                 <v-flex xs12 md12 >
-                                                  <v-chip v-for="color in this.editWidget.colors" :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip>
+                                                  <v-chip v-for="color in this.editWidget.colors" :key="color" :color="color" close @input="removeColorToWidget(color)" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip>
                                                 </v-flex>
                                               </v-layout>
 
@@ -666,7 +666,7 @@
                             <!--Optional Parameter Editing-->
                             <v-flex xs10 offset-xs1>
 
-                              <v-dialog v-model="optionalParameterDialog" width="600">
+                              <v-dialog v-model="optionalParameterDialog" width="900">
                                 <v-btn slot="activator" class="blueBleed">
                                   Manage Parameter
                                 </v-btn>
@@ -1506,7 +1506,7 @@
             widget06: {title: '', description: ''},
         },
         editWidget: {
-            color: []
+            colors: []
         },
         widgetSettings: {},
         dashboardWidgetList: [],
@@ -1565,12 +1565,13 @@
           'Other'
         ],
         charts: [
-            { title: 'Line', value: 'lineChart' },
-            { title: 'Bubble', value: 'bubbleChart' },
+//            { title: 'Line', value: 'lineChart' },
+//            { title: 'Bubble', value: 'bubbleChart' },
             { title: 'Dough Nut', value: 'doughnutChart' },
-            { title: 'Radar', value: 'radarChart' },
+//            { title: 'Radar', value: 'radarChart' },
             { title: 'Bar', value: 'barChart' },
         ],
+        sources: [],
         storeIDList: [
         ],
 //        cities: [
@@ -1647,7 +1648,7 @@
 //        now pushing it into array
 
           this.dashboardWidgetList.push(widget);
-          this.editWidget = {};
+          this.editWidget = { colors: []};
       },
       addColorToOptional(){
 //          Fetching the Color Object
@@ -1660,6 +1661,18 @@
       removeColorToOptional (item) {
           this.editOptionalParameter.color.splice(this.editOptionalParameter.color.indexOf(item), 1)
 //          this.editOptionalParameter.color = [...this.chips]
+      },
+      addColorToWidget(){
+//          Fetching the Color Object
+          let color = this.widgetColors;
+//        now pushing it Widget Array
+
+          this.editWidget.colors.push(color);
+          this.widgetColors = '#FFF'
+      },
+      removeColorToWidget(item){
+//          Removing from Array
+          this.editWidget.colors.splice(this.editWidget.colors.indexOf(item), 1)
       },
       onDeleteWidget(index){
 //        now pushing it into array
@@ -1893,6 +1906,7 @@
     created(){
 //    getting SKUS LIST
       let skusListArray = this.$store.getters.skusLists;
+
 //      Setting product list
       this.productList = skusListArray;
 
@@ -1944,6 +1958,10 @@
 //    getting Random store Details
       if (this.$store.getters.user === null) {
         this.$router.push('/login')
+      }
+      let questionsSources = this.$store.getters.questionReport;
+      for (let key in questionsSources){
+          this.sources.push(key)
       }
 //      this.$store.dispatch('unAssignedStoresListUPD').then(() => {
 //      });

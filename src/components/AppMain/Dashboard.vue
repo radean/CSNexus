@@ -53,7 +53,7 @@
             <!--user chart WIDGET # 1-->
             <div class="header">{{ widgets.widget1.title }}</div> {{ widgets.widget1.description }}
             <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
-            <Doughtnut :is="widgets.widget1.category" :chart-data="optionals[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="chartOptionSelector(widgets.widget1.category)"></Doughtnut>
+            <Doughtnut :is="widgets.widget1.category" :chart-data="questions[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="chartOptionSelector(widgets.widget1.category)"></Doughtnut>
 
           </v-flex>
             <!--Recent Entries-->
@@ -87,7 +87,7 @@
             <!--user chart WIDGET # 2-->
             <div class="header">{{ widgets.widget2.title }} </div> {{ widgets.widget2.description }}
             <!--<v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>-->
-            <Doughtnut :is="widgets.widget2.category" :chart-data="optionals[widgets.widget2.source]" :options="chartOptionSelector(widgets.widget2.category)"></Doughtnut>
+            <Doughtnut :is="widgets.widget2.category" :chart-data="questions[widgets.widget2.source]" :options="chartOptionSelector(widgets.widget2.category)"></Doughtnut>
 
           </v-flex>
         </v-layout>
@@ -154,12 +154,12 @@
         <!--</v-container>-->
     <!--</v-flex>-->
 
-      <v-flex xs12 class="reportContainer elevation-20">
-        <div class="header">&nbsp; {{ widgets.widget5.title }} &nbsp;</div> {{ widgets.widget5.description }}
-        <div class="barChart">
-          <BarChart :chart-data="datasetChart" :options="optionsCity"></BarChart>
-        </div>
-      </v-flex>
+      <!--<v-flex xs12 class="reportContainer elevation-20">-->
+        <!--<div class="header">&nbsp; {{ widgets.widget5.title }} &nbsp;</div> {{ widgets.widget5.description }}-->
+        <!--<div class="barChart">-->
+          <!--<BarChart :chart-data="datasetChart" :options="optionsCity"></BarChart>-->
+        <!--</div>-->
+      <!--</v-flex>-->
     </v-layout>
   </v-container>
 </template>
@@ -194,6 +194,7 @@
         isd_Stores_visited: 24,
 //      Charts Data
         optionals: {},
+        questions: {},
         widgets: {},
         recentReports: [
         ],
@@ -564,7 +565,7 @@
                         return this.doughnutChart;
                         break;
                     case 'lineChart':
-                        return this.optionsLine
+                        return this.barChart
                         break;
 //                    case 'radarChart':
 //                        return 'radarChart'
@@ -583,23 +584,107 @@
 //          First Creating Optionals objects and its DATA
 //          Getting the optionals put variable
             let optional = this.optionals;
-            let question = 'as';
+            let questions = this.questions;
 //          Getting Data from Server [In this case coming from $Store]
             let optionalReports = this.$store.getters.optionalReport;
-            let questionReports = this.$store.getters.optionalReport;
+            let questionReports = this.$store.getters.questionReport;
             let widgets = this.widgets;
 
 //      Increasing autonimius Process
-
-//      Creating Dataset for each Chart
-            for (let okey in optional){
+//            console.log('Question Report', questionReports);
+//      Creating Dataset of each Chart for optionals
+//            console.log('optional Data', optional);
+//            for (let okey in optional){
+////              Finding assigned Widget
+//                for (let wkey in widgets){
+////                  Conditioning if Match
+//                    if (widgets[wkey].source == okey){
+////                        Total Numbers
+//                        let yes = parseInt(optionalReports[okey].yes);
+//                        let no = parseInt(optionalReports[okey].no);
+////                      console.log('From Widget', widgets[wkey])
+////                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + okey)
+////                      If Widget contain a color array then
+//                        if (widgets[wkey].colors != null){
+////                            If the charts category is Doughnut or Pie
+//                            if (widgets[wkey].category == 'doughnutChart' || widgets[wkey].category == 'pieChart') {
+////                                console.log(widgets[wkey].id)
+//                                let color = widgets[wkey].colors;
+//                                optional[okey] = {
+//                                    labels: ['Yes', 'No'],
+//                                    datasets: [{
+//                                        label: widgets[wkey].title,
+//                                        backgroundColor: color,
+//                                        color: color,
+//                                        data: [yes, no]
+//                                    }
+//                                    ]
+//                                }
+//                            } else {
+////                            If the charts category are not Doughnut or Pie
+//                                let color = widgets[wkey].colors;
+//                                console.log(yes + '-' + no);
+//                                optional[okey] = {
+//                                    labels: ['Yes', 'No'],
+//                                    datasets: [{
+//                                        backgroundColor: color,
+//                                        color: color,
+//                                        data: [
+//                                            yes,
+////                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
+//                                            no
+//                                        ]
+//                                        }
+//                                    ]
+//                                }
+//                            }
+//                        } else {
+//                            optional[okey] = {
+//                                labels: ['Yes', 'No'],
+//                                datasets: [{
+//                                    backgroundColor: ['#d6a150', '#3f91db'],
+//                                    color: ['#ffc85a', '#49a9ff'],
+//                                    data: [
+//                                        yes,
+////                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
+//                                        no
+//                                    ]
+//                                }
+//                                ]
+//                            }
+////                            console.log('From Widget Color UNMATCHED',
+////                                ' ==>  Widget Source = ' + widgets[wkey].id +
+////                                ' . Data Array = ' + optionalReports[okey].yes +
+////                                '-' + optionalReports[okey].no);
+////                      Assigning parameters on charts
+////                      let keyNames = Object.keys(optionalReport[okey]);
+////                      console.log('Optional Keys',optionalReport[okey])
+//
+//                        }
+////                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + optional[okey])
+//                    }
+//                }
+//    }
+//      Creating Dataset of  each Chart for questiosn
+            for (let qkey in questionReports){
+//                console.log('Question inside Data', questions[qkey] +' KEY '+ qkey + 'INIT' + questions);
 //              Finding assigned Widget
                 for (let wkey in widgets){
 //                  Conditioning if Match
-                    if (widgets[wkey].source == okey){
+                    if (widgets[wkey].source == qkey){
 //                        Total Numbers
-                        let yes = parseInt(optionalReports[okey].yes);
-                        let no = parseInt(optionalReports[okey].no);
+//                        let yes = parseInt(optionalReports[okey].yes);
+//                        let no = parseInt(optionalReports[okey].no);
+//                        console.log('Question inside Data', questionReports[qkey]);
+//                        console.log('qkey', qkey);
+//                        console.log('qkey', questionReports);
+                        let dataArray = []
+                        let labels = [];
+                        for (var items in questionReports[qkey]){
+                            dataArray.push( questionReports[qkey][items]);
+                            labels.push(items);
+                        }
+//                        console.log('DArray', qkey + '=>' + labels);
 //                      console.log('From Widget', widgets[wkey])
 //                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + okey)
 //                      If Widget contain a color array then
@@ -608,45 +693,37 @@
                             if (widgets[wkey].category == 'doughnutChart' || widgets[wkey].category == 'pieChart') {
 //                                console.log(widgets[wkey].id)
                                 let color = widgets[wkey].colors;
-                                optional[okey] = {
-                                    labels: ['Yes', 'No'],
+                                questions[qkey] = {
+                                    labels: labels,
                                     datasets: [{
                                         label: widgets[wkey].title,
                                         backgroundColor: color,
                                         color: color,
-                                        data: [yes, no]
+                                        data: dataArray
                                     }
                                     ]
                                 }
                             } else {
 //                            If the charts category are not Doughnut or Pie
                                 let color = widgets[wkey].colors;
-                                console.log(yes + '-' + no);
-                                optional[okey] = {
-                                    labels: ['Yes', 'No'],
+//                                console.log(yes + '-' + no);
+                                questions[qkey] = {
+                                    labels: labels,
                                     datasets: [{
                                         backgroundColor: color,
                                         color: color,
-                                        data: [
-                                            yes,
-//                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
-                                            no
-                                        ]
-                                        }
+                                        data: dataArray
+                                    }
                                     ]
                                 }
                             }
                         } else {
-                            optional[okey] = {
-                                labels: ['Yes', 'No'],
+                            questions[qkey] = {
+                                labels: labels,
                                 datasets: [{
                                     backgroundColor: ['#d6a150', '#3f91db'],
                                     color: ['#ffc85a', '#49a9ff'],
-                                    data: [
-                                        yes,
-//                                    Taking Out Peoples who said Nothing or Clearly Say "NO"
-                                        no
-                                    ]
+                                    data: dataArray
                                 }
                                 ]
                             }
@@ -662,12 +739,12 @@
 //                        console.log('From Widget MATCHED', ' ==>  Widget Source = ' + widgets[wkey].source + ' . Optionals Key = ' + optional[okey])
                     }
                 }
-    }
-
+            }
+//            console.log('Question inside Data', question);
 //      Creating Datasets of Cumulative charts means y adding all optionals into one
-            let chartsdatasets = {};
+//            let chartsdatasets = {};
             let datasetsLabels = [];
-            let datasetColors = [];
+//            let datasetColors = [];
             let dataset = [];
             let chartsData = {};
             let chartsAltData = {};
@@ -726,6 +803,8 @@
                 labels: datasetsLabels,
                 datasets: dataset
             };
+
+//            For Setting Questions Charts
 //            console.log('Charts =>', chartsData);
 //            console.log('Charts Dataset', this.optionalDataset);
 //            console.log('optionals from DT', optional);

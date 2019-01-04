@@ -55,6 +55,7 @@ export const store = new Vuex.Store({
     optionalParameter: {},
     optionalQuestions:{},
     optionalReport: {},
+    questionReport: {},
     totalInterceptions: 0,
     totalPurchases: [],
     // totalConversion: 0,
@@ -138,6 +139,9 @@ export const store = new Vuex.Store({
     },
     setOptionalsReport (state, payload) {
         state.optionalReport = payload;
+    },
+    setQuestionsReport (state, payload) {
+      state.questionReport = payload;
     },
     setTotalPurchases (state, payload){
       state.totalPurchases = payload;
@@ -1256,7 +1260,7 @@ export const store = new Vuex.Store({
             questionName.push(questionParameters[key].id);
         }
 
-        console.log('from stores', questionsList);
+        // console.log('from stores', questionsList);
 
         // Creating the lists of optionals and questions that answers by customers
         report.forEach((recentReports) => {
@@ -1275,12 +1279,15 @@ export const store = new Vuex.Store({
 
           }
 
-          console.log('Prederfined questionParameters', answersReading + ',' );
+          // console.log('Prederfined questionParameters', answersReading + ',' );
 
           questionName.forEach((name) => {
+              // console.log('name before itteration', name);
               answers[name] = {}
+              // console.log('Prederfined answer before itteration', answers);
               for (let qkey in questionsList) {
-                  let variables = questionsList[qkey];
+                  // console.log('Question List', questionsList);
+                  let variables = questionsList[name];
                   variables.forEach((tags) => {
                       answers[name][tags] = 0
                       // console.log('tags from iterator =>', tags );
@@ -1289,7 +1296,7 @@ export const store = new Vuex.Store({
               }
               // console.log('name from iterator =>', name );
           })
-          // console.log('Prederfined answer', answersReading);
+          // console.log('Prederfined answer', answers);
         //   We are first interate the names of parameter to compare
           parametersName.forEach((parameter) => {
             // this loop is returning names
@@ -1309,15 +1316,17 @@ export const store = new Vuex.Store({
         // Making Names Variables
           questionName.forEach((name) => {
               for(let qkey in questionsList){
-                  console.log('Questions Lists', questionsList[qkey]);
+                  // console.log('Questions Lists', questionsList[qkey] + ', Key =>' + name);
                   let questionOutput = questionsList[qkey];
                   questionOutput.forEach((question) => {
                       for (let key in questions){
                           // console.log('IF Condition =>', questions[key][name] + ' ,,, ' + question);
-                          if(question == questions[key][name]){
+                          if(question == questions[key][name] ){
                               // console.log('Matched =>', questions[key][name] + ' === ' + question);
                               answers[name][question]++
                               // answers['food']++
+                          } else {
+
                           }
                       }
                   })
@@ -1332,7 +1341,7 @@ export const store = new Vuex.Store({
           });
           // console.log('Questions List =>', questionsList);
           // console.log('Questions Name =>', questions);
-          console.log('Answer List =>', answers);
+          // console.log('Answer List =>', answers);
         // console.log( 'Generated Reports',reports);
         // console.log('Generated Optionals List', parametersList);
         // console.log('Generated Questions List', questionsList);
@@ -1362,6 +1371,7 @@ export const store = new Vuex.Store({
         // console.log(reports)
         commit('SET_MAIN_LOADING', false);
         commit('setOptionalsReport', parametersList);
+        commit('setQuestionsReport', answers);
         commit('setAllStoreReport', lastReports);
       });
     },
@@ -1847,6 +1857,9 @@ export const store = new Vuex.Store({
 
     optionalReport (state){
         return state.optionalReport
+    },
+    questionReport (state){
+      return state.questionReport
     },
     totalInterceptions (state){
       return state.totalInterceptions

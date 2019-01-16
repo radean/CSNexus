@@ -354,7 +354,7 @@
                                                   <color-picker class="ma-2" type="sketch" v-model="widgetColors"></color-picker>
                                                 </v-flex>
                                                 <v-flex xs12 md12 >
-                                                  <v-chip v-for="color in this.editWidget.colors" :key="color" :color="color" close @input="removeColorToWidget(color)" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip>
+                                                  <v-chip v-for="(color, key) in this.editWidget.colors" :key="key" :color="color" close @input="removeColorToWidget(color)" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip>
                                                 </v-flex>
                                               </v-layout>
 
@@ -412,7 +412,7 @@
                                                   <td class="text-sm-left">{{ props.item.description }}</td>
                                                   <td class="text-sm-left">{{ props.item.type }}</td>
                                                   <td class="text-sm-left">{{ props.item.category }}</td>
-                                                  <td class="text-sm-left"><v-chip v-for="color in props.item.colors" :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
+                                                  <td class="text-sm-left"><v-chip v-for="(color, key) in props.item.colors" :key="key" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
                                                   <td class="text-sm-left">{{ props.item.source }}</td>
                                                   <td class="text-sm-left"><v-btn flat icon @click="onDeleteWidget(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
                                                 </template>
@@ -528,7 +528,7 @@
                             <v-flex xs12 class="title"> Manage Products </v-flex>
                             <v-flex xs12> SKUs can be managed from here. </v-flex>
 
-                            <!--Dashboard Parameter edit Dialogue Button-->
+                            <!--Dashboard SKUS Manager-->
                             <v-flex xs10 offset-xs1>
 
                               <v-dialog v-model="productEditDialog" width="980">
@@ -592,6 +592,21 @@
                                                           v-model="productSkus.price"
                                                           :clearable="true"
                                                   ></v-text-field>
+                                                  <!--Color-->
+                                                  <v-layout row wrap>
+                                                    <v-flex xs12>
+                                                      Please Select color from here
+                                                    </v-flex>
+                                                    <v-flex xs12>
+                                                      <v-btn flat icon class=" ma-0 pa-0 " color="greenSmalllBleed" @click="addColorToSkus">
+                                                        <v-icon >add</v-icon>
+                                                      </v-btn>
+                                                      <color-picker class="ma-2" type="sketch" v-model="widgetColors"></color-picker>
+                                                    </v-flex>
+                                                    <v-flex xs12 md12 >
+                                                      <v-chip v-if="this.productSkus.color" :color="this.productSkus.color" close @input="removeColorToSkus()" style="text-shadow: 0px 1px 1px #FFFFFF ">{{this.productSkus.color}}</v-chip>
+                                                    </v-flex>
+                                                  </v-layout>
                                                 </v-flex>
                                             <v-flex xs4 offset-xs2>
                                               <v-btn :disabled="productSkus.id === '' || productSkus.name === '' " type="button" class="blueBleed" @click="onProductAdd" > + Product <v-icon right>add</v-icon></v-btn>
@@ -607,6 +622,7 @@
                                                 <v-data-table
                                                   :headers="[{ text: 'ID', value: 'id' },
                                                   { text: 'Name', value: 'name' },
+                                                  { text: 'Color', value: 'color' },
                                                   { text: 'Category', value: 'category' },
                                                   { text: 'Price', value: 'price' },
                                                   { text: 'Actions', value: 'actions' }
@@ -616,6 +632,7 @@
                                                   <template slot="items"  slot-scope="props">
                                                     <td>{{ props.item.id }}</td>
                                                     <td class="text-xs-right">{{ props.item.name }}</td>
+                                                    <td class="text-xs-right"><v-chip :color="props.item.color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{props.item.color}}</v-chip></td>
                                                     <td class="text-xs-right">{{ props.item.category }}</td>
                                                     <td class="text-xs-right">{{ props.item.price }}</td>
                                                     <td class="text-xs-right"><v-btn flat icon @click="deleteProduct(props.item)" class='redSmallBleed'><v-icon>delete</v-icon></v-btn></td>
@@ -730,8 +747,8 @@
                                           <v-flex xs1 sm1 md1>
                                             <v-btn outline small fab @click="addColorToOptional()" class='blueBleed ma-0 pa-0'><v-icon>add</v-icon></v-btn>
                                           </v-flex>
-                                          <v-flex  v-for="color in editOptionalParameter.color">
-                                            <v-chip :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF" close @input="removeColorToOptional(color)" >{{color}}</v-chip>
+                                          <v-flex  v-for="(color, key) in editOptionalParameter.color">
+                                            <v-chip :key="key" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF" close @input="removeColorToOptional(color)" >{{color}}</v-chip>
                                           </v-flex>
 
                                         </v-layout>
@@ -758,7 +775,7 @@
                                           <td>{{ props.item.id }}</td>
                                           <td>{{ props.item.title }}</td>
                                           <td>{{ props.item.description }}</td>
-                                          <td v-for="color in props.item.color"><v-chip :key="color" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
+                                          <td v-for="(color, key) in props.item.color"><v-chip :key="key" :color="color" style="text-shadow: 0px 1px 1px #FFFFFF ">{{color}}</v-chip></td>
                                           <td class="text-xs-right"><v-btn outline small fab @click="deleteParameter(props.item)" class='redSmallBleed' ><v-icon>delete</v-icon></v-btn></td>
                                         </template>
                                       </v-data-table>
@@ -1537,7 +1554,8 @@
             id: null,
             name: '',
             category: '',
-            price: null
+            price: null,
+            color: null
         },
         productList:[],
 //        GUI DATA
@@ -1673,6 +1691,18 @@
       removeColorToWidget(item){
 //          Removing from Array
           this.editWidget.colors.splice(this.editWidget.colors.indexOf(item), 1)
+      },
+      addColorToSkus(){
+//          Fetching the Color Object
+          let color = this.widgetColors;
+//        now pushing it Widget Array
+
+          this.productSkus.color = color;
+          this.widgetColors = '#FFF'
+      },
+      removeColorToSkus(){
+//          Removing from Array
+          this.productSkus.color = null;
       },
       onDeleteWidget(index){
 //        now pushing it into array

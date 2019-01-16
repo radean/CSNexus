@@ -133,6 +133,7 @@
             <!--Content goes here-->
             <v-layout>
             <router-view></router-view>
+            <vue-progress-bar></vue-progress-bar>
             </v-layout>
           </transition>
         </v-container>
@@ -503,4 +504,8 @@ export default {
   .fade-enter, .fade-leave-active {
     opacity: 0
   }
+
+  /* ==========================================================================
+    V  U  E    L  O  A  D  E R
+   ========================================================================== */
 </style>

@@ -1,34 +1,32 @@
 <template>
   <div style="width: 100%">
-    <v-toolbar color="blue accent-3" dark tabs>
+    <v-toolbar class="gradientHead" tabs>
+
       <v-toolbar-title>REPORTS</v-toolbar-title>
-      <!--<v-spacer></v-spacer>-->
-      <v-tabs centered color="blue accent-3" fixed-tabs slot="extension" slider-color="yellow" v-model="reportTabs">
-        <!--<v-tab-->
-                <!--key="1"-->
-                <!--href="#tab-$c1"-->
-        <!--&gt;-->
-          <!--Item 1-->
-        <!--</v-tab>-->
-        <v-tab key="2" href="#tab-c2" >
+
+      <v-spacer></v-spacer>
+
+      <v-tabs
+              slot="extension"
+              v-model="tab"
+              class="gradientHead"
+              fixed-tabs
+              grow
+      >
+        <v-tabs-slider color="blue"></v-tabs-slider>
+
+        <v-tab class="gradientHead" href="#c2" >
+          <v-icon>people</v-icon>
           Store Report
         </v-tab>
-        <!--<v-tab key="3" href="#tab-c3">-->
-          <!--Compile Report-->
-        <!--</v-tab>-->
+        <v-tab class="gradientHead" href="#c3">
+          <v-icon>person</v-icon>
+          Compile
+        </v-tab>
       </v-tabs>
-      </v-toolbar>
-      <v-tabs-items v-model="reportTabs">
-        <v-tab-item
-                key="1"
-                id="tab-c1"
-        >
-          <v-card flat>
-            <v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item key="2" id="tab-c2">
+    </v-toolbar>
+      <v-tabs-items v-model="tab">
+        <v-tab-item id="c2">
           <v-card flat width="100%">
             <v-card-text>
               <v-container fluid text-xs-center>
@@ -199,14 +197,54 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
-        <v-tab-item
-                key="3"
-                id="tab-c3"
-        >
-          <v-card flat>
-            <v-card-text>
 
+        <!--Compiled Report -->
+        <v-tab-item id="c3">
+          <v-card flex>
+            <v-card-title>
+              <div class="headline"> Compiled Report </div>
+              <div class="subheading">Calculation of all stores and products </div>
+            </v-card-title>
+            <v-card-text>
+              <v-data-table :headers="this.productLabels" :items="this.compileReport" hide-actions class="elevation-1">
+                <template slot="items" slot-scope="props">
+                  <td>{{ props.item.baName }}</td>
+                  <td>{{ props.item.date }}</td>
+                  <td>{{ props.item.storeAddress }}</td>
+                  <td>{{ props.item.storeName }}</td>
+                  <!--<td>{{ props.item.storeInterceptions }}</td>-->
+                  <td v-for="data in props.item.data[0]">{{ data }}</td>
+                  <!--<td>{{ props.item.dates }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ props.item.meta }}</td>-->
+                </template>
+                <!--Footer For Total Values-->
+                <!--<template slot="footer">-->
+                  <!--<td>Total</td>-->
+                  <!--<td class="text-xs-center grey-4"></td>-->
+                  <!--<td class="text-xs-center grey-4"></td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.interceptions  }}</td>-->
+                  <!--<td class="text-xs-center grey-4">{{ storeReportFooter.BlockCheese  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Butter  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.BlockCheeseCream  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Cream  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Cheese  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.CreamFoodService  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Milk  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.ProcessCheese  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Shakes  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.ShreddedCheese  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Fish  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.FrenchFries  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Fruits  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Meat  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.SeaFood  }}</td>-->
+                  <!--<td class="text-xs-center grey-1">{{ storeReportFooter.Vegetable  }}</td>-->
+                <!--</template>-->
+              </v-data-table>
             </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+            </v-card-actions>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -221,6 +259,7 @@ export default {
     data () {
       return {
 //      GUI DATA
+        tab: '',
         consumerScrollPosition: null,
         storeScrollPosition: null,
         consumerMenu: false,
@@ -240,7 +279,14 @@ export default {
         storeSelected: 'Compile',
 //      PROCESSED
         compileTotal: [],
-        compileReport: [],
+        compileReport: [
+//            data: [],
+//            labels: [],
+//            meta: [],
+//            dates: []
+        ],
+        productLabels: [],
+//        productLabels: [],
         consumerTotal: [],
         storeReport: [],
         selectedStoreReport: [],
@@ -354,6 +400,15 @@ export default {
       totalReport(){
         return this.$store.getters.storeReport
       },
+//      productlabels(){
+//        console.log('Product Labels', this.$store.getters.productLabels)
+//        return this.$store.getters.productLabels
+//      },
+//      compileReportDate(){
+//        let payload = this.$store.getters.compileReport
+//        console.log('PAYLOAD', payload)
+//        return payload
+//      },
       storeReportDatewise(){
 //      Main Fetched Report
 //        Main fetched Report
@@ -1134,7 +1189,7 @@ export default {
         let selectedDate = this.selectedFormatedDate;
         let data = storeinfo;
         data['date'] = this.selectedFormatedDate;
-        this.$store.dispatch('fetchStoreReportsByName').then(() =>{
+        this.$store.dispatch('fetchStoreReports').then(() =>{
           setTimeout(() => {
             this.selectLoading = false;
             this.storeReportDialog = true;
@@ -1176,10 +1231,43 @@ export default {
 //        setting Time
         this.currentDate();
 //          Fetching Base Data Queries
-
-//            Please Look in it!
+//          Please Look in it!
 //        ===========================================================
-//        this.$store.dispatch('storeListUPD');
+        this.$store.dispatch('fetchStoreCompileReports').then(() => {
+            setTimeout(() => {
+                let sortedLabel = [];
+                let Labels = this.$store.getters.productLabels;
+                for (let key in Labels){
+                  sortedLabel.push({
+                      text: Labels[key],
+                      value: key,
+                  });
+                }
+                sortedLabel.unshift(
+                    {
+                        text: 'B.A Name',
+                        value: 'baName'
+                    },
+                    {
+                        text: 'Date',
+                        value: 'dates'
+                    },
+                    {
+                        text: 'Store Address',
+                        value: 'storeAddress'
+                    },
+                    {
+                        text: 'Store Name',
+                        value: 'storeName'
+                    }
+                    );
+//                console.log('Labels', sortedLabel);
+                this.productLabels = sortedLabel;
+                let payload = this.$store.getters.compileReport;
+//                console.log('PAYLOAD', payload)
+                this.compileReport = payload;
+            }, 2000)
+        });
 //        ===========================================================
       }
     },

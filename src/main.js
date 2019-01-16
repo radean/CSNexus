@@ -11,6 +11,7 @@ import { routes } from './router';
 import lodash from 'lodash';
 import VueParticles from 'vue-particles'
 import VueColorpicker from 'vue-pop-colorpicker'
+import VueProgressBar from 'vue-progressbar'
 
 // Vue Usage
 Vue.use(Vuetify);
@@ -19,7 +20,11 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueParticles);
 Vue.use(VueColorpicker);
-
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '8px'
+})
 
 // Setting HTTP
 // Vue.http.headers.common['Content-Type'] = 'application/json';

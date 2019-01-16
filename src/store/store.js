@@ -77,6 +77,8 @@ export const store = new Vuex.Store({
     storeReports: [],
     currentStoreReports: [],
     compileReports: [],
+    compileReport: [],
+    productLabels: [],
     // Workers List
     // B.A List
     baList: {},
@@ -158,6 +160,9 @@ export const store = new Vuex.Store({
     settotalBA (state, payload){
       state.totalBA = payload;
     },
+    setProductLabels(state, payload){
+      state.productLabels = payload;
+    },
     // setTotalConversion (state, payload) {
     //   state.totalConversion = payload;
     // },
@@ -199,6 +204,9 @@ export const store = new Vuex.Store({
     },
     setAllStoreReport (state, payload){
       state.recentReports = payload
+    },
+    setCompileReport(state, payload) {
+      state.compileReport = payload
     },
     // setStockReport (state, payload){
     //   state.storeStockReports = payload;
@@ -798,15 +806,16 @@ export const store = new Vuex.Store({
     //   });
     // },
     // Fetch Store Reports By Campaign
-    fetchStoreReports({commit}){
+    fetchStoreReports({commit, getters}){
       commit('SET_MAIN_LOADING', true);
       // Creating a Local Variable of Firebase Source
       let ref = firebase.firestore().collection('storedata');
-
+      let skusData = getters.skusLists;
       // Fetching Pierces
       ref.onSnapshot((rawdata) => {
         let totalSales = 0;
         let totalPurchases = {};
+        let grandtotal = [];
 
         // Creating Similar keys in totalPurchases
         rawdata.forEach((data) => {
@@ -819,8 +828,6 @@ export const store = new Vuex.Store({
               }
 
         });
-
-        // console.log( 'Creating TotalPurchase', totalPurchases);
 
         // Making More Views
         rawdata.forEach((data) => {
@@ -845,9 +852,29 @@ export const store = new Vuex.Store({
                 // console.log( 'purchase ', purchase);
             }
         });
+
+        // Changing names of arrays
+        let array = { name: [], data: [] };
+        for (let key in totalPurchases){
+            // console.log('Calling Keys', key)
+            for (let skey in skusData){
+                // console.log('Calling SKUKeys', skey)
+                if (key == skusData[skey].id){
+                    // console.log('Calling SKUKeys', skusData[skey].name);
+                    array.data.push(totalPurchases[key]);
+                    array.name.push(skusData[skey].name);
+                }
+            }
+            // console.log('GrandTotal', grandtotal)
+        }
+        grandtotal = array;
         // console.log( 'Purchased ', totalPurchases);
+        // console.log( 'SKUSData ', grandtotal);
         totalSales = Object.values(totalPurchases).reduce((t, n) => t + n);
         commit('setTotalSales', totalSales);
+        commit('setProductLabels', grandtotal.name);
+        // console.log('Total Purchases [STATES]', totalPurchases)
+        commit('setTotalPurchases', grandtotal);
       });
       // firebase.database().ref('storedata').on('value', (report) => {
       //   let reports = [];
@@ -1185,55 +1212,119 @@ export const store = new Vuex.Store({
   //           commit('setStoreReport', reports);
   //       });
   // },
-    // Fetch All Store Related Reports
-    // fetchStoreReportsByName({commit}){
-    //     commit('SET_MAIN_LOADING', true);
-    //     // let define some variables for Dates
-    //     let date = new Date();
-    //     let dateStart = date.getDate();
-    //     // console.log(dateStart);
-    //     firebase.database().ref('storedata').once('value', (report) => {
-    //         let reports = [];
-    //         let currentKey = null;
-    //         // console.log(reports)
-    //         report.forEach((childReport) => {
-    //             const obj = childReport.val();
-    //             currentKey = childReport.key;
-    //             // console.log(obj)
-    //             // reports[currentKey] = new Array;
-    //             for (let key in obj){
-    //                 reports.push({
-    //                     // date: currentKey,
-    //                     // Customer Information
-    //                     date: obj[key],
-    //                     customerName: obj[key].customerName,
-    //                     customerContact: obj[key].customerContact,
-    //                     customerRemarks: obj[key].customerRemarks,
-    //                     // Conversion
-    //                     conversion: obj[key].conversion,
-    //                     // Taste Trail
-    //                     tasteTrial: obj[key].tasteTrial,
-    //                     pUFrozen: obj[key].pUFrozen,
-    //                     pUCheese: obj[key].pUCheese,
-    //                     pUButter: obj[key].pUButter,
-    //                     // Store info
-    //                     store: obj[key].store,
-    //                     userName: obj[key].userName,
-    //                     // Stock Information
-    //                     purchased: obj[key].purchased
-    //                 });
-    //             }
-    //             // currentKey = null;
-    //         });
-    //         commit('SET_MAIN_LOADING', false);
-    //         // commit('setCurrentStoreReport', report);
-    //     });
-    // },
+  //   Fetch All Store Related Reports
+    fetchStoreReportsByName({commit}){
+        commit('SET_MAIN_LOADING', true);
+        // let define some variables for Dates
+        let date = new Date();
+        let dateStart = date.getDate();
+        // console.log(dateStart);
+        firebase.firestore().collection('storedata').get().then((report) => {
+            let reports = [];
+            // let data = report.data();
+            let currentKey = null;
+            // console.log(reports)
+            report.forEach((childReport) => {
+                // const obj = childReport.val();
+                // currentKey = childReport.key;
+                // console.log(obj)
+                // reports[currentKey] = new Array;
+                for (let key in childReport){
+                    reports.push({
+                        // date: currentKey,
+                        // Customer Information
+                        date: childReport[key],
+                        customerName: childReport[key].customerName,
+                        customerContact: childReport[key].customerContact,
+                        customerRemarks: childReport[key].customerRemarks,
+                        // Conversion
+                        conversion: childReport[key].conversion,
+                        // Taste Trail
+                        tasteTrial: childReport[key].tasteTrial,
+                        pUFrozen: childReport[key].pUFrozen,
+                        pUCheese: childReport[key].pUCheese,
+                        pUButter: childReport[key].pUButter,
+                        // Store info
+                        store: childReport[key].store,
+                        userName: childReport[key].userName,
+                        // Stock Information
+                        purchased: childReport[key].purchased
+                    });
+                }
+                // currentKey = null;
+            });
+            commit('SET_MAIN_LOADING', false);
+            commit('setCurrentStoreReport', report);
+        });
+    },
+    // Fetch Compile Report
+    fetchCompileReport({commit, getters}){
+      commit('SET_MAIN_LOADING', true);
+      // let define some variables for Dates
+      let date = new Date();
+      let dateStart = date.getDate();
+      let skusData = getters.skusLists;
+      // console.log(dateStart);
+      firebase.firestore().collection('storedata').get().then((report) => {
+          let reports = [];
+          let totalPurchases = {}
+          let compileReports = [];
+          // let data = report.data();
+          // console.log(reports)
+          // Creating Similar keys in totalPurchases
+          report.forEach((data) => {
+              // Storage Data
+              let purchase = data.data();
+              let purchased = purchase.purchased;
+              // Creating Similar keys in totalPurchases
+              for (let key in purchased){
+                  totalPurchases[key] = 0;
+              }
+
+          });
+
+          // Accumulating Total Purchases
+          report.forEach((data) => {
+              // Storage Data
+              let purchase = data.data();
+              let purchased = purchase.purchased;
+
+              for (let key in purchased){
+                  let purchase = purchased[key];
+                  // Conversion to Int
+                  purchase = parseInt(purchase);
+                  // console.log( 'Purchased ' + key +'=', purchase);
+                  // Merging two objects
+                  totalPurchases[key] = totalPurchases[key] + purchase;
+              }
+          });
+
+          // Creating Name Keys
+          let array = { name: [], data: [] };
+          for (let key in totalPurchases){
+              // console.log('Calling Keys', key)
+              for (let skey in skusData){
+                  // console.log('Calling SKUKeys', skey)
+                  if (key == skusData[skey].id){
+                      // console.log('Calling SKUKeys', skusData[skey].name);
+                      array.data.push(totalPurchases[key]);
+                      array.name.push(skusData[skey].name);
+                  }
+              }
+              // console.log('GrandTotal', grandtotal)
+          }
+          compileReports = array;
+
+
+          console.log( 'Compile Reports', compileReports)
+          // commit('setCompileReport', report);
+          commit('SET_MAIN_LOADING', false);
+      });
+    },
     // Fetch All Last Reports
     fetchAllStoreReports({commit, getters}){
       commit('SET_MAIN_LOADING', true);
       firebase.firestore().collection('storedata').onSnapshot((report) => {
-        let reports = [];
 
         let parametersList = {};
         let parametersName = [];
@@ -1367,14 +1458,189 @@ export const store = new Vuex.Store({
         //   }
         //   currentKey = null;
         // });
-        let lastReports = reports.slice(-3);
-        // console.log(reports)
-        commit('SET_MAIN_LOADING', false);
         commit('setOptionalsReport', parametersList);
         commit('setQuestionsReport', answers);
-        commit('setAllStoreReport', lastReports);
+        commit('SET_MAIN_LOADING', false);
       });
     },
+    fetchRecentReports({commit}){
+          commit('SET_MAIN_LOADING', true);
+          firebase.firestore().collection('storedata').orderBy('timestamp').onSnapshot((report) => {
+              let reports = [];
+
+              // Creating the lists of optionals and questions that answers by customers
+              report.forEach((recentReports) => {
+                  let report = recentReports.data();
+                  // let optionals = report.optionals;
+                  reports.push(report);
+              });
+              let lastReports = reports.slice(-3);
+              // console.log( 'LAST Reports', lastReports);
+              commit('setAllStoreReport', lastReports);
+              commit('SET_MAIN_LOADING', false);
+          });
+      },
+    fetchStoreCompileReports({commit, getters}){
+          commit('SET_MAIN_LOADING', true);
+          firebase.firestore().collection('storedata').orderBy('timestamp').get().then((report) => {
+              let reports = [];
+              let reporting =[];
+              let reducedReport = [];
+              let storeReports = {}
+              let storedata = [];
+              // Setting up the Date
+              let dates = [];
+              let simpDates = [];
+              // Getting SKUS
+              // let skusData = getters.skusLists;
+              // const totalPurchases = [];
+              // let purchaseDates = [];
+              // let metaInfo = [];
+              // let compiledReport = { dates: [], data: [], meta: []};
+
+
+              // Creating SKUS Purchases and names
+
+              // Unique Array Generator
+              function uniqBy(a, key) {
+                  var seen = {};
+                  return a.filter(function(item) {
+                      var k = key(item);
+                      return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+                  })
+              }
+
+              // ligible Date Generator
+              function _dateGenerator(timestamp){
+                  let fullDate = '';
+                  let curTimestamp = new Date(timestamp*1000);
+                  let year = (1900 + curTimestamp.getYear());
+                  let day = ("0" + curTimestamp.getDate()).slice(-2);
+                  let month = curTimestamp.getMonth() + 1;
+                  return (year + '-' + month + '-' + day);
+              }
+
+              // Aeroing each Entry
+              function resetData(obj) {
+                  for (let key in obj){
+                      obj[key] = 0
+                  }
+                  // console.log('renoune', obj)
+                  return obj
+              }
+
+              // Reducing the Dates
+              report.forEach((recentReports) => {
+                  let report = recentReports.data();
+                  let purchased = report.purchased;
+
+                  // let optionals = report.optionals;
+                  reports.push(report);
+                  // pushing up the dates
+                  let curDate = _dateGenerator(report.timestamp.seconds);
+                  dates.push(curDate);
+
+                  // console.log( 'skusData' ,skusData);
+                  // Creating SKUS Purchases
+                  // for (let key in purchased){
+                  //     datePurchased[key] = 0;
+                  // }
+
+              });
+
+              // Reducing Dates
+              simpDates = uniqBy(dates,JSON.stringify);
+
+
+              // Creating Datewise Report
+              for (let dKey in simpDates){
+                  // console.log(simpDates[dKey]);
+                  let datePurchased = {};
+                  let Dmeta = {};
+                  report.forEach((recentReports) => {
+                      let report = recentReports.data();
+                      let purchased = report.purchased;
+
+                      for (let key in purchased){
+                          datePurchased[key] = 0
+                      }
+
+                  });
+                  // for (let key in datePurchased){
+                  //     datePurchased[key] = 0
+                  // }
+                  // Iterating same dates in simpDates
+                  for (let rKey in reports){
+                      let reportDate = _dateGenerator(reports[rKey].timestamp.seconds);
+                      let purchased = reports[rKey].purchased;
+                      let baName = reports[rKey].userName;
+                      let storeName = reports[rKey].store.name;
+                      let storeAddress = reports[rKey].store.address;
+                      // for (let key in purchased){
+                      //     datePurchased[key] = 0;
+                      // }
+                      if(simpDates[dKey] == reportDate){
+                          // Adding up the total purchasing on that date
+                          for (let key in purchased){
+                              let purchase = purchased[key];
+                              // Conversion to Int
+                              purchase = parseInt(purchase);
+                              // console.log( 'Dates ' + simpDates[dKey] +'=', storeName);
+                              // Merging two objects
+                              datePurchased[key] = datePurchased[key] + purchase;
+                              storedata.push(datePurchased);
+                          }
+                          // console.log( 'META-DATA report', JSON.stringify(reports) + ',simpDates,' + simpDates + ',storeAddress,' +  storeAddress);
+
+                          // Assigning Meta Data
+                          Dmeta = {baName: baName, storeName: storeName, storeAddress: storeAddress, labels: 'Labels'}
+                      }
+
+                  }
+
+                  // Creating SKUS Labels
+
+                  storeReports[Dmeta.storeName] = {
+                      date: simpDates[dKey],
+                      data: [storedata],
+                      label: Dmeta.labels,
+                      baName: Dmeta.baName,
+                      storeName: Dmeta.storeName,
+                      storeAddress: Dmeta.storeAddress,
+                  }
+
+                  console.log( 'Store Reports Data', storedata);
+
+                  reporting.push({
+                      date: simpDates[dKey],
+                      data: [datePurchased],
+                      label: Dmeta.labels,
+                      baName: Dmeta.baName,
+                      storeName: Dmeta.storeName,
+                      storeAddress: Dmeta.storeAddress,
+                  });
+
+                  // totalPurchases.push(datePurchased);
+                  // purchaseDates.push(simpDates[dKey]);
+                  // metaInfo.push(Dmeta);
+                  // console.log( 'Date Reports After', datePurchased );
+                  // console.log( 'Total Purchases of each date' ,totalPurchases);
+              }
+
+
+              // compiledReport['dates'] = purchaseDates;
+              // compiledReport['data'] = totalPurchases;
+              // compiledReport['meta'] = metaInfo;
+              // datePurchased = resetData(datePurchased);
+              console.log( 'All Reports', reporting );
+              // console.log( 'LAST Reports', reports);
+              // console.log( 'Reduced Reports', totalPurchases );
+              // console.log( 'Purchase Dates Reports', purchaseDates );
+              // console.log( 'Purchase Compiled Reports', compiledReport );
+              commit('setCompileReport', reporting);
+              commit('SET_MAIN_LOADING', false);
+          });
+      },
     // Fetch Compile Reports By Campaign
     // fetchCompileReports({commit}, payload){
     //   commit('SET_MAIN_LOADING', true);
@@ -1854,12 +2120,17 @@ export const store = new Vuex.Store({
       return state.dashboardSettings
     },
       // Accumulative Figures
-
     optionalReport (state){
         return state.optionalReport
     },
     questionReport (state){
       return state.questionReport
+    },
+    compileReport (state){
+      return state.compileReport
+    },
+    productLabels(state){
+      return state.productLabels
     },
     totalInterceptions (state){
       return state.totalInterceptions
@@ -1917,9 +2188,9 @@ export const store = new Vuex.Store({
     // consumerStoreReports (state) {
     //   return state.consumerStoreReports
     // },
-    compileReport (state) {
-      return state.compileReports
-    },
+    // compileReport (state) {
+    //   return state.compileReports
+    // },
     storeReport (state) {
       return state.storeReports
     },

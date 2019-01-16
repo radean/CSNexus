@@ -18,10 +18,13 @@
     "babel-preset-es2015": "^6.24.1",
     "firestore-export-import": "^0.1.6",
     "lodash": "^4.17.11",
+    "nprogress": "^0.2.0",
     "serve-dist": "^1.0.11",
     "v-odometer": "^2.0.0",
     "vue": "^2.5.17",
+    "vue-nprogress": "^0.1.5",
     "vue-pop-colorpicker": "^1.0.2",
+    "vue-progressbar": "^0.7.5",
     "vue-router": "^3.0.1",
     "vuetify": "^1.2.6",
     "vuetify-upload-button": "^1.2.0"

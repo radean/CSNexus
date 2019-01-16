@@ -52,7 +52,7 @@
           <v-flex md3 class="GraphsContainer elevation-20">
             <!--user chart WIDGET # 1-->
             <div class="header">{{ widgets.widget1.title }}</div> {{ widgets.widget1.description }}
-            <v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>
+            <!--<v-progress-circular v-if="showProgress" indeterminate v-bind:size="75" color="yellow"></v-progress-circular>-->
             <Doughtnut :is="widgets.widget1.category" :chart-data="questions[widgets.widget1.source]" :colors="widgets.widget1.colors" :options="chartOptionSelector(widgets.widget1.category)"></Doughtnut>
 
           </v-flex>
@@ -127,9 +127,9 @@
                     <!--</div>-->
                 </v-flex>
                 <v-flex xs12 class="GraphsContainer elevation-20">
-                    <div class="header"> &nbsp; General Questions &nbsp; </div>
+                    <div class="header"> &nbsp; Product Sales &nbsp; </div>
                     <!--<div class="barChart">-->
-                    <Doughtnut :is="widgets.widget4.category" :height='240' :chart-data="optionals[widgets.widget4.source]" :options="optionsCity"></Doughtnut>
+                    <Doughtnut :is="widgets.widget3.category" :height='240' :chart-data="purchaseChart" :options="optionsCity"></Doughtnut>
                     <!--</div>-->
                 </v-flex>
             </v-layout>
@@ -234,6 +234,7 @@
               },
           ],
         },
+        purchaseChart: {},
         chartOptions: {
             dataLabels: {
                 enabled: false
@@ -372,7 +373,7 @@
 //        Charts
       'LineChart': line,
       'radarChart': radarChart,
-      'bubbleChart': BubbleChart
+      'bubbleChart': BubbleChart,
     },
 
     created(){
@@ -390,8 +391,11 @@
 //            Please Look in it!
 //        ===========================================================
 //      this.$store.dispatch('fetchTotalInterceptions');
-        this.dashboardSettings();
+      this.dashboardSettings();
       this.$store.dispatch('fetchStoreReports');
+      this.$store.dispatch('fetchRecentReports');
+//      start NProgress
+      this.$Progress.start();
       this.$store.dispatch('fetchAllStoreReports').then(() => { setTimeout(() => {
 //    First Creating Optionals objects and its DATA
 //          Getting the optionals put variable
@@ -405,6 +409,8 @@
           keyName.forEach((name) => {
               optional[name] = {}
           });
+          this.$Progress.finish();
+//          console.log( 'Total Purchased' , this.totalPurchases)
       }, 6000);
 
       });
@@ -455,6 +461,12 @@
       totalStores(){
         return this.$store.getters.totalStore;
       },
+      totalPurchases(){
+        return this.$store.getters.totalPurchases;
+      },
+      skusData(){
+        return this.$store.getters.skusLists;
+      },
       totalConversion(){
         return this.$store.getters.totalConversion;
       },
@@ -486,40 +498,40 @@
       totalInterceptions(){
         return this.$store.getters.totalInterceptions;
       },
-      totalPurchases (){
-//        GVs
-        let sSCO = 0;
-        let sCO = 0;
-        let sSB = 0;
-        let sSBO = 0;
-        let sortSKU = []
-        let totalSales = []
-        let totalSaleCount = 0;
-//        Getting Total Number of Purchases Form Server
-        let totalPurchases = this.$store.getters.totalPurchases;
-//        Breaking Down to Categories
-        let obj = totalPurchases;
-        for (let key in obj){
-          sortSKU.push(obj[key].purchased)
-        }
-//        Total Sale Calculate
-        sortSKU.forEach((obj) => {
-          Object.keys(obj).forEach(function(k) {
-            totalSales[k] = (totalSales[k] || 0) + parseInt(obj[k]);
-          })
-        });
-        for (let key in totalSales){
-            totalSaleCount += totalSales[key];
-        }
-        this.soyaSupremeSKU = totalSales;
-//        Assigning to GVBs
-        this.Purchases.sSCO = parseInt(sSCO);
-        this.Purchases.sCO = parseInt(sCO);
-        this.Purchases.sSB = parseInt(sSB);
-        this.Purchases.sSBO = parseInt(sSBO);
-//        this.totalSales = totalSaleCount;
-        return totalSaleCount;
-      },
+//      totalPurchases (){
+////        GVs
+//        let sSCO = 0;
+//        let sCO = 0;
+//        let sSB = 0;
+//        let sSBO = 0;
+//        let sortSKU = []
+//        let totalSales = []
+//        let totalSaleCount = 0;
+////        Getting Total Number of Purchases Form Server
+//        let totalPurchases = this.$store.getters.totalPurchases;
+////        Breaking Down to Categories
+//        let obj = totalPurchases;
+//        for (let key in obj){
+//          sortSKU.push(obj[key].purchased)
+//        }
+////        Total Sale Calculate
+//        sortSKU.forEach((obj) => {
+//          Object.keys(obj).forEach(function(k) {
+//            totalSales[k] = (totalSales[k] || 0) + parseInt(obj[k]);
+//          })
+//        });
+//        for (let key in totalSales){
+//            totalSaleCount += totalSales[key];
+//        }
+//        this.soyaSupremeSKU = totalSales;
+////        Assigning to GVBs
+//        this.Purchases.sSCO = parseInt(sSCO);
+//        this.Purchases.sCO = parseInt(sCO);
+//        this.Purchases.sSB = parseInt(sSB);
+//        this.Purchases.sSBO = parseInt(sSBO);
+////        this.totalSales = totalSaleCount;
+//        return totalSaleCount;
+//      },
     },
 //    All Charts Update Information
     methods: {
@@ -535,7 +547,8 @@
             baName: storeReport[key].userName
           })
         }
-        this.recentStore = check;
+//        console.log('Recent Reports', check)
+        this.recentReports = check;
         return true
       },
         dashboardSettings(){
@@ -581,9 +594,15 @@
             }
         },
         updateCharts(){
+//            Before anything we have to launch
+            this.recentPurchase();
 //          First Creating Optionals objects and its DATA
 //          Getting the optionals put variable
             let optional = this.optionals;
+            let totalPurchase = this.totalPurchases;
+            let skus = this.skusData;
+            let skusColor = [];
+            let totalPurchaseChart = {};
             let questions = this.questions;
 //          Getting Data from Server [In this case coming from $Store]
             let optionalReports = this.$store.getters.optionalReport;
@@ -666,6 +685,34 @@
 //                }
 //    }
 //      Creating Dataset of  each Chart for questiosn
+
+//            Total Purchases into Data Chart
+//            Setting Colors
+            for (let cKey in skus){
+                skusColor.push(skus[cKey].color)
+            }
+
+//            Setting DataSets
+            totalPurchaseChart = {
+                labels: totalPurchase.name,
+                datasets: [
+                    {
+                        backgroundColor: skusColor,
+                        borderWidth: 1,
+                        color: skusColor,
+                        data: totalPurchase.data
+                    },
+                ],
+            }
+
+//            Setting to Main totalPurchase
+            this.purchaseChart = totalPurchaseChart;
+
+
+//            console.log('SKUS Color Array ', skusColor)
+//              Finding assigned Widget
+
+//            Total Question into Data Chart
             for (let qkey in questionReports){
 //                console.log('Question inside Data', questions[qkey] +' KEY '+ qkey + 'INIT' + questions);
 //              Finding assigned Widget
@@ -741,7 +788,7 @@
                 }
             }
 //            console.log('Question inside Data', question);
-//      Creating Datasets of Cumulative charts means y adding all optionals into one
+//            Creating Datasets of Cumulative charts means y adding all optionals into one
 //            let chartsdatasets = {};
             let datasetsLabels = [];
 //            let datasetColors = [];
@@ -818,10 +865,10 @@
 //       Setting loading to false
             this.showProgress = false;
         },
-        fillData () {
-        this.showProgress = false;
+//        fillData () {
+//        this.showProgress = false;
 //        Recent Purchase
-        this.recentPurchase();
+//        this.recentPurchase();
 //        City progress
 //        this.CityDataCollection = {
 //          labels: ['KHI', 'LHR', 'ISD'],
@@ -901,7 +948,7 @@
 
 //        let optionalLabels = Object.keys( this.optionalReports.food);
 //        let optionalLabelCuisine = Object.keys( this.optionalReports.days);
-      }
+//      }
     }
 
   }

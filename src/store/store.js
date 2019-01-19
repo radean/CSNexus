@@ -1487,7 +1487,7 @@ export const store = new Vuex.Store({
               let reporting =[];
               let reducedReport = [];
               let storeReports = {}
-              let storedata = [];
+              let storeData = [];
               // Setting up the Date
               let dates = [];
               let simpDates = [];
@@ -1588,10 +1588,9 @@ export const store = new Vuex.Store({
                               // console.log( 'Dates ' + simpDates[dKey] +'=', storeName);
                               // Merging two objects
                               datePurchased[key] = datePurchased[key] + purchase;
-                              storedata.push(datePurchased);
                           }
                           // console.log( 'META-DATA report', JSON.stringify(reports) + ',simpDates,' + simpDates + ',storeAddress,' +  storeAddress);
-
+                          storeData.push(datePurchased);
                           // Assigning Meta Data
                           Dmeta = {baName: baName, storeName: storeName, storeAddress: storeAddress, labels: 'Labels'}
                       }
